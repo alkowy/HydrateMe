@@ -12,6 +12,8 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -20,6 +22,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import com.azmarzly.authentication.domain.AuthenticationRepository
+import com.azmarzly.authentication.presentation.AuthViewModel
 import core.ui.theme.HydrateMeTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -32,19 +35,24 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
+            val authViewModel: AuthViewModel = viewModel()
+            val authState = authViewModel.authState.collectAsStateWithLifecycle()
             HydrateMeTheme {
                 Column() {
                     Text(text = "test")
                     Button(onClick = {
-                        authRepository.loginWithEmailAndPassword(
-                            "test@gmail.com",
+                        authViewModel.loginWithEmailAndPassword(
+                            "test2@gmail.com",
                             "12345qwerty"
                         )
                     }) {
                         Text(text = "btn login")
                     }
+                    Text(text = "Auth state: ${authState.value}")
                     AppNavHost()
+
                 }
             }
         }
@@ -67,7 +75,6 @@ fun AppNavHost(
                 modifier = Modifier.fillMaxSize(),
                 color = MaterialTheme.colors.background
             ) {
-                Greeting("Android")
 
             }
             //LandingPage(onNavigateToHome?? = navController.navigate("home_screen")
@@ -88,15 +95,9 @@ fun NavGraphBuilder.accountCreationGraph(navController: NavController) {
     }
 }
 
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
     HydrateMeTheme {
-        Greeting("Android")
     }
 }

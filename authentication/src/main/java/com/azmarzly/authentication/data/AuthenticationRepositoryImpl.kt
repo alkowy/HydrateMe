@@ -1,33 +1,49 @@
 package com.azmarzly.authentication.data
 
 import com.azmarzly.authentication.domain.AuthenticationRepository
+import com.azmarzly.authentication.domain.UserManager
 import com.google.firebase.auth.FirebaseAuth
-import core.model.LoggedInUser
+import core.domain.FirestoreRepository
 import core.model.Resource
+import core.model.UserActivity
+import core.model.UserDataModel
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.tasks.await
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 class AuthenticationRepositoryImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
+    private val userManager: UserManager,
+    private val firestore: FirestoreRepository,
 ) : AuthenticationRepository {
 
-    override fun loginWithEmailAndPassword(
-        email: String,
-        password: String
-    ): Resource<LoggedInUser> {
-        var result: Resource<LoggedInUser> = Resource.Error()
-        firebaseAuth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task ->
-                result = if (task.isSuccessful) {
-                    Resource.Success(
-                        LoggedInUser(
-                            uId = task.result.user?.uid!!,
-                            email = task.result.user?.email!!
-                        )
-                    )
-                } else {
-                    Resource.Error(errorMessage = task.exception?.message)
-                }
-            }
-        return result
+    override fun loginWithEmailAndPassword(email: String, password: String) = flow {
+        emit(Resource.Loading)
+        try {
+            firebaseAuth.currentUser
+            val loginResult = firebaseAuth.signInWithEmailAndPassword(email, password).await()
+            val user = UserDataModel(
+                uId = loginResult.user?.uid!!,
+                email = loginResult.user?.email!!,
+                birthDate = LocalDateTime.now(),
+                gender = "male",
+                userActivity = UserActivity.AverageActivity(),
+                height = 200.0,
+                name = "Name",
+                weight = 100.0
+
+            )
+            userManager.saveLoggedInUserToLocalPreferences(user)
+            firestore.testfun(user)
+            emit(Resource.Success(user))
+        } catch (e: Exception) {
+            emit(Resource.Error(errorMessage = e.message))
+        }
+    }
+
+    override fun signOut() {
+        firebaseAuth.signOut()
+        userManager.clearUserData()
     }
 }
