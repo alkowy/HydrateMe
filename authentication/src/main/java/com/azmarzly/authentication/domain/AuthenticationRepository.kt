@@ -8,4 +8,5 @@ interface AuthenticationRepository {
 
     fun loginWithEmailAndPassword(email: String, password: String): Flow<Resource<UserDataModel>>
     fun signOut()
+    fun registerWithEmailAndPassword(email: String, password: String, userDataModel: UserDataModel): Flow<Resource<UserDataModel>>
 }

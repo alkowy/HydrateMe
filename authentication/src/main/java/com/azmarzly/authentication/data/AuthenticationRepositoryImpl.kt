@@ -5,11 +5,14 @@ import com.azmarzly.authentication.domain.UserManager
 import com.google.firebase.auth.FirebaseAuth
 import core.domain.FirestoreRepository
 import core.model.Resource
-import core.model.UserActivity
 import core.model.UserDataModel
+import core.util.doNothing
+import core.util.toFirestoreUserDataModel
+import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
-import java.time.LocalDateTime
 import javax.inject.Inject
 
 class AuthenticationRepositoryImpl @Inject constructor(
@@ -18,32 +21,57 @@ class AuthenticationRepositoryImpl @Inject constructor(
     private val firestore: FirestoreRepository,
 ) : AuthenticationRepository {
 
-    override fun loginWithEmailAndPassword(email: String, password: String) = flow {
+    override fun registerWithEmailAndPassword(
+        email: String,
+        password: String,
+        userDataModel: UserDataModel
+    ) = flow {
         emit(Resource.Loading)
         try {
-            firebaseAuth.currentUser
-            val loginResult = firebaseAuth.signInWithEmailAndPassword(email, password).await()
-            val user = UserDataModel(
-                uId = loginResult.user?.uid!!,
-                email = loginResult.user?.email!!,
-                birthDate = LocalDateTime.now(),
-                gender = "male",
-                userActivity = UserActivity.AverageActivity(),
-                height = 200.0,
-                name = "Name",
-                weight = 100.0
-
-            )
-            userManager.saveLoggedInUserToLocalPreferences(user)
-            firestore.testfun(user)
-            emit(Resource.Success(user))
+            val registrationResult = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
+            val userDataModelWithFirestoreId = userDataModel.copy(uid = registrationResult.user!!.uid)
+            userManager.saveLoggedInUserToLocalPreferences(userDataModelWithFirestoreId)
+            firestore.updateUserInFirestore(userDataModelWithFirestoreId.toFirestoreUserDataModel()).collect()
+            if (registrationResult.user != null) {
+                emit(Resource.Success(userDataModelWithFirestoreId))
+            } else {
+                emit(Resource.Error("Registration has failed"))
+            }
         } catch (e: Exception) {
-            emit(Resource.Error(errorMessage = e.message))
+            emit(Resource.Error(e.message))
+        }
+    }
+
+    override fun loginWithEmailAndPassword(
+        email: String,
+        password: String,
+    ) = channelFlow {
+        send(Resource.Loading)
+        try {
+            val loginResult = firebaseAuth.signInWithEmailAndPassword(email, password).await()
+            firestore.fetchUserFromFirestore(loginResult.user!!.uid)
+                .collectLatest { fetchedUser ->
+                    when (fetchedUser) {
+                        is Resource.Success -> {
+                            send(Resource.Success(fetchedUser.data))
+                            userManager.saveLoggedInUserToLocalPreferences(fetchedUser.data)
+                        }
+
+                        is Resource.Error -> {
+                            send(Resource.Error<UserDataModel>(errorMessage = fetchedUser.errorMessage))
+                        }
+
+                        Resource.Loading -> send(Resource.Loading)
+                        Resource.EmptyState -> doNothing()
+                    }
+                }
+        } catch (e: Exception) {
+            send(Resource.Error(errorMessage = e.message))
         }
     }
 
     override fun signOut() {
         firebaseAuth.signOut()
-        userManager.clearUserData()
+        userManager.clearUserDataInLocalPreferences()
     }
 }

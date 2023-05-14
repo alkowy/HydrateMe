@@ -4,8 +4,9 @@ import core.model.UserDataModel
 
 interface UserManager {
 
-    fun getLoggedInUser(): UserDataModel
+    fun getLoggedInUserFromLocalPreferences(): UserDataModel
     fun saveLoggedInUserToLocalPreferences(user: UserDataModel?)
     fun isUserLoggedIn(): Boolean
-    fun clearUserData()
+    fun clearUserDataInLocalPreferences()
+    fun getCurrentUserId(): String?
 }

@@ -29,4 +29,6 @@ class LocalPreferencesService @Inject constructor(
     override fun clearUserData() {
         setCurrentUser(null)
     }
+
+    override fun getCurrentUserId(): String = getCurrentUser().uid
 }

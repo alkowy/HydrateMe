@@ -11,12 +11,13 @@ class UserManagerImpl @Inject constructor(
     private val localPreferencesApi: LocalPreferencesApi,
 ) : UserManager {
 
-
-    override fun getLoggedInUser(): UserDataModel = localPreferencesApi.getCurrentUser()
+    override fun getLoggedInUserFromLocalPreferences(): UserDataModel = localPreferencesApi.getCurrentUser()
 
     override fun saveLoggedInUserToLocalPreferences(user: UserDataModel?) = localPreferencesApi.setCurrentUser(user)
 
+    override fun clearUserDataInLocalPreferences() = localPreferencesApi.clearUserData()
+
     override fun isUserLoggedIn(): Boolean = firebaseAuth.currentUser != null
 
-    override fun clearUserData() = localPreferencesApi.clearUserData()
+    override fun getCurrentUserId(): String? = firebaseAuth.currentUser?.uid
 }
