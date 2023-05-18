@@ -31,4 +31,8 @@ class LocalPreferencesService @Inject constructor(
     }
 
     override fun getCurrentUserId(): String = getCurrentUser().uid
+
+    override fun isUserLoggedIn(): Boolean {
+        TODO("Not yet implemented")
+    }
 }

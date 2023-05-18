@@ -81,5 +81,7 @@ dependencies {
     implementation project(path: ':core')
     implementation project(path: ':authentication')
     implementation project(path: ':registration')
-
+    implementation project(path: ':scanner')
+    implementation project(path: ':landing_page')
+    implementation project(path: ':sign_in')
 }

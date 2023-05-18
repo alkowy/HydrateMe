@@ -7,11 +7,8 @@ import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import core.util.Routes
-import core.util.navigateWithinRegistration
 
 @Composable
 fun ActivityPickScreen(
@@ -19,24 +16,24 @@ fun ActivityPickScreen(
     registrationViewModel: RegistrationViewModel,
 ) {
     ActivityPickScreenContent(
-        onNavigateToMeasurementsInfo = {
-            navController.navigate(Routes.RegistrationRoute.MEASUREMENTS.name)
+        onNavigateToMeasurementsHeightInfo = {
+            navController.navigate(Routes.RegistrationRoute.MEASUREMENTS_HEIGHT.name)
         }
     )
 }
 
 @Composable
 fun ActivityPickScreenContent(
-    onNavigateToMeasurementsInfo: () -> Unit,
+    onNavigateToMeasurementsHeightInfo: () -> Unit,
     //  onFinaliseRegistration: () -> Unit,
 
     ) {
-    BackHandler(onBack = onNavigateToMeasurementsInfo )
+    BackHandler(onBack = onNavigateToMeasurementsHeightInfo )
 
     Column(modifier = Modifier.fillMaxSize()) {
         Text(text = "ActivityPickScreenContent")
-        Button(onClick = onNavigateToMeasurementsInfo) {
-            Text(text = "Navigate to MEasurements info screen")
+        Button(onClick = onNavigateToMeasurementsHeightInfo) {
+            Text(text = "Navigate to MEasurements height info screen")
         }
     }
 }
