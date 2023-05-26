@@ -8,7 +8,9 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import core.util.Routes
+import core.util.RegistrationRoute
+import core.util.navigateTo
+import core.util.popUpTo
 
 @Composable
 fun MeasurementsWeightPickScreen(
@@ -17,13 +19,12 @@ fun MeasurementsWeightPickScreen(
 ) {
     MeasurementsWeightPickScreenContent(
         onNavigateToHeightInfo = {
-            navController.navigate(Routes.RegistrationRoute.MEASUREMENTS_HEIGHT.name) {
-                popUpTo(Routes.RegistrationRoute.MEASUREMENTS_HEIGHT.name) { inclusive = true }
+            navController.navigateTo(RegistrationRoute.MEASUREMENTS_HEIGHT) {
+                popUpTo(RegistrationRoute.MEASUREMENTS_HEIGHT) { inclusive = true }
             }
         },
         onNavigateToActivityInfo = {
-            navController.navigate(Routes.RegistrationRoute.ACTIVITY.name)
-
+            navController.navigateTo(RegistrationRoute.ACTIVITY) {}
         }
     )
 }
@@ -33,7 +34,6 @@ fun MeasurementsWeightPickScreenContent(
     onNavigateToHeightInfo: () -> Unit,
     onNavigateToActivityInfo: () -> Unit,
 ) {
-
     BackHandler(onBack = onNavigateToHeightInfo)
 
     Column(modifier = Modifier.fillMaxSize()) {

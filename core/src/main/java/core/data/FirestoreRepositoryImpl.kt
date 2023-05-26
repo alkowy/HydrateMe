@@ -6,6 +6,7 @@ import com.google.firebase.firestore.SetOptions
 import core.domain.FirestoreRepository
 import core.model.FirestoreUserDataModel
 import core.model.Resource
+import core.model.UserDataModel
 import core.util.toUserDataModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -23,14 +24,14 @@ class FirestoreRepositoryImpl @Inject constructor(
         private const val USERS_COLLECTION = "users"
     }
 
-    override fun updateUserInFirestore(firestoreUser: FirestoreUserDataModel): Flow<Resource<Boolean>> = channelFlow<Resource<Boolean>> {
+    override fun updateUserInFirestore(firestoreUser: FirestoreUserDataModel): Flow<Resource<UserDataModel>> = channelFlow<Resource<UserDataModel>> {
         send(Resource.Loading)
         firestore.collection(USERS_COLLECTION)
             .document(firestoreUser.uid)
             .set(firestoreUser, SetOptions.merge())
             .addOnCompleteListener {
                 launch {
-                    if (it.isSuccessful) send(Resource.Success(null)) else send(Resource.Error(it.exception?.message))
+                    if (it.isSuccessful) send(Resource.Success(firestoreUser.toUserDataModel())) else send(Resource.Error(it.exception?.message))
                 }
             }
 
@@ -43,6 +44,7 @@ class FirestoreRepositoryImpl @Inject constructor(
             .get()
             .await()
             .toObject(FirestoreUserDataModel::class.java)
+        Log.d("ANANAS", "fetchUserFromFirestore: in firestorerepo: $user")
         if (user == null) {
             emit(Resource.Error("Error fetching the user data"))
         } else {

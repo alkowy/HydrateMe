@@ -9,4 +9,5 @@ interface LocalPreferencesApi {
     fun clearUserData()
     fun getCurrentUserId(): String
     fun isUserLoggedIn(): Boolean
+    fun setCurrentUserId(id: String)
 }

@@ -11,8 +11,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import core.model.Resource
 import core.model.UserDataModel
-import core.util.Routes
+import core.util.HomeRoute
+import core.util.RegistrationRoute
 import core.util.doNothing
+import core.util.navigateTo
 
 @Composable
 fun SignInScreen(navController: NavController) {
@@ -21,8 +23,8 @@ fun SignInScreen(navController: NavController) {
 
     SignInScreenContent(
         state = state,
-        onNavigateToHome = { navController.navigate(Routes.Home.route) },
-        onNavigateToRegistration = { navController.navigate(Routes.Registration.route) },
+        onNavigateToHome = { navController.navigateTo(HomeRoute.HOME_ROOT) {} },
+        onNavigateToRegistration = { navController.navigateTo(RegistrationRoute.REGISTRATION_ROOT){} },
         onLogin = viewModel::loginWithEmailAndPassword
     )
 
@@ -37,29 +39,29 @@ fun SignInScreenContent(
 ) {
 
     Column() {
-        Text(text = state.toString())
+        Text(text = " sign in screen" + state.toString())
         Button(onClick = { onLogin("test@gmail.com", "12345qwerty") }) {
             Text(text = "Login")
         }
     }
 
 
-    LaunchedEffect(state) {
-        when (state) {
-            Resource.EmptyState -> {
-                doNothing()
-            }
-
-            is Resource.Error -> {//show some error dialog
-            }
-
-            Resource.Loading -> { // blur
-            }
-
-            is Resource.Success -> {
-//                onNavigateToHome()
-                onNavigateToRegistration() // todo remove, was here for testing
-            }
-        }
-    }
+//    LaunchedEffect(state) {
+//        when (state) {
+//            Resource.EmptyState -> {
+//                doNothing()
+//            }
+//
+//            is Resource.Error -> {//show some error dialog
+//            }
+//
+//            Resource.Loading -> { // blur
+//            }
+//
+//            is Resource.Success -> {
+////                onNavigateToHome()
+//                onNavigateToRegistration() // todo remove, was here for testing
+//            }
+//        }
+//    }
 }

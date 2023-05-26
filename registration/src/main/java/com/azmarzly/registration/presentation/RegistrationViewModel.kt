@@ -14,9 +14,7 @@ import core.util.toFirestoreUserDataModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -70,8 +68,10 @@ class RegistrationViewModel @Inject constructor(
                         when (step) {
                             RegistrationStep.INITIAL -> doNothing()
                             RegistrationStep.GENDER -> _registrationState.update { Resource.Success(RegistrationState.GenderInfo(fetchResult.data!!)) }
-                            RegistrationStep.MEASUREMENTS -> _registrationState.update { Resource.Success(RegistrationState.MeasurementsInfo(fetchResult.data!!)) }
+                            RegistrationStep.HEIGHT -> _registrationState.update { Resource.Success(RegistrationState.HeightInfo(fetchResult.data!!)) }
                             RegistrationStep.ACTIVITY -> _registrationState.update { Resource.Success(RegistrationState.ActivityInfo(fetchResult.data!!)) }
+                            RegistrationStep.AGE -> _registrationState.update { Resource.Success(RegistrationState.AgeInfo(fetchResult.data!!)) }
+                            RegistrationStep.WEIGHT -> _registrationState.update { Resource.Success(RegistrationState.WeightInfo(fetchResult.data!!)) }
                         }
                     }
 
@@ -92,7 +92,9 @@ class RegistrationViewModel @Inject constructor(
                         when (nextStep) {
                             RegistrationStep.INITIAL -> doNothing()
                             RegistrationStep.GENDER -> _registrationState.update { Resource.Success(RegistrationState.GenderInfo(userModel)) }
-                            RegistrationStep.MEASUREMENTS -> _registrationState.update { Resource.Success(RegistrationState.MeasurementsInfo(userModel)) }
+                            RegistrationStep.AGE -> _registrationState.update { Resource.Success(RegistrationState.AgeInfo(userModel)) }
+                            RegistrationStep.HEIGHT -> _registrationState.update { Resource.Success(RegistrationState.HeightInfo(userModel)) }
+                            RegistrationStep.WEIGHT -> _registrationState.update { Resource.Success(RegistrationState.WeightInfo(userModel)) }
                             RegistrationStep.ACTIVITY -> _registrationState.update { Resource.Success(RegistrationState.ActivityInfo(userModel)) }
                         }
                     }
@@ -107,14 +109,16 @@ class RegistrationViewModel @Inject constructor(
     }
 }
 
-// 1 basic; 2 gender; 3 height & weight; 4 activity -> display goal -> proceed to home
+// 1 basic; 2 gender; 3 age; 4 height 5; weight; 6 activity -> display goal -> proceed to home
 sealed interface RegistrationState {
     data class InitialInfoAndRegistration(val userModel: UserDataModel?) : RegistrationState
     data class GenderInfo(val userModel: UserDataModel) : RegistrationState
-    data class MeasurementsInfo(val userModel: UserDataModel) : RegistrationState
+    data class AgeInfo(val userModel: UserDataModel) : RegistrationState
+    data class HeightInfo(val userModel: UserDataModel) : RegistrationState
+    data class WeightInfo(val userModel: UserDataModel) : RegistrationState
     data class ActivityInfo(val userModel: UserDataModel) : RegistrationState
 }
 
 enum class RegistrationStep {
-    INITIAL, GENDER, MEASUREMENTS, ACTIVITY;
+    INITIAL, GENDER, AGE, HEIGHT, WEIGHT, ACTIVITY;
 }

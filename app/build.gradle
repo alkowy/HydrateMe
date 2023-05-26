@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId "com.azmarzly.hydrateme"
-        minSdk 26
+        minSdk 30
         targetSdk 33
         versionCode 1
         versionName "1.0"
@@ -84,4 +84,6 @@ dependencies {
     implementation project(path: ':scanner')
     implementation project(path: ':landing_page')
     implementation project(path: ':sign_in')
+    implementation project(path: ':home')
+
 }

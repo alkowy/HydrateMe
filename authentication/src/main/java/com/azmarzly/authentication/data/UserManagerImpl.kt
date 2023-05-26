@@ -20,4 +20,6 @@ class UserManagerImpl @Inject constructor(
     override fun isUserLoggedIn(): Boolean = firebaseAuth.currentUser != null
 
     override fun getCurrentUserId(): String? = firebaseAuth.currentUser?.uid
+
+    override fun saveUserId(id: String) = localPreferencesApi.setCurrentUserId(id)
 }

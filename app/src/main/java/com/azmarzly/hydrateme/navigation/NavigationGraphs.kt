@@ -1,6 +1,7 @@
 package com.azmarzly.hydrateme.navigation
 
 import android.annotation.SuppressLint
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -14,58 +15,36 @@ import com.azmarzly.registration.presentation.InitialRegistrationScreen
 import com.azmarzly.registration.presentation.MeasurementsHeightPickScreen
 import com.azmarzly.registration.presentation.MeasurementsWeightPickScreen
 import com.azmarzly.registration.presentation.RegistrationViewModel
-import core.util.Routes
+import core.util.RegistrationRoute
 
-@SuppressLint("UnrememberedGetBackStackEntry")
 fun NavGraphBuilder.registrationGraph(navController: NavController) {
-    navigation(startDestination = Routes.RegistrationRoute.INITIAL.name, route = Routes.Registration.route) {
-        composable(Routes.RegistrationRoute.INITIAL.name) {
-            val parentEntry = remember {
-                navController.getBackStackEntry(Routes.Registration.route)
-            }
-            val registrationViewModel: RegistrationViewModel = hiltViewModel(parentEntry)
-            InitialRegistrationScreen(navController, registrationViewModel)
+    navigation(startDestination = RegistrationRoute.INITIAL.route, route = RegistrationRoute.REGISTRATION_ROOT.route) {
+        composable(RegistrationRoute.INITIAL.route) {
+            InitialRegistrationScreen(navController, registrationViewModel(navController))
         }
-        composable(Routes.RegistrationRoute.GENDER.name) {
-            val parentEntry = remember {
-                navController.getBackStackEntry(Routes.Registration.route)
-            }
-            val registrationViewModel: RegistrationViewModel = hiltViewModel(parentEntry)
-            GenderPickScreen(navController = navController, registrationViewModel = registrationViewModel)
-
+        composable(RegistrationRoute.GENDER.route) {
+            GenderPickScreen(navController, registrationViewModel(navController))
         }
-        composable(Routes.RegistrationRoute.AGE.name) {
-            val parentEntry = remember {
-                navController.getBackStackEntry(Routes.Registration.route)
-            }
-            val registrationViewModel: RegistrationViewModel = hiltViewModel(parentEntry)
-            AgePickScreen(navController = navController, registrationViewModel = registrationViewModel)
-
+        composable(RegistrationRoute.AGE.route) {
+            AgePickScreen(navController, registrationViewModel(navController))
         }
-        composable(Routes.RegistrationRoute.MEASUREMENTS_HEIGHT.name) {
-            val parentEntry = remember {
-                navController.getBackStackEntry(Routes.Registration.route)
-            }
-            val registrationViewModel: RegistrationViewModel = hiltViewModel(parentEntry)
-            MeasurementsHeightPickScreen(navController = navController, registrationViewModel = registrationViewModel)
-
+        composable(RegistrationRoute.MEASUREMENTS_HEIGHT.route) {
+            MeasurementsHeightPickScreen(navController, registrationViewModel(navController))
         }
-        composable(Routes.RegistrationRoute.MEASUREMENTS_WEIGHT.name) {
-            val parentEntry = remember {
-                navController.getBackStackEntry(Routes.Registration.route)
-            }
-            val registrationViewModel: RegistrationViewModel = hiltViewModel(parentEntry)
-            MeasurementsWeightPickScreen(navController = navController, registrationViewModel = registrationViewModel)
-
+        composable(RegistrationRoute.MEASUREMENTS_WEIGHT.route) {
+            MeasurementsWeightPickScreen(navController, registrationViewModel(navController))
         }
-        composable(Routes.RegistrationRoute.ACTIVITY.name) {
-            val parentEntry = remember {
-                navController.getBackStackEntry(Routes.Registration.route)
-            }
-            val registrationViewModel: RegistrationViewModel = hiltViewModel(parentEntry)
-            ActivityPickScreen(navController = navController, registrationViewModel = registrationViewModel)
-
+        composable(RegistrationRoute.ACTIVITY.route) {
+            ActivityPickScreen(navController, registrationViewModel(navController))
         }
     }
 }
 
+@SuppressLint("UnrememberedGetBackStackEntry")
+@Composable
+private fun registrationViewModel(navController: NavController): RegistrationViewModel {
+    val parentEntry = remember {
+        navController.getBackStackEntry(RegistrationRoute.REGISTRATION_ROOT.route)
+    }
+    return hiltViewModel(parentEntry)
+}

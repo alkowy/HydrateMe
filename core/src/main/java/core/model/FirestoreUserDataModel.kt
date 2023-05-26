@@ -17,23 +17,13 @@ data class FirestoreUserDataModel(
 
 enum class UserActivityEnum {
     VERY_LOW, LOW, AVERAGE, HIGH, EMPTY;
-
-    fun toUserActivity(): UserActivity {
-        return when (this) {
-            VERY_LOW -> UserActivity.VeryLowActivity()
-            LOW -> UserActivity.LowActivity()
-            AVERAGE -> UserActivity.AverageActivity()
-            HIGH -> UserActivity.HighActivity()
-            EMPTY -> UserActivity.Empty
-        }
-    }
 }
 
 data class FirestoreHydrationData(
-    val date: Long,
-    val goal: Double,
-    val progress: Double,
-    val progressInPercentage: Int,
+    val date: Long = -1,
+    val goal: Double = 2000.0,
+    val progress: Double = 0.0,
+    val progressInPercentage: Int = 0,
 ) {
     fun toHydrationData(): HydrationData {
         return HydrationData(

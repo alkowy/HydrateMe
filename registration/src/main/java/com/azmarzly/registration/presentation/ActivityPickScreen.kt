@@ -8,7 +8,8 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import core.util.Routes
+import core.util.RegistrationRoute
+import core.util.navigateTo
 
 @Composable
 fun ActivityPickScreen(
@@ -17,7 +18,7 @@ fun ActivityPickScreen(
 ) {
     ActivityPickScreenContent(
         onNavigateToMeasurementsHeightInfo = {
-            navController.navigate(Routes.RegistrationRoute.MEASUREMENTS_HEIGHT.name)
+            navController.navigateTo(RegistrationRoute.MEASUREMENTS_HEIGHT){}
         }
     )
 }
@@ -27,8 +28,8 @@ fun ActivityPickScreenContent(
     onNavigateToMeasurementsHeightInfo: () -> Unit,
     //  onFinaliseRegistration: () -> Unit,
 
-    ) {
-    BackHandler(onBack = onNavigateToMeasurementsHeightInfo )
+) {
+    BackHandler(onBack = onNavigateToMeasurementsHeightInfo)
 
     Column(modifier = Modifier.fillMaxSize()) {
         Text(text = "ActivityPickScreenContent")

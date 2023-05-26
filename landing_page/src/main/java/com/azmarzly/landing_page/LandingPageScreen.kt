@@ -1,11 +1,33 @@
 package com.azmarzly.landing_page
 
+import android.util.Log
+import androidx.compose.animation.animateColor
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.Button
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import core.util.Routes
+import core.util.HomeRoute
+import core.util.SignInRoute
+import core.util.doNothing
+import core.util.navigateTo
+import kotlinx.coroutines.delay
 
 @Composable
 fun LandingPageScreen(navController: NavController) {
@@ -15,8 +37,16 @@ fun LandingPageScreen(navController: NavController) {
 
     LandingPageContent(
         state = state,
-        onNavigateToHome = { navController.navigate(Routes.Home.route) },
-        onNavigateToSignIn = { navController.navigate(Routes.SignIn.route) },
+        onNavigateToHome = {
+            Log.d("ANANAS", "LandingPageScreen: popbackstack: ${ navController.popBackStack(route = HomeRoute.HOME_ROOT.route, inclusive = true)}")
+            Log.d("ANANAS", "LandingPageScreen: ${navController.currentBackStackEntry?.destination?.route}   ${navController.previousBackStackEntry}   ${navController.graph.route}")
+            navController.navigateTo(HomeRoute.HOME_ROOT) {
+                popUpTo(navController.graph.id) { inclusive = true}
+            }
+            Log.d("ANANAS", "LandingPageScreen: ${navController.currentBackStackEntry?.destination?.route}   ${navController.previousBackStackEntry}   ${navController.graph.route}")
+
+        },
+        onNavigateToSignIn = { navController.navigateTo(SignInRoute) {} },
     )
 }
 
@@ -24,12 +54,55 @@ fun LandingPageScreen(navController: NavController) {
 fun LandingPageContent(
     state: LandingPageState,
     onNavigateToHome: () -> Unit,
-    onNavigateToSignIn: () -> Unit
-) {
-    when (state) {
-        LandingPageState.Loading -> LoadingLandingPageScreen()
-        LandingPageState.LoggedIn -> onNavigateToHome()
-        LandingPageState.NotLoggedIn -> onNavigateToSignIn()
+    onNavigateToSignIn: () -> Unit,
+
+    ) {
+
+    val infiniteTransition = rememberInfiniteTransition()
+
+    val logoColor by infiniteTransition.animateColor(
+        initialValue = Color.White.copy(alpha = 0.3f),
+        targetValue = Color.White,
+        animationSpec = infiniteRepeatable(
+            tween(1000),
+            repeatMode = RepeatMode.Reverse
+        )
+    )
+
+
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Image(
+            painter = painterResource(com.azmarzly.core.R.drawable.splash_bg),
+            contentDescription = "splash_bg",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize(),
+        )
+        Image(
+            painter = painterResource(com.azmarzly.core.R.drawable.hydrateme_logo),
+            contentDescription = "logo",
+            contentScale = ContentScale.FillBounds,
+            colorFilter = ColorFilter.tint(logoColor)
+
+        )
+        Button(onClick = { onNavigateToHome() }) {
+            Text(text = "navigate to home")
+
+        }
     }
+
+    LaunchedEffect(state) {
+        delay(800000) // remove or reduce
+        when (state) {
+            LandingPageState.Loading -> doNothing()
+            LandingPageState.LoggedIn -> onNavigateToHome()
+            LandingPageState.NotLoggedIn -> {
+                onNavigateToSignIn()
+            }
+        }
+    }
+
 
 }

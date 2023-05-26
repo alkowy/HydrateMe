@@ -9,4 +9,5 @@ interface UserManager {
     fun isUserLoggedIn(): Boolean
     fun clearUserDataInLocalPreferences()
     fun getCurrentUserId(): String?
+    fun saveUserId(id: String)
 }

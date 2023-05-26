@@ -1,7 +1,8 @@
 apply {
     from("$rootDir/base-module.gradle")
 }
-
 dependencies {
+    implementation project(path: ':core')
+    implementation project(path: ':authentication')
 
 }

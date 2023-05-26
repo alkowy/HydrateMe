@@ -8,7 +8,9 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import core.util.Routes
+import core.util.RegistrationRoute
+import core.util.navigateTo
+import core.util.popUpTo
 
 @Composable
 fun AgePickScreen(
@@ -17,13 +19,12 @@ fun AgePickScreen(
 ) {
     AgePickScreenContent(
         onNavigateToGenderInfo = {
-            navController.navigate(Routes.RegistrationRoute.GENDER.name) {
-                popUpTo(Routes.RegistrationRoute.GENDER.name) { inclusive = true }
+            navController.navigateTo(RegistrationRoute.GENDER) {
+                popUpTo(RegistrationRoute.GENDER) { inclusive = true }
             }
         },
         onNavigateToMeasurementsHeightPick = {
-            navController.navigate(Routes.RegistrationRoute.MEASUREMENTS_HEIGHT.name)
-
+            navController.navigateTo(RegistrationRoute.MEASUREMENTS_HEIGHT) {}
         }
     )
 }

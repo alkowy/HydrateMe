@@ -1,5 +1,6 @@
 package com.azmarzly.authentication.data
 
+import android.util.Log
 import com.azmarzly.authentication.domain.AuthenticationRepository
 import com.azmarzly.authentication.domain.UserManager
 import com.google.firebase.auth.FirebaseAuth
@@ -49,12 +50,15 @@ class AuthenticationRepositoryImpl @Inject constructor(
         send(Resource.Loading)
         try {
             val loginResult = firebaseAuth.signInWithEmailAndPassword(email, password).await()
+            Log.d("ANANAS", "loginWithEmailAndPassword: loginresult $loginResult")
             firestore.fetchUserFromFirestore(loginResult.user!!.uid)
                 .collectLatest { fetchedUser ->
+                    Log.d("ANANAS", "loginWithEmailAndPassword: $fetchedUser")
                     when (fetchedUser) {
                         is Resource.Success -> {
-                            send(Resource.Success(fetchedUser.data))
                             userManager.saveLoggedInUserToLocalPreferences(fetchedUser.data)
+                            userManager.saveUserId(loginResult.user!!.uid)
+                            send(Resource.Success(fetchedUser.data))
                         }
 
                         is Resource.Error -> {

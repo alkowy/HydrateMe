@@ -4,5 +4,7 @@ apply {
 
 dependencies {
     implementation project(path: ':core')
+    implementation project(path: ':profile')
 
+    implementation("com.exyte:animated-navigation-bar:1.0.0")
 }

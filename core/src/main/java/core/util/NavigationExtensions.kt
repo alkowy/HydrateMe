@@ -1,14 +1,8 @@
 package core.util
 
 import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavOptionsBuilder
+import androidx.navigation.PopUpToBuilder
 
-fun NavController.navigateWithinRegistration(route: String) {
-    this.navigate(route) {
-        popUpTo(Routes.RegistrationRoute.GENDER.name) {
-            saveState = true
-        }
-        launchSingleTop = true
-        restoreState = true
-    }
-}
+fun NavController.navigateTo(route: Route, builder: NavOptionsBuilder.() -> Unit) = this.navigate(route.route, builder)
+fun NavOptionsBuilder.popUpTo(route: Route, popUpToBuilder: PopUpToBuilder.() -> Unit = {}) = this.popUpTo(route.route, popUpToBuilder)

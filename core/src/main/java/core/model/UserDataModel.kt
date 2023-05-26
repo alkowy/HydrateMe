@@ -11,7 +11,7 @@ data class UserDataModel(
     val height: Double? = null,
     val weight: Double? = null,
     val birthDate: LocalDateTime? = null,
-    val userActivity: UserActivity = UserActivity.Empty,
+    val userActivity: UserActivityEnum = UserActivityEnum.EMPTY,
     val hydrationData: List<HydrationData> = emptyList(),
     val urineScanData: List<UrineScanData> = emptyList(),
 )

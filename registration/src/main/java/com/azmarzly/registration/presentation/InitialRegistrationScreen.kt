@@ -1,16 +1,15 @@
 package com.azmarzly.registration.presentation
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
-import core.util.Routes
-import core.util.navigateWithinRegistration
+import core.util.RegistrationRoute
+import core.util.navigateTo
 
 @Composable
 fun InitialRegistrationScreen(
@@ -19,13 +18,13 @@ fun InitialRegistrationScreen(
 ) {
     InitialRegistrationScreenContent(
         onNavigateToGenderInfo = {
-            //  navController.navigateWithinRegistration(Routes.RegistrationRoute.GENDER.name)
-            navController.navigate(Routes.RegistrationRoute.GENDER.name) {
-                popUpTo(Routes.RegistrationRoute.INITIAL.name) { inclusive = true }
+            navController.navigateTo(RegistrationRoute.GENDER) {
+                popUpTo(RegistrationRoute.INITIAL.route) { inclusive = true }
             }
         }
     )
 }
+
 
 @Composable
 fun InitialRegistrationScreenContent(
@@ -33,7 +32,10 @@ fun InitialRegistrationScreenContent(
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         Text(text = "INITIAL REGISTRATION")
-        Button(onClick = onNavigateToGenderInfo) {
+        Button(onClick = {
+            onNavigateToGenderInfo()
+            Log.d("ANANAS", "InitialRegistrationScreenContent: clicked")
+        }) {
             Text(text = "Navigate to Gender info screen")
         }
     }

@@ -50,8 +50,9 @@ fun ScannerScreen(scannerViewModel: ScannerViewModel = hiltViewModel()) {
     }
 
 }
+
 @Composable
-fun  ScannerContent() {
+fun ScannerContent() {
 
     val context = LocalContext.current
     var lifecycleOwner = LocalLifecycleOwner.current
@@ -85,8 +86,6 @@ fun  ScannerContent() {
                 .background(Color.Blue)
                 .fillMaxSize()
         ) {
-
-
 
 
             IconButton(

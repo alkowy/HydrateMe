@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import com.azmarzly.hydrateme.navigation.AppNavHost
 import core.ui.theme.HydrateMeTheme
-import core.util.Routes
+import core.util.HomeRoute
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -15,7 +15,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             HydrateMeTheme {
                 AppNavHost(
-                    startDestination = Routes.SignIn.route // remove
+//                    startDestination = HomeRoute.HOME_ROOT,// remove,
                 )
             }
         }

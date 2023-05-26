@@ -2,6 +2,7 @@ package core.util
 
 import core.model.FirestoreUserDataModel
 import core.model.UserDataModel
+import core.model.toUserActivityEnum
 
 fun UserDataModel.toFirestoreUserDataModel(): FirestoreUserDataModel {
     return FirestoreUserDataModel(
@@ -12,7 +13,7 @@ fun UserDataModel.toFirestoreUserDataModel(): FirestoreUserDataModel {
         height = this.height,
         name = this.name,
         weight = this.weight,
-        userActivity = this.userActivity.toUserActivityEnum(),
+        userActivity = this.userActivity,
         hydrationData = this.hydrationData.map { it.toFirestoreHydrationData() },
         urineScanData = this.urineScanData.map { it.toFirestoreUrineScanData() }
     )
@@ -27,7 +28,7 @@ fun FirestoreUserDataModel.toUserDataModel(): UserDataModel {
         height = this.height,
         name = this.name,
         weight = this.weight,
-        userActivity = this.userActivity.toUserActivity(),
+        userActivity = this.userActivity,
         hydrationData = this.hydrationData.map { it.toHydrationData() },
         urineScanData = this.urineScanData.map { it.toUrineScanData() },
     )

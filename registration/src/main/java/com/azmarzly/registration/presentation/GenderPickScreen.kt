@@ -7,7 +7,8 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import core.util.Routes
+import core.util.RegistrationRoute
+import core.util.navigateTo
 
 @Composable
 fun GenderPickScreen(
@@ -16,7 +17,9 @@ fun GenderPickScreen(
 ) {
     GenderPickScreenContent(
         onNavigateToAgeInfo = {
-            navController.navigate(Routes.RegistrationRoute.AGE.name)
+            navController.navigateTo(RegistrationRoute.AGE) {
+
+            }
         },
     )
 }
