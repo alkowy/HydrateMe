@@ -15,6 +15,7 @@ import core.util.LandingPageRoute
 import core.util.Route
 import core.util.ScannerRoute
 import core.util.SignInRoute
+import core.util.navigateTo
 
 @Composable
 fun AppNavHost(
@@ -39,7 +40,13 @@ fun AppNavHost(
             SignInScreen(navController)
         }
         composable(HomeRoute.HOME_ROOT.route) {
-            ParentHomeScreen()
+            ParentHomeScreen(
+                navigateToSignIn = {
+                    navController.navigateTo(SignInRoute) {
+                        popUpTo(navController.graph.id) { inclusive = true }
+                    }
+                }
+            )
         }
     }
 

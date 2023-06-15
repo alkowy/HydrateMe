@@ -68,7 +68,7 @@ fun HomeScreenContent(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                text = "Witaj Marcin!", // todo extract string resource
+                text = "Witaj Olo!", // todo extract string resource
                 style = MaterialTheme.typography.h2,
                 color = MaterialTheme.colors.onSurface,
             )
@@ -97,8 +97,8 @@ fun HomeScreenContent(
                 listOf(
                     ScanData(color = UrineColor.OK, message = "Nawodnienie dobre", hour = "12:23"),
                     ScanData(color = UrineColor.BAD, message = "Nawodnienie niewystarczające", hour = "15:23"),
-                    ScanData(color = UrineColor.BAD, message = "Nawodnienie niewystarczające", hour = "15:23"),
-                    ScanData(color = UrineColor.BAD, message = "Nawodnienie niewystarczające", hour = "15:23")
+                    ScanData(color = UrineColor.BAD, message = "Nawodnienie niewystarczające", hour = "16:27"),
+                    ScanData(color = UrineColor.BAD, message = "Nawodnienie niewystarczające", hour = "18:23")
 
                 )
             )

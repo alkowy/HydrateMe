@@ -1,5 +1,6 @@
 package core.ui.theme
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.Colors
 import androidx.compose.material.MaterialTheme
@@ -8,6 +9,7 @@ import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
+@SuppressLint("ConflictingOnColor")
 private val DarkColorPalette = darkColors(
     primary = Blue500,
     secondary = Blue400,
@@ -15,18 +17,21 @@ private val DarkColorPalette = darkColors(
     surface = VeryDarkBlue,
     background = Grey800,
     onBackground = Blue100,
-    onSurface = Blue100
+    onSurface = Blue100,
+    onPrimary = Blue900
 
 )
 
+@SuppressLint("ConflictingOnColor")
 private val LightColorPalette = lightColors(
     primary = Blue600,
     primaryVariant = Blue300,
     secondary = Blue300,
     surface = Grey300,
-    background = Blue100,
+    background = Grey100,
     onBackground = Blue900,
-    onSurface = Blue900
+    onSurface = Blue900,
+    onPrimary = Grey100,
 
 
     /* Other default colors to override
@@ -46,6 +51,12 @@ val Colors.emptyProgressColor: Color
 
 val Colors.caption: Color
     get() = if (isLight) Blue900 else Blue100
+
+val Colors.textFieldLabel: Color
+    get() = if (isLight) Grey500 else Grey200
+
+val Colors.textFieldBackground: Color
+    get() = if (isLight) Grey200 else Grey600
 
 @Composable
 fun HydrateMeTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {

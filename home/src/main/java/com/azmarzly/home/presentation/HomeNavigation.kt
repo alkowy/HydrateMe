@@ -11,12 +11,12 @@ import androidx.navigation.compose.composable
 import com.azmarzly.home.components.HomeScreenContent
 import com.azmarzly.profile.presentation.ProfileScreen
 import core.util.HomeRoute
-import core.util.Route
-import core.util.SignInRoute
-import core.util.navigateTo
 
 @Composable
-fun HomeNavGraph(navController: NavHostController) {
+fun HomeNavGraph(
+    navController: NavHostController,
+    navigateToSignIn: () -> Unit,
+) {
     NavHost(
         navController = navController,
         startDestination = HomeRoute.HOME.route,
@@ -38,7 +38,10 @@ fun HomeNavGraph(navController: NavHostController) {
         }
         composable(route = HomeRoute.PROFILE.route) {
             Text(text = "PRofile")
-            ProfileScreen()
+            ProfileScreen(
+                navigateToSignIn = { navigateToSignIn() }
+            )
+
         }
         composable(route = HomeRoute.NEWS.route) {
             Text(text = "News")

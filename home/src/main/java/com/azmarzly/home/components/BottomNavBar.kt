@@ -23,6 +23,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -69,7 +70,7 @@ fun DropletButtonNavBar(
                 .height(60.dp),
             selectedIndex = selectedItem,
             ballColor = dropletColor,
-            cornerRadius = shapeCornerRadius(25.dp),
+            cornerRadius = shapeCornerRadius(topLeft = 25.dp, topRight = 25.dp, bottomLeft = 0.dp, bottomRight = 0.dp),
             ballAnimation = ballAnimation,
             indentAnimation = Height(
                 indentWidth = 56.dp,

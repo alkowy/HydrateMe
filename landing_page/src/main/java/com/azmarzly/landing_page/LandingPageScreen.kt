@@ -9,8 +9,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Button
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -38,15 +36,25 @@ fun LandingPageScreen(navController: NavController) {
     LandingPageContent(
         state = state,
         onNavigateToHome = {
-            Log.d("ANANAS", "LandingPageScreen: popbackstack: ${ navController.popBackStack(route = HomeRoute.HOME_ROOT.route, inclusive = true)}")
-            Log.d("ANANAS", "LandingPageScreen: ${navController.currentBackStackEntry?.destination?.route}   ${navController.previousBackStackEntry}   ${navController.graph.route}")
+            Log.d("ANANAS", "LandingPageScreen: popbackstack: ${navController.popBackStack(route = HomeRoute.HOME_ROOT.route, inclusive = true)}")
+            Log.d(
+                "ANANAS",
+                "LandingPageScreen: ${navController.currentBackStackEntry?.destination?.route}   ${navController.previousBackStackEntry}   ${navController.graph.route}"
+            )
             navController.navigateTo(HomeRoute.HOME_ROOT) {
-                popUpTo(navController.graph.id) { inclusive = true}
+                popUpTo(navController.graph.id) { inclusive = true }
             }
-            Log.d("ANANAS", "LandingPageScreen: ${navController.currentBackStackEntry?.destination?.route}   ${navController.previousBackStackEntry}   ${navController.graph.route}")
+            Log.d(
+                "ANANAS",
+                "LandingPageScreen: ${navController.currentBackStackEntry?.destination?.route}   ${navController.previousBackStackEntry}   ${navController.graph.route}"
+            )
 
         },
-        onNavigateToSignIn = { navController.navigateTo(SignInRoute) {} },
+        onNavigateToSignIn = {
+            navController.navigateTo(SignInRoute) {
+                popUpTo(navController.graph.id) { inclusive = true }
+            }
+        },
     )
 }
 
@@ -55,9 +63,7 @@ fun LandingPageContent(
     state: LandingPageState,
     onNavigateToHome: () -> Unit,
     onNavigateToSignIn: () -> Unit,
-
-    ) {
-
+) {
     val infiniteTransition = rememberInfiniteTransition()
 
     val logoColor by infiniteTransition.animateColor(
@@ -68,7 +74,6 @@ fun LandingPageContent(
             repeatMode = RepeatMode.Reverse
         )
     )
-
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -87,14 +92,9 @@ fun LandingPageContent(
             colorFilter = ColorFilter.tint(logoColor)
 
         )
-        Button(onClick = { onNavigateToHome() }) {
-            Text(text = "navigate to home")
-
-        }
     }
 
     LaunchedEffect(state) {
-        delay(800000) // remove or reduce
         when (state) {
             LandingPageState.Loading -> doNothing()
             LandingPageState.LoggedIn -> onNavigateToHome()

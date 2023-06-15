@@ -8,10 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -26,26 +23,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.azmarzly.core.R
 import com.azmarzly.home.components.DropletButtonNavBar
-import com.azmarzly.home.components.HomeScreenBottomBarItem
 import com.azmarzly.home.presentation.HomeScreenParentViewModel.Companion.homeScreens
 import core.util.HomeRoute
 import core.util.navigateTo
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun ParentHomeScreen(navController: NavHostController = rememberNavController()) {
+fun ParentHomeScreen(
+    navController: NavHostController = rememberNavController(),
+    navigateToSignIn: () -> Unit,
+) {
 
     val homeParentViewModel: HomeScreenParentViewModel = hiltViewModel()
     var showAddWaterCard by remember { mutableStateOf(false) }
@@ -62,7 +56,7 @@ fun ParentHomeScreen(navController: NavHostController = rememberNavController())
             bottomBar = {
                 DropletButtonNavBar(
                     dropletButtons = homeScreens,
-                    barColor = Color.White.copy(alpha = 0.7F),
+                    barColor = Color.White.copy(alpha = 0.9F),
                     onNavigateToHome = {
                         navController.popBackStack()
                         navController.navigateTo(HomeRoute.HOME_ROOT) {
@@ -76,7 +70,17 @@ fun ParentHomeScreen(navController: NavHostController = rememberNavController())
 
                         }
                     },
-                    onNavigateToCalendar = { navController.navigateTo(HomeRoute.CALENDAR) {} },
+                    onNavigateToCalendar = {
+                        navController.navigateTo(HomeRoute.CALENDAR) {
+                            navController.graph.startDestinationRoute?.let { screen_route ->
+                                popUpTo(screen_route) {
+                                    saveState = true
+                                }
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    },
                     onNavigateToProfile = {
                         navController.navigateTo(HomeRoute.PROFILE) {
                             navController.graph.startDestinationRoute?.let { screen_route ->
@@ -88,12 +92,25 @@ fun ParentHomeScreen(navController: NavHostController = rememberNavController())
                             restoreState = true
                         }
                     },
-                    onNavigateToNews = { navController.navigateTo(HomeRoute.NEWS) {} },
+                    onNavigateToNews = {
+                        navController.navigateTo(HomeRoute.NEWS) {
+                            navController.graph.startDestinationRoute?.let { screen_route ->
+                                popUpTo(screen_route) {
+                                    saveState = true
+                                }
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    },
                     onFloatingActionButtonAction = { showAddWaterCard = true }
                 )
             }
         ) {
-            HomeNavGraph(navController = navController)
+            HomeNavGraph(
+                navController = navController,
+                navigateToSignIn = navigateToSignIn
+            )
 
             if (showAddWaterCard) {
                 AddWaterDialog(onDismissRequest = { showAddWaterCard = false })

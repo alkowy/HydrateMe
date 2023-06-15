@@ -2,7 +2,7 @@ package core.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val testColor = Color(0xFF00CAE7)
+val testColor = Color(0xFFF1F6F6)
 
 // Dark Theme
 val VeryDarkBlue = Color(0xFF171D1F) // surface
