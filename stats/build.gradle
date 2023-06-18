@@ -5,3 +5,7 @@ apply {
 dependencies {
 
 }
+
+android {
+    namespace 'com.azmarzly.stats'
+}

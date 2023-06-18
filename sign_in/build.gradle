@@ -7,3 +7,7 @@ dependencies {
     implementation project(path: ':authentication')
 
 }
+
+android {
+    namespace 'com.azmarzly.sign_in'
+}
