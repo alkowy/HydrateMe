@@ -18,7 +18,7 @@ val displayTextStyle = TextStyle(
     fontFamily = Poppins,
     fontWeight = FontWeight.Normal,
     fontSize = 34.sp,
-    letterSpacing = (-3).sp,
+    letterSpacing = (-0.03).sp,
     platformStyle = PlatformTextStyle(includeFontPadding = false)
 )
 
@@ -26,7 +26,7 @@ val buttonLabelLinkTextStyle = TextStyle(
     fontFamily = Poppins,
     fontWeight = FontWeight.Medium,
     fontSize = 12.sp,
-    letterSpacing = 2.sp,
+    letterSpacing = 0.02.sp,
     lineHeight = 18.sp,
     platformStyle = PlatformTextStyle(includeFontPadding = false)
 )
@@ -37,14 +37,14 @@ val Typography = Typography(
         fontWeight = FontWeight.Medium,
         fontSize = 29.sp,
         lineHeight = 32.sp,
-        letterSpacing = (-3).sp,
+        letterSpacing = (-0.03).sp,
         platformStyle = PlatformTextStyle(includeFontPadding = false)
     ),
     h2 = TextStyle(
         fontFamily = Poppins,
         fontWeight = FontWeight.Medium,
         fontSize = 25.sp,
-        letterSpacing = (-2).sp,
+        letterSpacing = (-0.02).sp,
         lineHeight = 30.sp,
         platformStyle = PlatformTextStyle(includeFontPadding = false)
     ),
@@ -52,7 +52,7 @@ val Typography = Typography(
         fontFamily = Poppins,
         fontWeight = FontWeight.Medium,
         fontSize = 22.sp,
-        letterSpacing = (-2).sp,
+        letterSpacing = (-0.02).sp,
         lineHeight = 25.sp,
         platformStyle = PlatformTextStyle(includeFontPadding = false)
     ),
@@ -82,7 +82,7 @@ val Typography = Typography(
         fontFamily = Poppins,
         fontWeight = FontWeight.Medium,
         fontSize = 16.sp,
-        letterSpacing = 1.sp,
+        letterSpacing = 0.01.sp,
         lineHeight = 24.sp,
         platformStyle = PlatformTextStyle(includeFontPadding = false)
     ),
@@ -92,6 +92,5 @@ val Typography = Typography(
         fontSize = 12.sp,
         lineHeight = 18.sp,
         platformStyle = PlatformTextStyle(includeFontPadding = false)
-
     )
 )

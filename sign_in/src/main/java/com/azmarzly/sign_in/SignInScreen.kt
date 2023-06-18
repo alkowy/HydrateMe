@@ -1,6 +1,6 @@
 package com.azmarzly.sign_in
 
-import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextDecoration
@@ -41,6 +42,7 @@ import com.azmarzly.core.R
 import com.azmarzly.sign_in.components.ValidatedTextField
 import core.common_components.RoundedButtonWithContent
 import core.input_validators.ValidationState
+import core.input_validators.ValidationState.Valid
 import core.ui.theme.HydrateMeTheme
 import core.ui.theme.buttonLabelLinkTextStyle
 import core.util.HomeRoute
@@ -54,12 +56,16 @@ fun SignInScreen(navController: NavController) {
     val state by viewModel.authState.collectAsStateWithLifecycle()
     val emailValidationState by viewModel.emailValidationState.collectAsStateWithLifecycle()
     val passwordValidationState by viewModel.passwordValidationState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     SignInScreenContent(
         state = state,
         emailValidationState = emailValidationState,
         passwordValidationState = passwordValidationState,
-        onNavigateToRegistration = { navController.navigateTo(RegistrationRoute.REGISTRATION_ROOT) {} },
+        onNavigateToRegistration = {
+            navController.navigateTo(RegistrationRoute.REGISTRATION_ROOT) {
+            }
+        },
         onLogin = viewModel::loginWithEmailAndPassword,
         onForgotPassword = { doNothing() },
         validateEmail = viewModel::validateEmail,
@@ -68,9 +74,11 @@ fun SignInScreen(navController: NavController) {
 
     LaunchedEffect(state) {
         if (state is SignInState.Success) {
-            navController.navigateTo(HomeRoute.HOME_ROOT) {
-                popUpTo(HomeRoute.HOME_ROOT.route) { inclusive = true }
-            }
+            navController.popBackStack()
+            navController.navigateTo(HomeRoute.HOME_ROOT) {}
+        }
+        if (state is SignInState.Error) {
+            Toast.makeText(context, "Nie udało się zalogować, niepoprawne dane", Toast.LENGTH_SHORT).show()
         }
     }
 }
@@ -96,7 +104,7 @@ fun SignInScreenContent(
                 .offset(y = (-300).dp),
         )
         Image(
-            painter = painterResource(com.azmarzly.core.R.drawable.hydrateme_logo),
+            painter = painterResource(R.drawable.hydrateme_logo),
             contentDescription = "logo",
             contentScale = ContentScale.Fit,
             colorFilter = ColorFilter.tint(Color.White),
@@ -180,7 +188,6 @@ fun SignInScreenContent(
                         .height(48.dp),
                     enabled = enabledSignInButton,
                 ) {
-                    Log.d("ANANAS", "SignInScreenContent: button state: $state")
                     if (state is SignInState.Loading) {
                         LinearProgressIndicator(
                             color = MaterialTheme.colors.onPrimary,
@@ -202,7 +209,7 @@ fun SignInScreenContent(
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Text(
                         text = "Nie masz jeszcze konta?",
-                        style = buttonLabelLinkTextStyle
+                        style = MaterialTheme.typography.caption
                     )
                     Spacer(modifier = Modifier.width(18.dp))
                     Text(
@@ -218,7 +225,9 @@ fun SignInScreenContent(
                     )
                 }
 
-
+                LaunchedEffect(emailValidationState, passwordValidationState) {
+                    enabledSignInButton = (emailValidationState is Valid && passwordValidationState is Valid)
+                }
             }
         }
     }
