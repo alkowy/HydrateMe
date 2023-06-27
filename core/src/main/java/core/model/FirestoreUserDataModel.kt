@@ -6,7 +6,7 @@ data class FirestoreUserDataModel(
     val uid: String = "",
     val email: String = "",
     val name: String = "",
-    val gender: String? = "",
+    val gender: Gender? = null,
     val height: Double? = 0.0,
     val weight: Double? = 0.0,
     val birthDate: Long? = -1, // in timestamp, epoch seconds

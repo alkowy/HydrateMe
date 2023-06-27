@@ -7,7 +7,7 @@ data class UserDataModel(
     val uid: String = "",
     val email: String,
     val name: String,
-    val gender: String? = null,
+    val gender: Gender? = null,
     val height: Double? = null,
     val weight: Double? = null,
     val birthDate: LocalDateTime? = null,
@@ -15,3 +15,7 @@ data class UserDataModel(
     val hydrationData: List<HydrationData> = emptyList(),
     val urineScanData: List<UrineScanData> = emptyList(),
 )
+
+enum class Gender{
+    MALE, FEMALE
+}

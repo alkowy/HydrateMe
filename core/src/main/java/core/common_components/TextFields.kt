@@ -1,4 +1,4 @@
-package com.azmarzly.sign_in.components
+package core.common_components
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -138,7 +138,7 @@ fun SecuredValidatedTextField(
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    var isPasswordVisible by remember {
+    var isInputVisible by remember {
         mutableStateOf(false)
     }
 
@@ -169,7 +169,7 @@ fun SecuredValidatedTextField(
         shape = RoundedCornerShape(25.dp),
         trailingIcon = {
             IconButton(onClick = {
-                isPasswordVisible = !isPasswordVisible
+                isInputVisible = !isInputVisible
             }) {
 
                 val visibleIconAndText = Pair(
@@ -183,7 +183,7 @@ fun SecuredValidatedTextField(
                 )
 
                 val passwordVisibilityIconAndText =
-                    if (isPasswordVisible) visibleIconAndText else hiddenIconAndText
+                    if (isInputVisible) visibleIconAndText else hiddenIconAndText
 
                 Icon(
                     imageVector = passwordVisibilityIconAndText.first,
@@ -192,7 +192,7 @@ fun SecuredValidatedTextField(
                 )
             }
         },
-        visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+        visualTransformation = if (isInputVisible) VisualTransformation.None else PasswordVisualTransformation(),
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Password,
             imeAction = imeAction

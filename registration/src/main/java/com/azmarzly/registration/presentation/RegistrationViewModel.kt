@@ -9,6 +9,8 @@ import core.domain.use_case.FetchCurrentUserUseCase
 import core.domain.use_case.UpdateFirestoreUserUseCase
 import core.model.Resource
 import core.model.UserDataModel
+import core.util.RegistrationRoute
+import core.util.Route
 import core.util.doNothing
 import core.util.toFirestoreUserDataModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,7 +30,7 @@ class RegistrationViewModel @Inject constructor(
     private val updateFirestoreUserUseCase: UpdateFirestoreUserUseCase,
 ) : ViewModel() {
 
-    private val _registrationState: MutableStateFlow<Resource<RegistrationState>> = MutableStateFlow(Resource.EmptyState)
+    private val _registrationState: MutableStateFlow<RegistrationState> = MutableStateFlow(RegistrationState(currentStep = RegistrationRoute.INITIAL))
     val registrationState = _registrationState.asStateFlow()
 
     init {
@@ -37,21 +39,38 @@ class RegistrationViewModel @Inject constructor(
 
     fun registerWithEmailAndPassword(email: String, password: String, userModel: UserDataModel) {
         viewModelScope.launch(dispatcherIO) {
+            _registrationState.update {
+                _registrationState.value.copy(
+                    isLoading = true,
+                    error = null,
+                )
+            }
             authRepository.registerWithEmailAndPassword(email, password, userModel)
                 .collectLatest { registrationResult ->
                     when (registrationResult) {
-                        Resource.Loading -> _registrationState.update { Resource.Loading }
+                        Resource.Loading -> _registrationState.update {
+                            _registrationState.value.copy(
+                                isLoading = true
+                            )
+                        }
+
                         is Resource.Success -> {
                             _registrationState.update {
-                                Resource.Success(
-                                    RegistrationState.InitialInfoAndRegistration(
-                                        userModel = registrationResult.data,
-                                    )
+                                _registrationState.value.copy(
+                                    userModel = registrationResult.data,
+                                    isLoading = false,
+                                    currentStep = RegistrationRoute.GENDER
                                 )
                             }
                         }
 
-                        is Resource.Error -> _registrationState.update { Resource.Error(registrationResult.errorMessage) }
+                        is Resource.Error -> _registrationState.update {
+                            _registrationState.value.copy(
+                                isLoading = false,
+                                error = registrationResult.errorMessage
+                            )
+                        }
+
                         Resource.EmptyState -> doNothing()
                     }
 
@@ -59,48 +78,67 @@ class RegistrationViewModel @Inject constructor(
         }
     }
 
-    //to be called when closing error dialog?
-    fun tryToFetchUserData(step: RegistrationStep) {
-        viewModelScope.launch(dispatcherIO) {
-            fetchCurrentUserUseCase().collect { fetchResult ->
-                when (fetchResult) {
-                    is Resource.Success -> {
-                        when (step) {
-                            RegistrationStep.INITIAL -> doNothing()
-                            RegistrationStep.GENDER -> _registrationState.update { Resource.Success(RegistrationState.GenderInfo(fetchResult.data!!)) }
-                            RegistrationStep.HEIGHT -> _registrationState.update { Resource.Success(RegistrationState.HeightInfo(fetchResult.data!!)) }
-                            RegistrationStep.ACTIVITY -> _registrationState.update { Resource.Success(RegistrationState.ActivityInfo(fetchResult.data!!)) }
-                            RegistrationStep.AGE -> _registrationState.update { Resource.Success(RegistrationState.AgeInfo(fetchResult.data!!)) }
-                            RegistrationStep.WEIGHT -> _registrationState.update { Resource.Success(RegistrationState.WeightInfo(fetchResult.data!!)) }
-                        }
-                    }
+//    //to be called when closing error dialog?
+//    fun tryToFetchUserData(step: RegistrationRoute) {
+//        viewModelScope.launch(dispatcherIO) {
+//            fetchCurrentUserUseCase().collect { fetchResult ->
+//                when (fetchResult) {
+//                    is Resource.Success -> {
+//                        when (step) {
+//                            RegistrationRoute.GENDER -> _registrationState.update { Resource.Success(RegistrationState.GenderInfo(fetchResult.data!!)) }
+//                            RegistrationRoute.AGE -> _registrationState.update { Resource.Success(RegistrationState.AgeInfo(fetchResult.data!!)) }
+//                            RegistrationRoute.MEASUREMENTS_HEIGHT -> _registrationState.update { Resource.Success(RegistrationState.HeightInfo(fetchResult.data!!)) }
+//                            RegistrationRoute.MEASUREMENTS_WEIGHT -> _registrationState.update { Resource.Success(RegistrationState.WeightInfo(fetchResult.data!!)) }
+//                            RegistrationRoute.ACTIVITY -> _registrationState.update { Resource.Success(RegistrationState.ActivityInfo(fetchResult.data!!)) }
+//                            else -> doNothing()
+//                        }
+//                    }
+//
+//                    is Resource.Error -> _registrationState.update { Resource.Error(fetchResult.errorMessage) }
+//                    Resource.Loading -> _registrationState.update { Resource.Loading }
+//                    Resource.EmptyState -> doNothing()
+//                }
+//            }
+//
+//        }
+//    }
 
-                    is Resource.Error -> _registrationState.update { Resource.Error(fetchResult.errorMessage) }
-                    Resource.Loading -> _registrationState.update { Resource.Loading }
-                    Resource.EmptyState -> doNothing()
-                }
+    fun updateUserDataAndMoveToStep(userModel: UserDataModel, nextStep: Route) {
+        Log.d("ANANAS", "updateUserDataAndMoveToStep: $userModel, $nextStep")
+        viewModelScope.launch(dispatcherIO) {
+            _registrationState.update {
+                _registrationState.value.copy(
+                    isLoading = true,
+                    error = null,
+                )
             }
-
-        }
-    }
-
-    fun updateUserDataAndMoveToStep(userModel: UserDataModel, nextStep: RegistrationStep) {
-        viewModelScope.launch(dispatcherIO) {
             updateFirestoreUserUseCase(userModel.toFirestoreUserDataModel()).collect { updateResult ->
+                Log.d("ANANAS", "updateUserDataAndMoveToStep: updateresult $updateResult")
                 when (updateResult) {
                     is Resource.Success -> {
-                        when (nextStep) {
-                            RegistrationStep.INITIAL -> doNothing()
-                            RegistrationStep.GENDER -> _registrationState.update { Resource.Success(RegistrationState.GenderInfo(userModel)) }
-                            RegistrationStep.AGE -> _registrationState.update { Resource.Success(RegistrationState.AgeInfo(userModel)) }
-                            RegistrationStep.HEIGHT -> _registrationState.update { Resource.Success(RegistrationState.HeightInfo(userModel)) }
-                            RegistrationStep.WEIGHT -> _registrationState.update { Resource.Success(RegistrationState.WeightInfo(userModel)) }
-                            RegistrationStep.ACTIVITY -> _registrationState.update { Resource.Success(RegistrationState.ActivityInfo(userModel)) }
+                        _registrationState.update {
+                            _registrationState.value.copy(
+                                userModel = updateResult.data,
+                                isLoading = false,
+                                error = null,
+                                currentStep = nextStep,
+                            )
                         }
                     }
 
-                    is Resource.Error -> _registrationState.update { Resource.Error(updateResult.errorMessage) }
-                    Resource.Loading -> _registrationState.update { Resource.Loading }
+                    is Resource.Error -> _registrationState.update {
+                        _registrationState.value.copy(
+                            error = updateResult.errorMessage
+                        )
+                    }
+
+                    Resource.Loading -> _registrationState.update {
+                        _registrationState.value.copy(
+                            error = null,
+                            isLoading = true
+                        )
+                    }
+
                     Resource.EmptyState -> doNothing()
                 }
             }
@@ -109,16 +147,12 @@ class RegistrationViewModel @Inject constructor(
     }
 }
 
-// 1 basic; 2 gender; 3 age; 4 height 5; weight; 6 activity -> display goal -> proceed to home
-sealed interface RegistrationState {
-    data class InitialInfoAndRegistration(val userModel: UserDataModel?) : RegistrationState
-    data class GenderInfo(val userModel: UserDataModel) : RegistrationState
-    data class AgeInfo(val userModel: UserDataModel) : RegistrationState
-    data class HeightInfo(val userModel: UserDataModel) : RegistrationState
-    data class WeightInfo(val userModel: UserDataModel) : RegistrationState
-    data class ActivityInfo(val userModel: UserDataModel) : RegistrationState
-}
 
-enum class RegistrationStep {
-    INITIAL, GENDER, AGE, HEIGHT, WEIGHT, ACTIVITY;
-}
+data class RegistrationState(
+    val userModel: UserDataModel? = null,
+    val currentStep: Route,
+    val nextStep: Route = currentStep.nextRegistrationStep(),
+    val previousStep: RegistrationRoute = currentStep.previousRegistrationStep(),
+    val isLoading: Boolean = false,
+    val error: String? = null,
+)

@@ -39,7 +39,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.azmarzly.core.R
-import com.azmarzly.sign_in.components.ValidatedTextField
+import core.common_components.ValidatedTextField
 import core.common_components.RoundedButtonWithContent
 import core.input_validators.ValidationState
 import core.input_validators.ValidationState.Valid
@@ -64,6 +64,7 @@ fun SignInScreen(navController: NavController) {
         passwordValidationState = passwordValidationState,
         onNavigateToRegistration = {
             navController.navigateTo(RegistrationRoute.REGISTRATION_ROOT) {
+                launchSingleTop = true
             }
         },
         onLogin = viewModel::loginWithEmailAndPassword,

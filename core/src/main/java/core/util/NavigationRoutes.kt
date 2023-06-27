@@ -2,6 +2,29 @@ package core.util
 
 interface Route {
     val route: String
+
+    fun nextRegistrationStep(): Route {
+        return when (this) {
+            RegistrationRoute.REGISTRATION_ROOT -> RegistrationRoute.INITIAL
+            RegistrationRoute.INITIAL -> RegistrationRoute.GENDER
+            RegistrationRoute.GENDER -> RegistrationRoute.AGE
+            RegistrationRoute.AGE -> RegistrationRoute.MEASUREMENTS_HEIGHT
+            RegistrationRoute.MEASUREMENTS_HEIGHT -> RegistrationRoute.MEASUREMENTS_WEIGHT
+            RegistrationRoute.MEASUREMENTS_WEIGHT -> RegistrationRoute.ACTIVITY
+            RegistrationRoute.ACTIVITY -> HomeRoute.HOME_ROOT
+            else -> RegistrationRoute.INITIAL
+        }
+    }
+
+    fun previousRegistrationStep(): RegistrationRoute {
+        return when (this) {
+            RegistrationRoute.AGE -> RegistrationRoute.GENDER
+            RegistrationRoute.MEASUREMENTS_HEIGHT -> RegistrationRoute.AGE
+            RegistrationRoute.MEASUREMENTS_WEIGHT -> RegistrationRoute.MEASUREMENTS_HEIGHT
+            RegistrationRoute.ACTIVITY -> RegistrationRoute.MEASUREMENTS_WEIGHT
+            else -> RegistrationRoute.INITIAL
+        }
+    }
 }
 
 enum class RegistrationRoute : Route {

@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -24,17 +23,19 @@ class FirestoreRepositoryImpl @Inject constructor(
         private const val USERS_COLLECTION = "users"
     }
 
-    override fun updateUserInFirestore(firestoreUser: FirestoreUserDataModel): Flow<Resource<UserDataModel>> = channelFlow<Resource<UserDataModel>> {
+    override suspend fun updateUserInFirestore(firestoreUser: FirestoreUserDataModel): Flow<Resource<UserDataModel>> = channelFlow<Resource<UserDataModel>> {
         send(Resource.Loading)
-        firestore.collection(USERS_COLLECTION)
+        val task = firestore.collection(USERS_COLLECTION)
             .document(firestoreUser.uid)
             .set(firestoreUser, SetOptions.merge())
-            .addOnCompleteListener {
-                launch {
-                    if (it.isSuccessful) send(Resource.Success(firestoreUser.toUserDataModel())) else send(Resource.Error(it.exception?.message))
-                }
-            }
 
+        task.addOnCompleteListener {  }.await()
+
+        Log.d("ANANAS", "updateUserInFirestore: $task \n isscucess${task.isSuccessful} iscomplete ${task.isComplete}")
+        when {
+            task.isSuccessful -> send(Resource.Success(firestoreUser.toUserDataModel()))
+            task.isComplete && task.isSuccessful.not() -> send(Resource.Error(task.exception?.message))
+        }
     }.catch { emit(Resource.Error(it.message)) }
 
     override fun fetchUserFromFirestore(userId: String) = flow {
