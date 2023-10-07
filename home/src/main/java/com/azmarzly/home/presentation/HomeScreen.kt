@@ -67,7 +67,6 @@ fun ParentHomeScreen(
                             }
                             launchSingleTop = true
                             restoreState = true
-
                         }
                     },
                     onNavigateToCalendar = {

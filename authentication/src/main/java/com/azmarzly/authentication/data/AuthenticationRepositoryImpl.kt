@@ -31,9 +31,10 @@ class AuthenticationRepositoryImpl @Inject constructor(
         try {
             val registrationResult = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
             val userDataModelWithFirestoreId = userDataModel.copy(uid = registrationResult.user!!.uid)
-            userManager.saveLoggedInUserToLocalPreferences(userDataModelWithFirestoreId)
             firestore.updateUserInFirestore(userDataModelWithFirestoreId.toFirestoreUserDataModel()).collect()
             if (registrationResult.user != null) {
+                userManager.saveLoggedInUserToLocalPreferences(userDataModelWithFirestoreId)
+                userManager.saveUserId(userDataModelWithFirestoreId.uid)
                 emit(Resource.Success(userDataModelWithFirestoreId))
             } else {
                 emit(Resource.Error("Registration has failed"))

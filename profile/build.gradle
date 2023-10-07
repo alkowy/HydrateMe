@@ -4,7 +4,6 @@ apply {
 dependencies {
     implementation project(path: ':core')
     implementation project(path: ':authentication')
-
 }
 
 android {

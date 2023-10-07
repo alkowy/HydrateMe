@@ -58,6 +58,12 @@ val Colors.textFieldLabel: Color
 val Colors.textFieldBackground: Color
     get() = if (isLight) Grey200 else Grey600
 
+val Colors.registrationStepDot: Color
+    get() = if (isLight) Grey300 else Grey600
+
+val Colors.registrationTextColor: Color
+    get() = if (isLight) Grey900 else Grey100
+
 @Composable
 fun HydrateMeTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
     val colors = if (darkTheme) {

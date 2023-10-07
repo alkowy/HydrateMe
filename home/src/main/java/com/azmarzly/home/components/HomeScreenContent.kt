@@ -68,7 +68,7 @@ fun HomeScreenContent(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                text = "Witaj Olo!", // todo extract string resource
+                text = "Witaj ${homeState.userData?.name ?: ""}!", // todo extract string resource
                 style = MaterialTheme.typography.h2,
                 color = MaterialTheme.colors.onSurface,
             )
@@ -109,7 +109,7 @@ fun HomeScreenContent(
     }
     LaunchedEffect(Unit) {
         Log.d("ANANAS", "HomeScreenContent: fetch current user")
-        // fetchCurrentUserData()
+         fetchCurrentUserData()
     }
 }
 

@@ -37,6 +37,8 @@ class RegistrationViewModel @Inject constructor(
         Log.d("ANANAS", "initialsed vm: ")
     }
 
+    val sd = listOf<String>().asSequence()
+
     fun registerWithEmailAndPassword(email: String, password: String, userModel: UserDataModel) {
         viewModelScope.launch(dispatcherIO) {
             _registrationState.update {
@@ -59,7 +61,7 @@ class RegistrationViewModel @Inject constructor(
                                 _registrationState.value.copy(
                                     userModel = registrationResult.data,
                                     isLoading = false,
-                                    currentStep = RegistrationRoute.GENDER
+                                    currentStep = it.nextStep as RegistrationRoute,
                                 )
                             }
                         }
@@ -103,7 +105,7 @@ class RegistrationViewModel @Inject constructor(
 //        }
 //    }
 
-    fun updateUserDataAndMoveToStep(userModel: UserDataModel, nextStep: Route) {
+    fun updateUserDataAndMoveToStep(userModel: UserDataModel, nextStep: RegistrationRoute) {
         Log.d("ANANAS", "updateUserDataAndMoveToStep: $userModel, $nextStep")
         viewModelScope.launch(dispatcherIO) {
             _registrationState.update {
@@ -150,7 +152,7 @@ class RegistrationViewModel @Inject constructor(
 
 data class RegistrationState(
     val userModel: UserDataModel? = null,
-    val currentStep: Route,
+    val currentStep: RegistrationRoute,
     val nextStep: Route = currentStep.nextRegistrationStep(),
     val previousStep: RegistrationRoute = currentStep.previousRegistrationStep(),
     val isLoading: Boolean = false,

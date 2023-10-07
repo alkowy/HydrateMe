@@ -42,6 +42,7 @@ class LocalPreferencesService @Inject constructor(
     }
 
     override fun getCurrentUserId(): String {
+        Log.d("ANANAS", "getCurrentUserId: ${sharedPreferences.getString(CURRENT_USER_ID_KEY, DEFAULT_VALUE)} ")
         return sharedPreferences.getString(CURRENT_USER_ID_KEY, DEFAULT_VALUE) ?: ""
     }
 

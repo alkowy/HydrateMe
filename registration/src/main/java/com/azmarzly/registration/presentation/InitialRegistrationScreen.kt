@@ -27,6 +27,7 @@ import core.util.navigateTo
 fun InitialRegistrationScreen(
     navController: NavController,
     registrationViewModel: RegistrationViewModel,
+    navigateToSignIn: () -> Unit,
 ) {
 
     val state by registrationViewModel.registrationState.collectAsStateWithLifecycle()
@@ -35,7 +36,8 @@ fun InitialRegistrationScreen(
         state = state,
         registerWithEmailAndPassword = { email, password, userDataModel ->
             registrationViewModel.registerWithEmailAndPassword(email, password, userDataModel)
-        }
+        },
+        navigateToSignIn = navigateToSignIn
     )
 
     LaunchedEffect(state) {
@@ -60,6 +62,7 @@ fun InitialRegistrationScreen(
 fun InitialRegistrationScreenContent(
     state: RegistrationState,
     registerWithEmailAndPassword: (email: String, password: String, userDataModel: UserDataModel) -> Unit,
+    navigateToSignIn: () -> Unit,
 ) {
     val name = remember { mutableStateOf("") }
     val email = remember { mutableStateOf("") }
@@ -120,11 +123,8 @@ fun InitialRegistrationScreenContent(
 
         }
 
-        Button(onClick = {
-            //  onNavigateToGenderInfo()
-            Log.d("ANANAS", "InitialRegistrationScreenContent: clicked")
-        }) {
-            Text(text = "Navigate to Gender info screen")
+        Button(onClick = navigateToSignIn) {
+            Text(text = "mam juz konto, zaloguj sie :)))")
         }
     }
 }
@@ -135,7 +135,8 @@ fun InitialRegistrationScreenPrev() {
     HydrateMeTheme() {
         InitialRegistrationScreenContent(
             state = RegistrationState(currentStep = RegistrationRoute.INITIAL),
-            registerWithEmailAndPassword = { _, _, _ -> Unit }
+            registerWithEmailAndPassword = { _, _, _ -> Unit },
+            navigateToSignIn = {}
         )
     }
 }

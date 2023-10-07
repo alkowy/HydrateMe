@@ -21,10 +21,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.azmarzly.registration.R
 import core.model.Gender
-import core.util.HomeRoute
 import core.util.RegistrationRoute
 import core.util.navigateTo
 
@@ -32,24 +33,19 @@ import core.util.navigateTo
 fun GenderPickScreen(
     navController: NavController,
     registrationViewModel: RegistrationViewModel,
+    navigateToHome: () -> Unit,
 ) {
 
     val state by registrationViewModel.registrationState.collectAsStateWithLifecycle()
 
     GenderPickScreenContent(
-        onNavigateToAgeInfo = {
-            navController.navigateTo(RegistrationRoute.AGE) {}
-        },
-        onNavigateToHome = {
-            navController.popBackStack()
-            navController.navigateTo(HomeRoute.HOME_ROOT) {}
-        },
+        onNavigateToHome = navigateToHome,
         setUserGender = { gender ->
             registrationViewModel.updateUserDataAndMoveToStep(
                 userModel = state.userModel!!.copy(
                     gender = gender
                 ),
-                nextStep = RegistrationRoute.AGE
+                nextStep = RegistrationRoute.PARAMETERS
             )
         }
     )
@@ -64,7 +60,6 @@ fun GenderPickScreen(
 
 @Composable
 fun GenderPickScreenContent(
-    onNavigateToAgeInfo: () -> Unit,
     onNavigateToHome: () -> Unit,
     setUserGender: (Gender) -> Unit,
 ) {
@@ -72,18 +67,18 @@ fun GenderPickScreenContent(
     var genderSelected: Gender? by remember { mutableStateOf(null) }
 
     Column(modifier = Modifier.fillMaxSize()) {
-        Text(text = "GenderPickScreenContent")
+        Text(text = "GenderPickScreenContent 3")
 
         GenderPicker(
             gender = Gender.MALE,
-            imageId = com.azmarzly.core.R.drawable.ic_add,
+            imageId = R.drawable.ic_male,
             onClick = { genderSelected = it },
             isSelected = genderSelected == Gender.MALE
 
         )
         GenderPicker(
             gender = Gender.FEMALE,
-            imageId = com.azmarzly.core.R.drawable.ic_add,
+            imageId = R.drawable.ic_female,
             onClick = { genderSelected = it },
             isSelected = genderSelected == Gender.FEMALE
         )
@@ -98,10 +93,6 @@ fun GenderPickScreenContent(
 
         Button(onClick = { onNavigateToHome() }) {
             Text(text = "Pomiń")
-        }
-
-        Button(onClick = onNavigateToAgeInfo) {
-            Text(text = "Navigate to age pick info screen")
         }
     }
 }
@@ -130,4 +121,13 @@ fun GenderPicker(
         Image(painter = painterResource(id = imageId), contentDescription = gender.name)
         Text(text = gender.name.uppercase())
     }
+}
+
+@Preview
+@Composable
+fun GenderPickerScreenPreview() {
+    GenderPickScreenContent(
+        onNavigateToHome = {},
+        setUserGender = {}
+    )
 }

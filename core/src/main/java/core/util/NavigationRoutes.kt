@@ -6,29 +6,37 @@ interface Route {
     fun nextRegistrationStep(): Route {
         return when (this) {
             RegistrationRoute.REGISTRATION_ROOT -> RegistrationRoute.INITIAL
-            RegistrationRoute.INITIAL -> RegistrationRoute.GENDER
-            RegistrationRoute.GENDER -> RegistrationRoute.AGE
-            RegistrationRoute.AGE -> RegistrationRoute.MEASUREMENTS_HEIGHT
-            RegistrationRoute.MEASUREMENTS_HEIGHT -> RegistrationRoute.MEASUREMENTS_WEIGHT
-            RegistrationRoute.MEASUREMENTS_WEIGHT -> RegistrationRoute.ACTIVITY
-            RegistrationRoute.ACTIVITY -> HomeRoute.HOME_ROOT
+            RegistrationRoute.INITIAL -> RegistrationRoute.PARAMETERS
+            RegistrationRoute.PARAMETERS -> RegistrationRoute.GENDER
+            RegistrationRoute.GENDER -> RegistrationRoute.ACTIVITY
+            RegistrationRoute.ACTIVITY -> RegistrationRoute.GOAL
+            RegistrationRoute.GOAL -> HomeRoute.HOME_ROOT
             else -> RegistrationRoute.INITIAL
         }
     }
 
     fun previousRegistrationStep(): RegistrationRoute {
         return when (this) {
-            RegistrationRoute.AGE -> RegistrationRoute.GENDER
-            RegistrationRoute.MEASUREMENTS_HEIGHT -> RegistrationRoute.AGE
-            RegistrationRoute.MEASUREMENTS_WEIGHT -> RegistrationRoute.MEASUREMENTS_HEIGHT
-            RegistrationRoute.ACTIVITY -> RegistrationRoute.MEASUREMENTS_WEIGHT
+            RegistrationRoute.ACTIVITY -> RegistrationRoute.GENDER
+            RegistrationRoute.GENDER -> RegistrationRoute.PARAMETERS
+            RegistrationRoute.GOAL -> RegistrationRoute.ACTIVITY
             else -> RegistrationRoute.INITIAL
         }
     }
 }
 
 enum class RegistrationRoute : Route {
-    REGISTRATION_ROOT, INITIAL, GENDER, AGE, MEASUREMENTS_HEIGHT, MEASUREMENTS_WEIGHT, ACTIVITY;
+    REGISTRATION_ROOT, INITIAL, PARAMETERS, GENDER, ACTIVITY, GOAL;
+
+    fun toName() : String =
+        when(this){
+            REGISTRATION_ROOT -> ""
+            INITIAL -> "Podstawowe dane"
+            PARAMETERS -> "Twoje parametry"
+            GENDER -> "Płeć"
+            ACTIVITY -> "Aktywność"
+            GOAL -> "Dzienny cel spożycia wody"
+        }
 
     override val route: String = this.name
 }

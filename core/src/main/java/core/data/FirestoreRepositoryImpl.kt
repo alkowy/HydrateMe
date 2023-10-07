@@ -1,6 +1,7 @@
 package core.data
 
 import android.util.Log
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import core.domain.FirestoreRepository
@@ -13,6 +14,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
+import java.util.Dictionary
 import javax.inject.Inject
 
 class FirestoreRepositoryImpl @Inject constructor(
@@ -45,6 +47,7 @@ class FirestoreRepositoryImpl @Inject constructor(
             .get()
             .await()
             .toObject(FirestoreUserDataModel::class.java)
+
         Log.d("ANANAS", "fetchUserFromFirestore: in firestorerepo: $user")
         if (user == null) {
             emit(Resource.Error("Error fetching the user data"))

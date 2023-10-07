@@ -7,43 +7,53 @@ import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
+import core.util.HomeRoute
 import core.util.RegistrationRoute
 import core.util.navigateTo
 import core.util.popUpTo
 
 @Composable
-fun AgePickScreen(
+fun ParametersPickScreen(
     navController: NavController,
     registrationViewModel: RegistrationViewModel,
+    navigateToHome: () -> Unit,
 ) {
-    AgePickScreenContent(
+    ParametersPickContent(
         onNavigateToGenderInfo = {
             navController.navigateTo(RegistrationRoute.GENDER) {
                 popUpTo(RegistrationRoute.GENDER) { inclusive = true }
             }
         },
-        onNavigateToMeasurementsHeightPick = {
-            navController.navigateTo(RegistrationRoute.MEASUREMENTS_HEIGHT) {}
-        }
+        onNavigateToHome = navigateToHome,
     )
 }
 
 @Composable
-fun AgePickScreenContent(
+fun ParametersPickContent(
     onNavigateToGenderInfo: () -> Unit,
-    onNavigateToMeasurementsHeightPick: () -> Unit,
+    onNavigateToHome: () -> Unit,
 ) {
 
     BackHandler(onBack = onNavigateToGenderInfo)
 
     Column(modifier = Modifier.fillMaxSize()) {
-        Text(text = "Age pick content")
+        Text(text = "Parameters pick content 2")
         Button(onClick = onNavigateToGenderInfo) {
             Text(text = "Navigate to Gender info screen")
         }
-        Button(onClick = onNavigateToMeasurementsHeightPick) {
-            Text(text = "Navigate to to height pick info screen")
+        Button(onClick = { onNavigateToHome() }) {
+            Text(text = "Pomiń")
         }
     }
+}
+
+@Preview
+@Composable
+fun ParametersPickContentPreview() {
+    ParametersPickContent(
+        onNavigateToGenderInfo = {},
+        onNavigateToHome = {}
+    )
 }

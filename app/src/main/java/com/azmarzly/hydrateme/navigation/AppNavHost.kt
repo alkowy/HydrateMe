@@ -8,10 +8,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.azmarzly.home.presentation.ParentHomeScreen
 import com.azmarzly.landing_page.LandingPageScreen
+import com.azmarzly.registration.presentation.RegistrationFlow
 import com.azmarzly.scanner.presentation.ScannerScreen
 import com.azmarzly.sign_in.SignInScreen
 import core.util.HomeRoute
 import core.util.LandingPageRoute
+import core.util.RegistrationRoute
 import core.util.Route
 import core.util.ScannerRoute
 import core.util.SignInRoute
@@ -21,7 +23,7 @@ import core.util.navigateTo
 fun AppNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    startDestination: Route = LandingPageRoute
+    startDestination: Route = LandingPageRoute,
 ) {
     NavHost(
         modifier = modifier,
@@ -31,8 +33,9 @@ fun AppNavHost(
         composable(LandingPageRoute.route) {
             LandingPageScreen(navController)
         }
-        registrationGraph(navController)
-
+        composable(RegistrationRoute.REGISTRATION_ROOT.route) {
+            RegistrationFlow(navController)
+        }
         composable(ScannerRoute.route) {
             ScannerScreen()
         }

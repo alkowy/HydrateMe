@@ -1,6 +1,5 @@
 package com.azmarzly.registration.presentation
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Button
@@ -9,21 +8,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import core.util.HomeRoute
-import core.util.RegistrationRoute
 import core.util.navigateTo
-import core.util.popUpTo
 
 @Composable
-fun ActivityPickScreen(
+fun GoalScreen(
     navController: NavController,
     registrationViewModel: RegistrationViewModel,
 ) {
-    ActivityPickScreenContent(
-        onNavigateToGoalScreen = {
-            navController.navigateTo(RegistrationRoute.GOAL) {
-                popUpTo(RegistrationRoute.GOAL) { inclusive = true }
-            }
-        },
+    GoalScreenContent(
         onNavigateToHome = {
             navController.popBackStack()
             navController.navigateTo(HomeRoute.HOME_ROOT) {}
@@ -32,16 +24,13 @@ fun ActivityPickScreen(
 }
 
 @Composable
-fun ActivityPickScreenContent(
-    onNavigateToGoalScreen: () -> Unit,
+fun GoalScreenContent(
     onNavigateToHome: () -> Unit,
 ) {
-    BackHandler(onBack = onNavigateToGoalScreen)
-
     Column(modifier = Modifier.fillMaxSize()) {
-        Text(text = "ActivityPickScreenContent 4 ")
-        Button(onClick = onNavigateToGoalScreen) {
-            Text(text = "DALEJ - Navigate to goal screen")
+        Text(text = "GOAL SCREEN  5 ")
+        Button(onClick = onNavigateToHome) {
+            Text(text = "navigate to home - finish")
         }
     }
 }
