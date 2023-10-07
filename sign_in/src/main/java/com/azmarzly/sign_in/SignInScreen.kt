@@ -1,5 +1,6 @@
 package com.azmarzly.sign_in
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -39,8 +40,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.azmarzly.core.R
-import core.common_components.ValidatedTextField
 import core.common_components.RoundedButtonWithContent
+import core.common_components.ValidatedTextField
 import core.input_validators.ValidationState
 import core.input_validators.ValidationState.Valid
 import core.ui.theme.HydrateMeTheme
@@ -73,7 +74,14 @@ fun SignInScreen(navController: NavController) {
         validatePassword = viewModel::validatePassword,
     )
 
+    LaunchedEffect(Unit) {
+        if (viewModel.isLoggedIn()) {
+            navController.popBackStack()
+            navController.navigateTo(HomeRoute.HOME_ROOT) {}
+        }
+    }
     LaunchedEffect(state) {
+        Log.d("ANANAS", "SignInScreen: launchedeffect $state")
         if (state is SignInState.Success) {
             navController.popBackStack()
             navController.navigateTo(HomeRoute.HOME_ROOT) {}

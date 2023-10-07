@@ -3,7 +3,6 @@ package com.azmarzly.registration.presentation
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -23,11 +22,19 @@ import core.util.navigateTo
 fun RegistrationFlow(navController: NavHostController) {
     val registrationViewModel: RegistrationViewModel = hiltViewModel()
     val registrationNavController = rememberNavController()
-
     val registrationState by registrationViewModel.registrationState.collectAsStateWithLifecycle()
+
     Scaffold(
         topBar = {
-            RegistrationTopBar(currentStep = registrationState.currentStep, registrationState.currentStep != RegistrationRoute.INITIAL)
+            RegistrationTopBar(
+                currentStep = registrationState.currentStep,
+                showBackButton = registrationState.currentStep !in setOf(RegistrationRoute.INITIAL, RegistrationRoute.PARAMETERS),
+                onBackButtonClick = {
+//                    registrationNavController.popBackStack()
+//                    registrationNavController.navigateTo(registrationState.previousStep) {}
+                    registrationViewModel.changeCurrentStep(registrationState.previousStep)
+                }
+            )
         }
     ) { padding ->
         Box(modifier = Modifier.padding(padding)) {

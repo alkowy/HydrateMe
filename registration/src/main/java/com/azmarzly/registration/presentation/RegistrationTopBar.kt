@@ -32,6 +32,7 @@ import core.util.RegistrationRoute
 fun RegistrationTopBar(
     currentStep: RegistrationRoute,
     showBackButton: Boolean,
+    onBackButtonClick: () -> Unit,
 ) {
     Column {
         Box(
@@ -43,7 +44,8 @@ fun RegistrationTopBar(
         ) {
             if (showBackButton) {
                 IconButton(
-                    onClick = { /*TODO*/ }) {
+                    onClick = onBackButtonClick
+                ) {
                     Icon(painterResource(id = R.drawable.ic_back_arrow), contentDescription = "back")
                 }
             }
@@ -94,7 +96,8 @@ fun RegistrationTopBarPreview() {
     HydrateMeTheme {
         RegistrationTopBar(
             currentStep = RegistrationRoute.GENDER,
-            showBackButton = true
+            showBackButton = true,
+            onBackButtonClick = {},
         )
     }
 }
@@ -105,7 +108,8 @@ fun RegistrationTopBarPreviewWithoutBackButton() {
     HydrateMeTheme {
         RegistrationTopBar(
             currentStep = RegistrationRoute.GENDER,
-            showBackButton = false
+            showBackButton = false,
+            onBackButtonClick = {},
         )
     }
 }

@@ -52,7 +52,6 @@ fun InitialRegistrationScreen(
                 }
                 launchSingleTop = true
             }
-
         }
     }
 }

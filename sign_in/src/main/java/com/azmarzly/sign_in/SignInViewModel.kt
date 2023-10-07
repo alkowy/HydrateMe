@@ -3,7 +3,9 @@ package com.azmarzly.sign_in
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.azmarzly.authentication.domain.AuthenticationRepository
+import com.azmarzly.authentication.domain.UserManager
 import core.DispatcherIO
+import core.LocalPreferencesApi
 import core.input_validators.InputValidator
 import core.input_validators.ValidationState
 import core.model.Resource
@@ -27,6 +29,7 @@ class SignInViewModel @Inject constructor(
     @DispatcherIO private val dispatcherIO: CoroutineDispatcher,
     @Named("EmailValidator") private val emailValidator: InputValidator,
     @Named("PasswordValidator") private val passwordValidator: InputValidator,
+    private val userManager: UserManager,
 ) : ViewModel() {
 
     private val _authState: MutableStateFlow<SignInState> = MutableStateFlow(SignInState.EmptyState)
@@ -70,4 +73,6 @@ class SignInViewModel @Inject constructor(
             _passwordValidationState.update { passwordValidator.isValid(password) }
         }
     }
+
+    fun isLoggedIn() = userManager.isUserLoggedIn()
 }

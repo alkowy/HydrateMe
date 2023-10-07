@@ -105,6 +105,10 @@ class RegistrationViewModel @Inject constructor(
 //        }
 //    }
 
+    fun changeCurrentStep(step: RegistrationRoute){
+        _registrationState.update { it.copy(currentStep = step) }
+    }
+
     fun updateUserDataAndMoveToStep(userModel: UserDataModel, nextStep: RegistrationRoute) {
         Log.d("ANANAS", "updateUserDataAndMoveToStep: $userModel, $nextStep")
         viewModelScope.launch(dispatcherIO) {
@@ -124,6 +128,8 @@ class RegistrationViewModel @Inject constructor(
                                 isLoading = false,
                                 error = null,
                                 currentStep = nextStep,
+                                nextStep = nextStep.nextRegistrationStep(),
+                                previousStep = nextStep.previousRegistrationStep(),
                             )
                         }
                     }
@@ -148,6 +154,7 @@ class RegistrationViewModel @Inject constructor(
         }
     }
 }
+
 
 
 data class RegistrationState(

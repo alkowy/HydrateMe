@@ -1,6 +1,7 @@
 package com.azmarzly.registration.presentation
 
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -27,6 +28,7 @@ import androidx.navigation.NavController
 import com.azmarzly.registration.R
 import core.model.Gender
 import core.util.RegistrationRoute
+import core.util.RegistrationRoute.PARAMETERS
 import core.util.navigateTo
 
 @Composable
@@ -45,10 +47,12 @@ fun GenderPickScreen(
                 userModel = state.userModel!!.copy(
                     gender = gender
                 ),
-                nextStep = RegistrationRoute.PARAMETERS
+                nextStep = RegistrationRoute.ACTIVITY
             )
         }
     )
+
+    BackHandler { registrationViewModel.changeCurrentStep(PARAMETERS) }
 
     LaunchedEffect(state.currentStep) {
         Log.d("ANANAS", "GenderPickScreen: $state")

@@ -14,9 +14,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             HydrateMeTheme {
-                AppNavHost(
-//                    startDestination = HomeRoute.HOME_ROOT,// remove,
-                )
+                AppNavHost()
             }
         }
     }

@@ -25,7 +25,6 @@ import core.util.HomeRoute
 import core.util.SignInRoute
 import core.util.doNothing
 import core.util.navigateTo
-import kotlinx.coroutines.delay
 
 @Composable
 fun LandingPageScreen(navController: NavController) {
@@ -56,6 +55,33 @@ fun LandingPageScreen(navController: NavController) {
             }
         },
     )
+
+    LaunchedEffect(state) {
+        Log.d("ANANAS", "LandingPageContent: launchedEffect $state")
+        when (state) {
+            LandingPageState.Loading -> doNothing()
+            LandingPageState.LoggedIn -> {
+                Log.d("ANANAS", "LandingPageScreen: popbackstack: ${navController.popBackStack(route = HomeRoute.HOME_ROOT.route, inclusive = true)}")
+                Log.d(
+                    "ANANAS",
+                    "LandingPageScreen: ${navController.currentBackStackEntry?.destination?.route}   ${navController.previousBackStackEntry}   ${navController.graph.route}"
+                )
+                navController.navigateTo(HomeRoute.HOME_ROOT) {
+                    popUpTo(navController.graph.id) { inclusive = true }
+                }
+                Log.d(
+                    "ANANAS",
+                    "LandingPageScreen: ${navController.currentBackStackEntry?.destination?.route}   ${navController.previousBackStackEntry}   ${navController.graph.route}"
+                )
+            }
+
+            LandingPageState.NotLoggedIn -> {
+                navController.navigateTo(SignInRoute) {
+                    popUpTo(navController.graph.id) { inclusive = true }
+                }
+            }
+        }
+    }
 }
 
 @Composable
@@ -93,16 +119,4 @@ fun LandingPageContent(
 
         )
     }
-
-    LaunchedEffect(state) {
-        when (state) {
-            LandingPageState.Loading -> doNothing()
-            LandingPageState.LoggedIn -> onNavigateToHome()
-            LandingPageState.NotLoggedIn -> {
-                onNavigateToSignIn()
-            }
-        }
-    }
-
-
 }

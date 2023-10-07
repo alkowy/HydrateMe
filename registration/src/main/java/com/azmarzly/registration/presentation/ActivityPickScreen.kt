@@ -36,7 +36,6 @@ fun ActivityPickScreenContent(
     onNavigateToGoalScreen: () -> Unit,
     onNavigateToHome: () -> Unit,
 ) {
-    BackHandler(onBack = onNavigateToGoalScreen)
 
     Column(modifier = Modifier.fillMaxSize()) {
         Text(text = "ActivityPickScreenContent 4 ")
