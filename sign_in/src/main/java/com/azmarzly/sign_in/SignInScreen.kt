@@ -33,6 +33,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -159,6 +160,7 @@ fun SignInScreenContent(
                     isError = emailValidationState == ValidationState.Invalid,
                     errorText = "Zły e-mail",
                     imeAction = ImeAction.Next,
+                    keyboardType = KeyboardType.Email
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -174,6 +176,7 @@ fun SignInScreenContent(
                     isError = passwordValidationState == ValidationState.Invalid,
                     errorText = "Złe hasło",
                     imeAction = ImeAction.Done,
+                    keyboardType = KeyboardType.Password
                 )
 
                 Text(

@@ -42,6 +42,7 @@ fun ValidatedTextField(
     errorText: String = "",
     imeAction: ImeAction,
     style: TextStyle,
+    keyboardType: KeyboardType,
 ) {
     if (isSecured) {
         SecuredValidatedTextField(
@@ -54,7 +55,8 @@ fun ValidatedTextField(
             style = style,
             isError = isError,
             errorText = errorText,
-            imeAction = imeAction
+            imeAction = imeAction,
+            keyboardType = keyboardType,
         )
     } else {
         PlaneValidatedTextField(
@@ -65,7 +67,8 @@ fun ValidatedTextField(
             style = style,
             isError = isError,
             errorText = errorText,
-            imeAction = imeAction
+            imeAction = imeAction,
+            keyboardType = keyboardType,
         )
 
     }
@@ -81,7 +84,8 @@ fun PlaneValidatedTextField(
     isError: Boolean = false,
     errorText: String = "",
     imeAction: ImeAction = ImeAction.Next,
-    style: TextStyle
+    style: TextStyle,
+    keyboardType: KeyboardType = KeyboardType.Text,
 ) {
     TextField(
         modifier = modifier
@@ -107,7 +111,7 @@ fun PlaneValidatedTextField(
             }
         },
         keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Email,
+            keyboardType = keyboardType,
             imeAction = imeAction
         ),
         maxLines = 1,
@@ -134,7 +138,8 @@ fun SecuredValidatedTextField(
     isError: Boolean = false,
     errorText: String = "",
     imeAction: ImeAction = ImeAction.Done,
-    style: TextStyle
+    style: TextStyle,
+    keyboardType: KeyboardType = KeyboardType.Password,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -194,7 +199,7 @@ fun SecuredValidatedTextField(
         },
         visualTransformation = if (isInputVisible) VisualTransformation.None else PasswordVisualTransformation(),
         keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Password,
+            keyboardType = keyboardType,
             imeAction = imeAction
         ),
         keyboardActions = KeyboardActions(onDone = {

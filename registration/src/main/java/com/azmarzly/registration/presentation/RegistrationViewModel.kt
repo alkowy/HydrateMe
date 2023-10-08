@@ -15,6 +15,7 @@ import core.util.doNothing
 import core.util.toFirestoreUserDataModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -33,11 +34,10 @@ class RegistrationViewModel @Inject constructor(
     private val _registrationState: MutableStateFlow<RegistrationState> = MutableStateFlow(RegistrationState(currentStep = RegistrationRoute.INITIAL))
     val registrationState = _registrationState.asStateFlow()
 
+
     init {
         Log.d("ANANAS", "initialsed vm: ")
     }
-
-    val sd = listOf<String>().asSequence()
 
     fun registerWithEmailAndPassword(email: String, password: String, userModel: UserDataModel) {
         viewModelScope.launch(dispatcherIO) {
@@ -105,7 +105,7 @@ class RegistrationViewModel @Inject constructor(
 //        }
 //    }
 
-    fun changeCurrentStep(step: RegistrationRoute){
+    fun changeCurrentStep(step: RegistrationRoute) {
         _registrationState.update { it.copy(currentStep = step) }
     }
 
@@ -154,7 +154,6 @@ class RegistrationViewModel @Inject constructor(
         }
     }
 }
-
 
 
 data class RegistrationState(

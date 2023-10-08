@@ -45,8 +45,4 @@ class LocalPreferencesService @Inject constructor(
         Log.d("ANANAS", "getCurrentUserId: ${sharedPreferences.getString(CURRENT_USER_ID_KEY, DEFAULT_VALUE)} ")
         return sharedPreferences.getString(CURRENT_USER_ID_KEY, DEFAULT_VALUE) ?: ""
     }
-
-    override fun isUserLoggedIn(): Boolean {
-        TODO("Not yet implemented")
-    }
 }

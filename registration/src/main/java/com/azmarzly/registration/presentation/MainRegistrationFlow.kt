@@ -53,9 +53,13 @@ fun RegistrationNavHost(
     registrationNavController: NavHostController,
     registrationViewModel: RegistrationViewModel,
 ) {
+    val registrationState by registrationViewModel.registrationState.collectAsStateWithLifecycle()
+
     NavHost(navController = registrationNavController, startDestination = RegistrationRoute.INITIAL.route) {
         composable(RegistrationRoute.INITIAL.route) {
-            InitialRegistrationScreen(registrationNavController, registrationViewModel,
+            InitialRegistrationScreen(
+                registrationNavController,
+                registrationViewModel,
                 navigateToSignIn = {
                     parentNavController.popBackStack()
                     parentNavController.navigateTo(SignInRoute) {
@@ -71,7 +75,9 @@ fun RegistrationNavHost(
         }
         composable(RegistrationRoute.PARAMETERS.route) {
             ParametersPickScreen(
-                registrationNavController, registrationViewModel,
+                navController = registrationNavController,
+                updateUserDataAndMoveToStep = registrationViewModel::updateUserDataAndMoveToStep,
+                registrationState = registrationState,
                 navigateToHome = {
                     parentNavController.popBackStack()
                     parentNavController.navigateTo(HomeRoute.HOME_ROOT) {}
@@ -79,14 +85,19 @@ fun RegistrationNavHost(
             )
         }
         composable(RegistrationRoute.GENDER.route) {
-            GenderPickScreen(registrationNavController, registrationViewModel,
+            GenderPickScreen(
+                registrationNavController,
+                registrationViewModel,
                 navigateToHome = {
                     parentNavController.popBackStack()
                     parentNavController.navigateTo(HomeRoute.HOME_ROOT) {}
                 })
         }
         composable(RegistrationRoute.ACTIVITY.route) {
-            ActivityPickScreen(registrationNavController, registrationViewModel)
+            ActivityPickScreen(
+                registrationNavController,
+                registrationViewModel
+            )
         }
         composable(RegistrationRoute.GOAL.route) {
             //GoalPickScreen(navController, registrationViewModel(navController))

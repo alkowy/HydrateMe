@@ -13,6 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
@@ -78,7 +79,8 @@ fun InitialRegistrationScreenContent(
                 doNothing()
             },
             label = "Imię",
-            style = MaterialTheme.typography.caption
+            style = MaterialTheme.typography.caption,
+            keyboardType = KeyboardType.Text
         )
         ValidatedTextField(
             modifier = Modifier,
@@ -89,7 +91,8 @@ fun InitialRegistrationScreenContent(
                 doNothing()
             },
             label = "E-mail",
-            style = MaterialTheme.typography.caption
+            style = MaterialTheme.typography.caption,
+            keyboardType = KeyboardType.Email
         )
         ValidatedTextField(
             modifier = Modifier,
@@ -100,7 +103,8 @@ fun InitialRegistrationScreenContent(
                 doNothing()
             },
             label = "Hasło",
-            style = MaterialTheme.typography.caption
+            style = MaterialTheme.typography.caption,
+            keyboardType = KeyboardType.Password
         )
 
         Button(onClick = {
