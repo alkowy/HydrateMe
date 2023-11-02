@@ -1,5 +1,6 @@
 package core.di
 
+import core.input_validators.DateValidator
 import core.input_validators.EmailInputValidator
 import core.input_validators.HeightValidator
 import core.input_validators.InputValidator
@@ -30,4 +31,8 @@ abstract class ValidatorModule {
     @Binds
     @Named("HeightValidator")
     abstract fun bindsHeightValidator(service: HeightValidator): InputValidator
+
+    @Binds
+    @Named("DateValidator")
+    abstract fun bindsDateValidator(service: DateValidator): InputValidator
 }

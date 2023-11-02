@@ -1,6 +1,5 @@
 package core.common_components
 
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -12,6 +11,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -28,7 +28,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import core.ui.theme.textFieldBackground
+import core.ui.theme.backgroundContainer
 import core.ui.theme.textFieldLabel
 
 @Composable
@@ -70,9 +70,7 @@ fun ValidatedTextField(
             imeAction = imeAction,
             keyboardType = keyboardType,
         )
-
     }
-
 }
 
 @Composable
@@ -87,9 +85,9 @@ fun PlaneValidatedTextField(
     style: TextStyle,
     keyboardType: KeyboardType = KeyboardType.Text,
 ) {
+
     TextField(
-        modifier = modifier
-            .fillMaxWidth(),
+        modifier = modifier,
         value = value.value,
         onValueChange = {
             value.value = it
@@ -102,29 +100,24 @@ fun PlaneValidatedTextField(
             )
         },
         isError = isError,
-        supportingText = {
-            if (isError) {
-                Text(
-                    text = errorText,
-                    style = style
-                )
-            }
-        },
+        supportingText = if (isError) {
+            { Text(text = errorText, style = style) }
+        } else null,
         keyboardOptions = KeyboardOptions(
             keyboardType = keyboardType,
             imeAction = imeAction
         ),
         maxLines = 1,
         shape = RoundedCornerShape(25.dp),
-        colors = androidx.compose.material3.TextFieldDefaults.colors(
-            unfocusedContainerColor = MaterialTheme.colors.textFieldBackground,
-            focusedContainerColor = MaterialTheme.colors.textFieldBackground,
-            errorContainerColor = MaterialTheme.colors.textFieldBackground,
+        colors = TextFieldDefaults.colors(
+            unfocusedContainerColor = MaterialTheme.colors.backgroundContainer,
+            focusedContainerColor = MaterialTheme.colors.backgroundContainer,
+            errorContainerColor = MaterialTheme.colors.backgroundContainer,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
             disabledIndicatorColor = Color.Transparent
         ),
-        textStyle = style
+        textStyle = style,
     )
 }
 
@@ -148,8 +141,7 @@ fun SecuredValidatedTextField(
     }
 
     TextField(
-        modifier = modifier
-            .fillMaxWidth(),
+        modifier = modifier,
         value = value.value,
         onValueChange = {
             value.value = it
@@ -206,10 +198,10 @@ fun SecuredValidatedTextField(
             keyboardController?.hide()
         }),
 
-        colors = androidx.compose.material3.TextFieldDefaults.colors(
-            unfocusedContainerColor = MaterialTheme.colors.textFieldBackground,
-            focusedContainerColor = MaterialTheme.colors.textFieldBackground,
-            errorContainerColor = MaterialTheme.colors.textFieldBackground,
+        colors = TextFieldDefaults.colors(
+            unfocusedContainerColor = MaterialTheme.colors.backgroundContainer,
+            focusedContainerColor = MaterialTheme.colors.backgroundContainer,
+            errorContainerColor = MaterialTheme.colors.backgroundContainer,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
             disabledIndicatorColor = Color.Transparent

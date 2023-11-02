@@ -10,12 +10,10 @@ import core.domain.use_case.UpdateFirestoreUserUseCase
 import core.model.Resource
 import core.model.UserDataModel
 import core.util.RegistrationRoute
-import core.util.Route
 import core.util.doNothing
 import core.util.toFirestoreUserDataModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -34,9 +32,19 @@ class RegistrationViewModel @Inject constructor(
     private val _registrationState: MutableStateFlow<RegistrationState> = MutableStateFlow(RegistrationState(currentStep = RegistrationRoute.INITIAL))
     val registrationState = _registrationState.asStateFlow()
 
+    private val _registrationBottomBarState: MutableStateFlow<RegistrationBottomBarState> = MutableStateFlow(RegistrationBottomBarState())
+    val bottomNavigationBarState = _registrationBottomBarState.asStateFlow()
 
     init {
         Log.d("ANANAS", "initialsed vm: ")
+    }
+
+    fun updateBottomBarButtonStatus(isButtonEnabled: Boolean) {
+        _registrationBottomBarState.update {
+            it.copy(
+                isNextButtonEnabled = isButtonEnabled
+            )
+        }
     }
 
     fun registerWithEmailAndPassword(email: String, password: String, userModel: UserDataModel) {
@@ -47,13 +55,21 @@ class RegistrationViewModel @Inject constructor(
                     error = null,
                 )
             }
+            _registrationBottomBarState.update {
+                _registrationBottomBarState.value.copy(
+                    isNextButtonEnabled = false,
+                )
+            }
             authRepository.registerWithEmailAndPassword(email, password, userModel)
                 .collectLatest { registrationResult ->
                     when (registrationResult) {
-                        Resource.Loading -> _registrationState.update {
-                            _registrationState.value.copy(
-                                isLoading = true
-                            )
+                        Resource.Loading -> {
+                            _registrationState.update {
+                                _registrationState.value.copy(
+                                    isLoading = true,
+                                    error = null,
+                                )
+                            }
                         }
 
                         is Resource.Success -> {
@@ -61,19 +77,28 @@ class RegistrationViewModel @Inject constructor(
                                 _registrationState.value.copy(
                                     userModel = registrationResult.data,
                                     isLoading = false,
-                                    currentStep = it.nextStep as RegistrationRoute,
+                                    isRegistrationSuccessful = true,
                                 )
                             }
                         }
 
-                        is Resource.Error -> _registrationState.update {
-                            _registrationState.value.copy(
-                                isLoading = false,
-                                error = registrationResult.errorMessage
-                            )
+                        is Resource.Error -> {
+                            _registrationState.update {
+                                _registrationState.value.copy(
+                                    isLoading = false,
+                                    error = registrationResult.errorMessage
+                                )
+                            }
+                            _registrationBottomBarState.update {
+                                _registrationBottomBarState.value.copy(
+                                    isNextButtonEnabled = true,
+                                )
+                            }
                         }
 
-                        Resource.EmptyState -> doNothing()
+                        Resource.EmptyState -> {
+                            doNothing()
+                        }
                     }
 
                 }
@@ -109,8 +134,8 @@ class RegistrationViewModel @Inject constructor(
         _registrationState.update { it.copy(currentStep = step) }
     }
 
-    fun updateUserDataAndMoveToStep(userModel: UserDataModel, nextStep: RegistrationRoute) {
-        Log.d("ANANAS", "updateUserDataAndMoveToStep: $userModel, $nextStep")
+    fun updateUserData(userModel: UserDataModel) {
+        Log.d("ANANAS", "updateUserDataAndMoveToStep: $userModel, ")
         viewModelScope.launch(dispatcherIO) {
             _registrationState.update {
                 _registrationState.value.copy(
@@ -127,9 +152,6 @@ class RegistrationViewModel @Inject constructor(
                                 userModel = updateResult.data,
                                 isLoading = false,
                                 error = null,
-                                currentStep = nextStep,
-                                nextStep = nextStep.nextRegistrationStep(),
-                                previousStep = nextStep.previousRegistrationStep(),
                             )
                         }
                     }
@@ -159,8 +181,12 @@ class RegistrationViewModel @Inject constructor(
 data class RegistrationState(
     val userModel: UserDataModel? = null,
     val currentStep: RegistrationRoute,
-    val nextStep: Route = currentStep.nextRegistrationStep(),
-    val previousStep: RegistrationRoute = currentStep.previousRegistrationStep(),
     val isLoading: Boolean = false,
     val error: String? = null,
+    val isRegistrationSuccessful: Boolean = false,
+)
+
+data class RegistrationBottomBarState(
+    val isNextButtonEnabled: Boolean = false,
+    val currentStep: RegistrationRoute = RegistrationRoute.INITIAL,
 )

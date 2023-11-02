@@ -15,7 +15,7 @@ private val DarkColorPalette = darkColors(
     secondary = Blue400,
     primaryVariant = Blue400,
     surface = VeryDarkBlue,
-    background = Grey800,
+    background = Grey600,
     onBackground = Blue100,
     onSurface = Blue100,
     onPrimary = Blue900
@@ -46,6 +46,7 @@ private val LightColorPalette = lightColors(
 
 val Colors.blue200: Color
     get() = if (isLight) Color.Blue else Color.Red
+
 val Colors.emptyProgressColor: Color
     get() = if (isLight) Grey300 else Grey500
 
@@ -55,14 +56,17 @@ val Colors.caption: Color
 val Colors.textFieldLabel: Color
     get() = if (isLight) Grey500 else Grey200
 
-val Colors.textFieldBackground: Color
-    get() = if (isLight) Grey200 else Grey600
+val Colors.backgroundContainer: Color
+    get() = if (isLight) Grey300 else Grey600
 
 val Colors.registrationStepDot: Color
     get() = if (isLight) Grey300 else Grey600
 
 val Colors.registrationTextColor: Color
     get() = if (isLight) Grey900 else Grey100
+
+//val Colors.registrationSurface: Color
+//    get() = if (isLight) VeryWhite else Grey800
 
 @Composable
 fun HydrateMeTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {

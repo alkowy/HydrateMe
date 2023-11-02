@@ -2,7 +2,8 @@ package core.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val testColor = Color(0xFFF1F6F6)
+val testColor = Color(0xFFF8FAFA)
+val testCo2lor = Color(0xFF44595C)
 
 // Dark Theme
 val VeryDarkBlue = Color(0xFF171D1F) // surface
@@ -18,6 +19,7 @@ val LightCyan = Color(0xFFC5E7EE) // secondary
 val LightWhite = Color(0xFFECF7FA) // background
 val LightGray = Color(0xFFB0C8CD) //onBackground
 
+val VeryWhite = Color(0xFFF8FBFC)
 val Blue100 = Color(0xFFF1FDFF)
 val Blue200 = Color(0xFFDEF9FD)
 val Blue300 = Color(0xFFADEEF8)

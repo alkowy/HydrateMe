@@ -1,21 +1,26 @@
 package com.azmarzly.registration.presentation
 
 import android.util.Log
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Button
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import core.common_components.ValidatedTextField
 import core.model.UserDataModel
@@ -27,27 +32,25 @@ import core.util.navigateTo
 @Composable
 fun InitialRegistrationScreen(
     navController: NavController,
-    registrationViewModel: RegistrationViewModel,
+    registerUser: (String, String, UserDataModel) -> Unit,
+    registrationState: RegistrationState,
     navigateToSignIn: () -> Unit,
+    bottomBarState: RegistrationBottomBarState,
+    updateBottomBarState: (Boolean) -> Unit,
 ) {
 
-    val state by registrationViewModel.registrationState.collectAsStateWithLifecycle()
-
     InitialRegistrationScreenContent(
-        state = state,
-        registerWithEmailAndPassword = { email, password, userDataModel ->
-            registrationViewModel.registerWithEmailAndPassword(email, password, userDataModel)
-        },
-        navigateToSignIn = navigateToSignIn
+        state = registrationState,
+        bottomBarState = bottomBarState,
+        registerWithEmailAndPassword = registerUser,
+        navigateToSignIn = navigateToSignIn,
+        updateBottomBarState = updateBottomBarState,
     )
 
-    LaunchedEffect(state) {
-        Log.d("ANANAS", "InitialRegistrationScreen 111111: $state")
-    }
-    LaunchedEffect(state.currentStep) {
-        Log.d("ANANAS", "InitialRegistrationScreen: $state")
-        if (state.currentStep != RegistrationRoute.INITIAL) {
-            navController.navigateTo(state.currentStep) {
+    LaunchedEffect(registrationState.isRegistrationSuccessful) {
+        Log.d("ANANAS", "InitialRegistrationScreen: launched isregistrationSuccessful $registrationState")
+        if (registrationState.isRegistrationSuccessful) {
+            navController.navigateTo(RegistrationRoute.PARAMETERS) {
                 popUpTo(RegistrationRoute.INITIAL.route) {
                     inclusive = true
                 }
@@ -63,51 +66,21 @@ fun InitialRegistrationScreenContent(
     state: RegistrationState,
     registerWithEmailAndPassword: (email: String, password: String, userDataModel: UserDataModel) -> Unit,
     navigateToSignIn: () -> Unit,
+    bottomBarState: RegistrationBottomBarState,
+    updateBottomBarState: (Boolean) -> Unit,
 ) {
+
     val name = remember { mutableStateOf("") }
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
-    Column(modifier = Modifier.fillMaxSize()) {
-        Text(text = "INITIAL REGISTRATION")
+    val buttonEnabled = remember {
+        derivedStateOf { name.value.isNotEmpty() && email.value.isNotEmpty() && password.value.isNotEmpty() }
+    }
 
-        ValidatedTextField(
-            modifier = Modifier,
-            isSecured = false,
-            value = name,
-            imeAction = ImeAction.Next,
-            onValueChange = {
-                doNothing()
-            },
-            label = "Imię",
-            style = MaterialTheme.typography.caption,
-            keyboardType = KeyboardType.Text
-        )
-        ValidatedTextField(
-            modifier = Modifier,
-            isSecured = false,
-            value = email,
-            imeAction = ImeAction.Next,
-            onValueChange = {
-                doNothing()
-            },
-            label = "E-mail",
-            style = MaterialTheme.typography.caption,
-            keyboardType = KeyboardType.Email
-        )
-        ValidatedTextField(
-            modifier = Modifier,
-            isSecured = true,
-            value = password,
-            imeAction = ImeAction.Next,
-            onValueChange = {
-                doNothing()
-            },
-            label = "Hasło",
-            style = MaterialTheme.typography.caption,
-            keyboardType = KeyboardType.Password
-        )
-
-        Button(onClick = {
+    RegistrationStepWithBottomBar(
+        bottomBarState = bottomBarState,
+        onSkip = navigateToSignIn,
+        onNext = {
             registerWithEmailAndPassword(
                 email.value,
                 password.value,
@@ -117,18 +90,70 @@ fun InitialRegistrationScreenContent(
                 )
             )
         }
-
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize()
+                .background(MaterialTheme.colors.background),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Text(text = "Dalej")
-        }
+            ValidatedTextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp),
+                isSecured = false,
+                value = name,
+                imeAction = ImeAction.Next,
+                onValueChange = {
+                    doNothing()
+                },
+                label = "Imię",
+                style = MaterialTheme.typography.caption,
+                keyboardType = KeyboardType.Text
+            )
+            ValidatedTextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp),
+                isSecured = false,
+                value = email,
+                imeAction = ImeAction.Next,
+                onValueChange = {
+                    doNothing()
+                },
+                label = "E-mail",
+                style = MaterialTheme.typography.caption,
+                keyboardType = KeyboardType.Email
+            )
+            ValidatedTextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp),
+                isSecured = true,
+                value = password,
+                imeAction = ImeAction.Next,
+                onValueChange = {
+                    doNothing()
+                },
+                label = "Hasło",
+                style = MaterialTheme.typography.caption,
+                keyboardType = KeyboardType.Password
+            )
 
-        LaunchedEffect(state.currentStep) {
-
+            if (state.error != null) {
+                Text(
+                    modifier = Modifier
+                        .align(CenterHorizontally)
+                        .padding(horizontal = 32.dp),
+                    text = state.error,
+                    style = MaterialTheme.typography.caption,
+                    color = Color.Red
+                )
+            }
         }
+    }
 
-        Button(onClick = navigateToSignIn) {
-            Text(text = "mam juz konto, zaloguj sie :)))")
-        }
+    LaunchedEffect(buttonEnabled.value) {
+        updateBottomBarState(buttonEnabled.value)
     }
 }
 
@@ -139,7 +164,9 @@ fun InitialRegistrationScreenPrev() {
         InitialRegistrationScreenContent(
             state = RegistrationState(currentStep = RegistrationRoute.INITIAL),
             registerWithEmailAndPassword = { _, _, _ -> Unit },
-            navigateToSignIn = {}
+            navigateToSignIn = {},
+            bottomBarState = RegistrationBottomBarState(),
+            updateBottomBarState = { _ -> }
         )
     }
 }

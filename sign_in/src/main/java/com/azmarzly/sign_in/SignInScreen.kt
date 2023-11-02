@@ -160,7 +160,8 @@ fun SignInScreenContent(
                     isError = emailValidationState == ValidationState.Invalid,
                     errorText = "Zły e-mail",
                     imeAction = ImeAction.Next,
-                    keyboardType = KeyboardType.Email
+                    keyboardType = KeyboardType.Email,
+                    modifier = Modifier.fillMaxWidth()
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -176,7 +177,8 @@ fun SignInScreenContent(
                     isError = passwordValidationState == ValidationState.Invalid,
                     errorText = "Złe hasło",
                     imeAction = ImeAction.Done,
-                    keyboardType = KeyboardType.Password
+                    keyboardType = KeyboardType.Password,
+                    modifier = Modifier.fillMaxWidth()
                 )
 
                 Text(

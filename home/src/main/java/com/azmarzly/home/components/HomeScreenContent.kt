@@ -73,7 +73,7 @@ fun HomeScreenContent(
                 color = MaterialTheme.colors.onSurface,
             )
             Image(
-                painter = painterResource(id = R.drawable.ic_home_selected),
+                painter = painterResource(id = R.drawable.ic_profile_unselected),
                 contentDescription = "",
                 modifier = Modifier.clip(CircleShape)
             )

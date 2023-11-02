@@ -1,6 +1,7 @@
 package core.ui.theme
 
 import androidx.compose.material.Typography
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -94,3 +95,15 @@ val Typography = Typography(
         platformStyle = PlatformTextStyle(includeFontPadding = false)
     )
 )
+
+val Typography.bodySmall: TextStyle
+    @Composable
+    get() {
+        return TextStyle(
+            fontFamily = Poppins,
+            fontWeight = FontWeight(400),
+            fontSize = 14.sp,
+            lineHeight = 21.sp,
+            platformStyle = PlatformTextStyle(includeFontPadding = false)
+        )
+    }
