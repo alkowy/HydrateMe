@@ -75,51 +75,64 @@ class HomeViewModel @Inject constructor(
         return _homeState.value.userData?.hydrationData?.find { it.date.isSameDayAs(today) }?.calculateProgress() ?: 0
     }
 
-    fun updateHydrationData(date: LocalDateTime = LocalDateTime.now(), amountOfWaterAdded: Int) {
+    fun updateHydrationData(
+        date: LocalDateTime = LocalDateTime.now(),
+        amountOfWaterAdded: Int
+    ) {
         _homeState.update { currentState ->
             val userData = currentState.userData ?: return
-            val hydrationDataList = userData.hydrationData.toMutableList()
 
-            val existingData = hydrationDataList.find { it.date.isSameDayAs(date) }
+            val updatedHydrationData = updateOrAddHydrationData(userData, date, amountOfWaterAdded)
 
-            if (existingData != null) {
-                // Update an existing entry
-                existingData.progress += amountOfWaterAdded
-                existingData.progressInPercentage = existingData.calculateProgress()
-            } else {
-                // Create a new entry
-                val newEntry = HydrationData(
-                    date = date,
-                    goalMillis = userData.hydrationGoalMillis,
-                    progress = amountOfWaterAdded,
-                    progressInPercentage = (amountOfWaterAdded * 100) / userData.hydrationGoalMillis
-                )
-                hydrationDataList.add(newEntry)
-            }
+            val updatedUserData = userData.copy(hydrationData = updatedHydrationData)
 
-            val updatedUserData = userData.copy(hydrationData = hydrationDataList)
-
-
-            var updatedHomeState = currentState.copy(
-                userData = updatedUserData,
-//                remainingHydrationMillis = updatedUserData.hydrationGoalMillis.minus(
-//                    updatedUserData.hydrationData.find { it.date.isSameDayAs(date) }?.progress ?: amountOfWaterAdded
-//                ),
-//                hydrationProgressPercentage = calculateHydrationProgress()
-            )
-            val hydrationData = updatedUserData.hydrationData.find { it.date.isSameDayAs(date) }
-            hydrationData?.let { data ->
-                updatedHomeState = updatedHomeState.copy(
-                    remainingHydrationMillis = data.calculateRemaining(),
-                    hydrationProgressPercentage = data.calculateProgress()
-                )
-            }
+            val updatedHomeState = updateHomeStateWithNewUserDataModel(currentState, updatedUserData, date)
 
             updatedHomeState
         }
+
         _homeState.value.userData?.toFirestoreUserDataModel()?.let { updateFirestoreUser(it) }
     }
 
+    private fun updateOrAddHydrationData(
+        userData: UserDataModel,
+        date: LocalDateTime,
+        amountOfWaterAdded: Int
+    ): List<HydrationData> {
+        val updatedHydrationData = userData.hydrationData.toMutableList()
+        val existingData = updatedHydrationData.find { it.date.isSameDayAs(date) }
+
+        if (existingData != null) {
+            existingData.progress += amountOfWaterAdded
+            existingData.progressInPercentage = existingData.calculateProgress()
+        } else {
+            val newEntry = HydrationData(
+                date = date,
+                goalMillis = userData.hydrationGoalMillis,
+                progress = amountOfWaterAdded,
+                progressInPercentage = (amountOfWaterAdded * 100) / userData.hydrationGoalMillis
+            )
+            updatedHydrationData.add(newEntry)
+        }
+
+        return updatedHydrationData
+    }
+
+    private fun updateHomeStateWithNewUserDataModel(
+        currentState: HomeState,
+        updatedUserData: UserDataModel,
+        date: LocalDateTime
+    ): HomeState {
+        val hydrationData = updatedUserData.hydrationData.find { it.date.isSameDayAs(date) }
+        val hydrationProgressPercentage = hydrationData?.calculateProgress() ?: 0
+        val remainingHydrationMillis = hydrationData?.calculateRemaining() ?: 0
+
+        return currentState.copy(
+            userData = updatedUserData,
+            remainingHydrationMillis = remainingHydrationMillis,
+            hydrationProgressPercentage = hydrationProgressPercentage
+        )
+    }
 
 //    private fun calculateHydrationProgress(): Int {
 //        val today = LocalDateTime.now()
