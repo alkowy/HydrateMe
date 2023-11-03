@@ -23,18 +23,6 @@ class ProfileViewModel @Inject constructor(
     val profileState: StateFlow<ProfileState> = _profileState.asStateFlow()
 
     // remove
-    fun login(email: String = "test@gmail.com", password: String = "12345qwerty") {
-        viewModelScope.launch {
-            authenticationRepository.loginWithEmailAndPassword(email, password).collect {
-                Log.d("ANANAS", "login: $it")
-                Log.d("ANANAS", "login: current User: ${userManager.getCurrentUserId()}")
-
-            }
-
-        }
-    }
-
-    // remove
     fun signOut() {
         viewModelScope.launch {
             authenticationRepository.signOut()

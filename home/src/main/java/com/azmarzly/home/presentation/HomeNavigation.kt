@@ -8,6 +8,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.azmarzly.home.components.HomeScreen
 import com.azmarzly.home.components.HomeScreenContent
 import com.azmarzly.profile.presentation.ProfileScreen
 import core.util.HomeRoute
@@ -23,14 +24,7 @@ fun HomeNavGraph(
         route = HomeRoute.HOME_ROOT.route
     ) {
         composable(route = HomeRoute.HOME.route) {
-            val viewModel: HomeViewModel = hiltViewModel()
-            val homeScreenState by viewModel.homeState.collectAsStateWithLifecycle()
-
-            HomeScreenContent(
-                homeState = homeScreenState,
-                fetchCurrentUserData = viewModel::fetchCurrentUser,
-                addWater = viewModel::addWater,
-            )
+            HomeScreen()
         }
         composable(route = HomeRoute.CALENDAR.route) {
             Text(text = "calendar")

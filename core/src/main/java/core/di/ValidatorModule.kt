@@ -5,7 +5,7 @@ import core.input_validators.EmailInputValidator
 import core.input_validators.HeightValidator
 import core.input_validators.InputValidator
 import core.input_validators.PasswordInputValidator
-import core.input_validators.WeightValidator
+import core.input_validators.DecimalNumberValidator
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -25,8 +25,8 @@ abstract class ValidatorModule {
     abstract fun bindsPasswordValidator(service: PasswordInputValidator): InputValidator
 
     @Binds
-    @Named("WeightValidator")
-    abstract fun bindsWeightValidator(service: WeightValidator): InputValidator
+    @Named("DecimalValidator")
+    abstract fun bindsWeightValidator(service: DecimalNumberValidator): InputValidator
 
     @Binds
     @Named("HeightValidator")

@@ -4,18 +4,19 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 import javax.inject.Inject
 
-class DateValidator @Inject constructor() : InputValidator {
+open class DateValidator @Inject constructor() : InputValidator {
 
-    private var simpleDateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+    private var simpleDateFormat = SimpleDateFormat("yyyy-M-dd", Locale.getDefault())
 
     init {
         simpleDateFormat.isLenient = false
     }
 
     override fun isValid(input: String): ValidationState {
-        if (input.split("-").isEmpty()) return ValidationState.Empty
+        if (input.split("-").any { it.isEmpty() }) return ValidationState.Empty
         return try {
             simpleDateFormat.parse(input)
+            if (input.split("-").first().toInt() < 1900) return ValidationState.Invalid
             ValidationState.Valid
         } catch (e: Exception) {
             ValidationState.Invalid

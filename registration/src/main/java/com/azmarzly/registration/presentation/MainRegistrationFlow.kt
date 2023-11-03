@@ -274,7 +274,7 @@ fun RegistrationNavHost(
             }) {
             GoalScreen(
                 navController = registrationNavController,
-                registrationViewModel = registrationViewModel,
+                registrationState = registrationState,
                 bottomBarState = bottomRegistrationBarState,
                 updateBottomBarState = registrationViewModel::updateBottomBarButtonStatus,
                 navigateToHome = {
@@ -285,6 +285,8 @@ fun RegistrationNavHost(
                         launchSingleTop = true
                     }
                 },
+                updateUserData = registrationViewModel::updateUserData,
+                changeCurrentStep = registrationViewModel::changeCurrentStep
             )
             LaunchedEffect(Unit) {
                 registrationViewModel.changeCurrentStep(RegistrationRoute.GOAL)

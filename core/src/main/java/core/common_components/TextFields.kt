@@ -115,7 +115,7 @@ fun PlaneValidatedTextField(
             errorContainerColor = MaterialTheme.colors.backgroundContainer,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
-            disabledIndicatorColor = Color.Transparent
+            disabledIndicatorColor = Color.Transparent,
         ),
         textStyle = style,
     )

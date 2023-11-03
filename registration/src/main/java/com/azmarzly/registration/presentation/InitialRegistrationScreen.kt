@@ -48,7 +48,6 @@ fun InitialRegistrationScreen(
     )
 
     LaunchedEffect(registrationState.isRegistrationSuccessful) {
-        Log.d("ANANAS", "InitialRegistrationScreen: launched isregistrationSuccessful $registrationState")
         if (registrationState.isRegistrationSuccessful) {
             navController.navigateTo(RegistrationRoute.PARAMETERS) {
                 popUpTo(RegistrationRoute.INITIAL.route) {

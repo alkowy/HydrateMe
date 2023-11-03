@@ -78,7 +78,6 @@ fun AnimatedGoalProgress(
     size: Dp = 140.dp,
 ) {
 
-    Log.d("ANANAS", "AnimatedGoalProgress: :)")
     var isGoalReached by remember { mutableStateOf(false) }
 
     val sweepAngleAnimateNumber = animateFloatAsState(
@@ -86,7 +85,7 @@ fun AnimatedGoalProgress(
         animationSpec = tween(
             durationMillis = durationMillis,
             delayMillis = delayMillis
-        )
+        ), label = ""
     )
 
     val animateColor = animateColorAsState(

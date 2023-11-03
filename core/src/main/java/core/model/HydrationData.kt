@@ -1,6 +1,7 @@
 package core.model
 
 import core.util.toTimestamp
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 data class HydrationData(

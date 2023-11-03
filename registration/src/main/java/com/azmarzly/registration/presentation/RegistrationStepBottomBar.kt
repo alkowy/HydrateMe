@@ -40,7 +40,7 @@ fun RegistrationStepBottomBar(
         modifier = modifier
     ) {
         RoundedButtonWithContent(
-            onClick = if (state.currentStep == GOAL) onSkip else onNext,
+            onClick = onNext,
             modifier = Modifier
                 .align(Alignment.End)
                 .fillMaxWidth(fraction = if (state.currentStep == GOAL) 1f else 0.5f)

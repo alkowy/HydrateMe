@@ -122,7 +122,6 @@ fun ActivityPickScreenContent(
     }
 
     LaunchedEffect(activitySelected) {
-        Log.d("ANANAS", "ActivityPickScreenContent: launched effect $activitySelected")
         updateBottomBarState(activitySelected != null)
     }
 }

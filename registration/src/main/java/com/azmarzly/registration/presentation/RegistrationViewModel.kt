@@ -7,6 +7,7 @@ import com.azmarzly.authentication.domain.AuthenticationRepository
 import core.DispatcherIO
 import core.domain.use_case.FetchCurrentUserUseCase
 import core.domain.use_case.UpdateFirestoreUserUseCase
+import core.input_validators.InputValidator
 import core.model.Resource
 import core.model.UserDataModel
 import core.util.RegistrationRoute
@@ -20,6 +21,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import javax.inject.Named
 
 @HiltViewModel
 class RegistrationViewModel @Inject constructor(
@@ -34,10 +36,6 @@ class RegistrationViewModel @Inject constructor(
 
     private val _registrationBottomBarState: MutableStateFlow<RegistrationBottomBarState> = MutableStateFlow(RegistrationBottomBarState())
     val bottomNavigationBarState = _registrationBottomBarState.asStateFlow()
-
-    init {
-        Log.d("ANANAS", "initialsed vm: ")
-    }
 
     fun updateBottomBarButtonStatus(isButtonEnabled: Boolean) {
         _registrationBottomBarState.update {
@@ -105,37 +103,12 @@ class RegistrationViewModel @Inject constructor(
         }
     }
 
-//    //to be called when closing error dialog?
-//    fun tryToFetchUserData(step: RegistrationRoute) {
-//        viewModelScope.launch(dispatcherIO) {
-//            fetchCurrentUserUseCase().collect { fetchResult ->
-//                when (fetchResult) {
-//                    is Resource.Success -> {
-//                        when (step) {
-//                            RegistrationRoute.GENDER -> _registrationState.update { Resource.Success(RegistrationState.GenderInfo(fetchResult.data!!)) }
-//                            RegistrationRoute.AGE -> _registrationState.update { Resource.Success(RegistrationState.AgeInfo(fetchResult.data!!)) }
-//                            RegistrationRoute.MEASUREMENTS_HEIGHT -> _registrationState.update { Resource.Success(RegistrationState.HeightInfo(fetchResult.data!!)) }
-//                            RegistrationRoute.MEASUREMENTS_WEIGHT -> _registrationState.update { Resource.Success(RegistrationState.WeightInfo(fetchResult.data!!)) }
-//                            RegistrationRoute.ACTIVITY -> _registrationState.update { Resource.Success(RegistrationState.ActivityInfo(fetchResult.data!!)) }
-//                            else -> doNothing()
-//                        }
-//                    }
-//
-//                    is Resource.Error -> _registrationState.update { Resource.Error(fetchResult.errorMessage) }
-//                    Resource.Loading -> _registrationState.update { Resource.Loading }
-//                    Resource.EmptyState -> doNothing()
-//                }
-//            }
-//
-//        }
-//    }
-
     fun changeCurrentStep(step: RegistrationRoute) {
         _registrationState.update { it.copy(currentStep = step) }
     }
 
     fun updateUserData(userModel: UserDataModel) {
-        Log.d("ANANAS", "updateUserDataAndMoveToStep: $userModel, ")
+        Log.d("ANANAS", "updateUserData:  $userModel")
         viewModelScope.launch(dispatcherIO) {
             _registrationState.update {
                 _registrationState.value.copy(
@@ -144,7 +117,7 @@ class RegistrationViewModel @Inject constructor(
                 )
             }
             updateFirestoreUserUseCase(userModel.toFirestoreUserDataModel()).collect { updateResult ->
-                Log.d("ANANAS", "updateUserDataAndMoveToStep: updateresult $updateResult")
+                Log.d("ANANAS", "updateUserData: result $updateResult")
                 when (updateResult) {
                     is Resource.Success -> {
                         _registrationState.update {

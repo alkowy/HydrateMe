@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -22,8 +24,11 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import core.common_components.PlaneValidatedTextField
+import core.model.UserDataModel
 import core.ui.theme.Grey400
 import core.ui.theme.HydrateMeTheme
 import core.ui.theme.bodySmall
@@ -33,18 +38,34 @@ import core.util.RegistrationRoute.GOAL
 @Composable
 fun GoalScreen(
     navController: NavController,
-    registrationViewModel: RegistrationViewModel,
+    registrationState: RegistrationState,
     navigateToHome: () -> Unit,
     bottomBarState: RegistrationBottomBarState,
     updateBottomBarState: (Boolean) -> Unit,
+    updateUserData: (UserDataModel) -> Unit,
+    changeCurrentStep: (RegistrationRoute) -> Unit,
+    viewModel: GoalScreenViewModel = hiltViewModel(),
 ) {
+
+    val isGoalValid by viewModel.isInputValid.collectAsStateWithLifecycle()
+
     GoalScreenContent(
         onNavigateToHome = navigateToHome,
         bottomBarState = bottomBarState,
-        updateBottomBarState = updateBottomBarState
+        updateBottomBarState = updateBottomBarState,
+        updateHydrationGoalData = { goal ->
+            updateUserData(
+                registrationState.userModel!!.copy(
+                    hydrationGoal = goal
+                ),
+            )
+        },
+        validateGoal = viewModel::validateGoal,
+        isGoalValid = isGoalValid,
     )
+
     BackHandler {
-        registrationViewModel.changeCurrentStep(RegistrationRoute.ACTIVITY)
+        changeCurrentStep(RegistrationRoute.ACTIVITY)
         navController.popBackStack()
     }
 
@@ -55,6 +76,9 @@ fun GoalScreenContent(
     onNavigateToHome: () -> Unit,
     bottomBarState: RegistrationBottomBarState,
     updateBottomBarState: (Boolean) -> Unit,
+    updateHydrationGoalData: (Double) -> Unit,
+    validateGoal: (String) -> Unit,
+    isGoalValid: Boolean,
 ) {
 
     val goal = rememberSaveable { mutableStateOf("") }
@@ -62,7 +86,10 @@ fun GoalScreenContent(
     RegistrationStepWithBottomBar(
         bottomBarState = bottomBarState.copy(currentStep = GOAL),
         onSkip = onNavigateToHome,
-        onNext = onNavigateToHome
+        onNext = {
+            updateHydrationGoalData(goal.value.toDouble())
+            onNavigateToHome()
+        }
     ) {
         Column(
             modifier = Modifier
@@ -86,7 +113,7 @@ fun GoalScreenContent(
             ) {
                 PlaneValidatedTextField(
                     value = goal,
-                    onValueChange = {},
+                    onValueChange = validateGoal,
                     label = "Cel",
                     style = MaterialTheme.typography.caption.copy(textAlign = TextAlign.Center),
                     imeAction = ImeAction.Done,
@@ -99,6 +126,10 @@ fun GoalScreenContent(
                 )
             }
         }
+
+        LaunchedEffect(isGoalValid) {
+            updateBottomBarState(isGoalValid)
+        }
     }
 }
 
@@ -106,6 +137,13 @@ fun GoalScreenContent(
 @Composable
 fun GoalScreenPreview() {
     HydrateMeTheme {
-        GoalScreenContent(onNavigateToHome = { }, bottomBarState = RegistrationBottomBarState(), updateBottomBarState = {})
+        GoalScreenContent(
+            onNavigateToHome = { },
+            bottomBarState = RegistrationBottomBarState(),
+            updateBottomBarState = {},
+            updateHydrationGoalData = {},
+            validateGoal = {},
+            isGoalValid = true
+        )
     }
 }

@@ -28,14 +28,18 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.azmarzly.core.R
 import com.azmarzly.home.presentation.HomeState
+import com.azmarzly.home.presentation.HomeViewModel
 import core.model.ScanData
 import core.model.UrineColor
 import core.model.UrineScanData
@@ -45,6 +49,19 @@ import core.ui.theme.caption
 import core.util.doNothing
 import java.time.LocalDateTime
 
+@Composable
+fun HomeScreen(
+    viewModel: HomeViewModel = hiltViewModel()
+) {
+
+    val homeScreenState by viewModel.homeState.collectAsStateWithLifecycle()
+
+    HomeScreenContent(
+        homeState = homeScreenState,
+        fetchCurrentUserData = viewModel::fetchCurrentUser,
+        addWater = viewModel::addWater,
+    )
+}
 
 @Composable
 fun HomeScreenContent(
@@ -82,8 +99,8 @@ fun HomeScreenContent(
         Spacer(modifier = Modifier.height(45.dp))
 
         HomeHydrationProgressCard(
-            hydrationProgress = homeState.hydrationProgress,
-            onAddHydrationAction = { doNothing() }
+            hydrationProgress = homeState.hydrationProgressPercentage,
+            onAddHydrationAction = { addWater(250.0) },
         )
         Spacer(modifier = Modifier.height(12.dp))
 
@@ -108,8 +125,11 @@ fun HomeScreenContent(
 
     }
     LaunchedEffect(Unit) {
-        Log.d("ANANAS", "HomeScreenContent: fetch current user")
-         fetchCurrentUserData()
+        Log.d("ANANAS", "HomeScreenContent: launchedeffect Unit $homeState")
+//         fetchCurrentUserData() // commented out, called in vm init block. probably to be removed
+    }
+    LaunchedEffect(homeState) {
+        Log.d("ANANAS", "HomeScreenContent: launchedeffect homeState: $homeState")
     }
 }
 

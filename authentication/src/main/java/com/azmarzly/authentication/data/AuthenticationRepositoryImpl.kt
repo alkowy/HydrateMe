@@ -51,10 +51,8 @@ class AuthenticationRepositoryImpl @Inject constructor(
         send(Resource.Loading)
         try {
             val loginResult = firebaseAuth.signInWithEmailAndPassword(email, password).await()
-            Log.d("ANANAS", "loginWithEmailAndPassword: loginresult $loginResult")
             firestore.fetchUserFromFirestore(loginResult.user!!.uid)
                 .collectLatest { fetchedUser ->
-                    Log.d("ANANAS", "loginWithEmailAndPassword: $fetchedUser")
                     when (fetchedUser) {
                         is Resource.Success -> {
                             userManager.saveLoggedInUserToLocalPreferences(fetchedUser.data)

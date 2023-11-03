@@ -1,6 +1,5 @@
 package com.azmarzly.registration.presentation
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -37,11 +36,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import core.common_components.PlaneValidatedTextField
+import core.input_validators.ValidationState
 import core.model.UserDataModel
 import core.ui.theme.HydrateMeTheme
 import core.ui.theme.registrationTextColor
 import core.util.RegistrationRoute
 import core.util.navigateTo
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 @Composable
@@ -72,7 +73,7 @@ fun ParametersPickScreen(
         onNavigateToHome = navigateToHome,
         validateWeight = parametersViewModel::validateWeight,
         validateHeight = parametersViewModel::validateHeight,
-        handleDatePicked = parametersViewModel::handleDatePickerStateChange,
+        handleDatePicked = parametersViewModel::handleDatePickedStateChanged,
         validateDate = parametersViewModel::validateDate,
         bottomBarState = bottomBarState,
     )
@@ -88,17 +89,6 @@ fun ParametersPickScreen(
             parametersState.isNextButtonEnabled,
         )
     }
-//    LaunchedEffect(registrationState.currentStep) {
-//        Log.d("ANANAS", "Parameters pick screen: $registrationState")
-//        if (registrationState.currentStep != RegistrationRoute.PARAMETERS && registrationState.currentStep != RegistrationRoute.INITIAL) {
-//            navController.navigateTo(registrationState.currentStep) {
-//            }
-//        }
-//    }
-
-//    LaunchedEffect(parametersState.weightValidationState, parametersState.heightValidationState, parametersState.selectedDate) {
-//        parametersViewModel.checkIsNextButtonEnabled()
-//    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -107,7 +97,7 @@ fun ParametersPickContent(
     state: RegistrationParametersState,
     onNavigateToHome: () -> Unit,
     onNavigateToNextStep: () -> Unit,
-    setUserParameters: (Double?, Double?, LocalDateTime?) -> Unit,
+    setUserParameters: (Double?, Double?, LocalDate?) -> Unit,
     validateWeight: (String) -> Unit,
     validateHeight: (String) -> Unit,
     handleDatePicked: (Long?) -> Unit,
@@ -115,13 +105,17 @@ fun ParametersPickContent(
     bottomBarState: RegistrationBottomBarState,
 ) {
 
+    val currentYear = LocalDate.now().year
     val weight = rememberSaveable { mutableStateOf("") }
     val height = rememberSaveable { mutableStateOf("") }
     val day = rememberSaveable { mutableStateOf("") }
     val month = rememberSaveable { mutableStateOf("") }
     val year = rememberSaveable { mutableStateOf("") }
     var showDatePickerDialog by remember { mutableStateOf(false) }
-    val datePickerState = rememberDatePickerState(initialDisplayMode = DisplayMode.Picker)
+    val datePickerState = rememberDatePickerState(
+        initialDisplayMode = DisplayMode.Picker,
+        yearRange = 1900..currentYear
+    )
 
     RegistrationStepWithBottomBar(
         bottomBarState = bottomBarState.copy(
@@ -145,6 +139,7 @@ fun ParametersPickContent(
                 month = month,
                 year = year,
                 onCalendarClick = { showDatePickerDialog = true },
+                state = state,
             )
 
             WeightRow(
@@ -178,7 +173,7 @@ fun ParametersPickContent(
         }
 
         LaunchedEffect(day.value, month.value, year.value) {
-            validateDate("${day.value}-${month.value}-${year.value}")
+            validateDate("${year.value}-${month.value}-${day.value}")
         }
     }
 }
@@ -242,6 +237,7 @@ private fun AgeRow(
     month: MutableState<String>,
     year: MutableState<String>,
     onCalendarClick: () -> Unit,
+    state: RegistrationParametersState,
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -259,6 +255,7 @@ private fun AgeRow(
             label = "DD",
             style = MaterialTheme.typography.caption,
             keyboardType = KeyboardType.Number,
+            isError = state.dateValidationState == ValidationState.Invalid,
         )
         PlaneValidatedTextField(
             modifier = Modifier.weight(1f),
@@ -266,7 +263,8 @@ private fun AgeRow(
             onValueChange = {},
             label = "MM",
             style = MaterialTheme.typography.caption,
-            keyboardType = KeyboardType.Number
+            keyboardType = KeyboardType.Number,
+            isError = state.dateValidationState == ValidationState.Invalid
         )
         PlaneValidatedTextField(
             modifier = Modifier.weight(1f),
@@ -274,15 +272,12 @@ private fun AgeRow(
             onValueChange = {},
             label = "YYYY",
             style = MaterialTheme.typography.caption,
-            keyboardType = KeyboardType.Number
+            keyboardType = KeyboardType.Number,
+            isError = state.dateValidationState == ValidationState.Invalid
         )
         IconButton(onClick = onCalendarClick) {
             Icon(imageVector = Icons.Default.CalendarMonth, contentDescription = "calendar")
         }
-    }
-
-    LaunchedEffect(day.value, month.value, year.value) {
-        Log.d("ANANAS", "AgeRow: launchedeffect call")
     }
 }
 

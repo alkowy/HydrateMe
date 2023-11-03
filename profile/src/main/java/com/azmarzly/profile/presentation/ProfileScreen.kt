@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import core.util.doNothing
 
 @Composable
 fun ProfileScreen(
@@ -39,7 +40,7 @@ fun ProfileScreen(
     val state by profileViewModel.profileState.collectAsStateWithLifecycle()
 
     ProfileContent(
-        login = { email, password -> profileViewModel.login(email, password) }, // remove
+        login = {_, _ -> Unit }, // remove
         signOut = { profileViewModel.signOut() }, // remove
     )
 

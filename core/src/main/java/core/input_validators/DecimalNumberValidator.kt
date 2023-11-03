@@ -2,7 +2,7 @@ package core.input_validators
 
 import javax.inject.Inject
 
-class WeightValidator @Inject constructor() : InputValidator {
+class DecimalNumberValidator @Inject constructor() : InputValidator {
     override fun isValid(input: String): ValidationState {
         val decimalRegex = "-?[0-9]+(\\.[0-9]+)?".toRegex()
         return when {

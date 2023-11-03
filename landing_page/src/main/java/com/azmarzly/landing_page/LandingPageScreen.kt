@@ -35,19 +35,9 @@ fun LandingPageScreen(navController: NavController) {
     LandingPageContent(
         state = state,
         onNavigateToHome = {
-            Log.d("ANANAS", "LandingPageScreen: popbackstack: ${navController.popBackStack(route = HomeRoute.HOME_ROOT.route, inclusive = true)}")
-            Log.d(
-                "ANANAS",
-                "LandingPageScreen: ${navController.currentBackStackEntry?.destination?.route}   ${navController.previousBackStackEntry}   ${navController.graph.route}"
-            )
             navController.navigateTo(HomeRoute.HOME_ROOT) {
                 popUpTo(navController.graph.id) { inclusive = true }
             }
-            Log.d(
-                "ANANAS",
-                "LandingPageScreen: ${navController.currentBackStackEntry?.destination?.route}   ${navController.previousBackStackEntry}   ${navController.graph.route}"
-            )
-
         },
         onNavigateToSignIn = {
             navController.navigateTo(SignInRoute) {
@@ -57,22 +47,12 @@ fun LandingPageScreen(navController: NavController) {
     )
 
     LaunchedEffect(state) {
-        Log.d("ANANAS", "LandingPageContent: launchedEffect $state")
         when (state) {
             LandingPageState.Loading -> doNothing()
             LandingPageState.LoggedIn -> {
-                Log.d("ANANAS", "LandingPageScreen: popbackstack: ${navController.popBackStack(route = HomeRoute.HOME_ROOT.route, inclusive = true)}")
-                Log.d(
-                    "ANANAS",
-                    "LandingPageScreen: ${navController.currentBackStackEntry?.destination?.route}   ${navController.previousBackStackEntry}   ${navController.graph.route}"
-                )
                 navController.navigateTo(HomeRoute.HOME_ROOT) {
                     popUpTo(navController.graph.id) { inclusive = true }
                 }
-                Log.d(
-                    "ANANAS",
-                    "LandingPageScreen: ${navController.currentBackStackEntry?.destination?.route}   ${navController.previousBackStackEntry}   ${navController.graph.route}"
-                )
             }
 
             LandingPageState.NotLoggedIn -> {

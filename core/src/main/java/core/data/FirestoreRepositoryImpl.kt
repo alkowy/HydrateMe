@@ -33,7 +33,6 @@ class FirestoreRepositoryImpl @Inject constructor(
 
         task.addOnCompleteListener {  }.await()
 
-        Log.d("ANANAS", "updateUserInFirestore: $task \n isscucess${task.isSuccessful} iscomplete ${task.isComplete}")
         when {
             task.isSuccessful -> send(Resource.Success(firestoreUser.toUserDataModel()))
             task.isComplete && task.isSuccessful.not() -> send(Resource.Error(task.exception?.message))
@@ -48,7 +47,6 @@ class FirestoreRepositoryImpl @Inject constructor(
             .await()
             .toObject(FirestoreUserDataModel::class.java)
 
-        Log.d("ANANAS", "fetchUserFromFirestore: in firestorerepo: $user")
         if (user == null) {
             emit(Resource.Error("Error fetching the user data"))
         } else {

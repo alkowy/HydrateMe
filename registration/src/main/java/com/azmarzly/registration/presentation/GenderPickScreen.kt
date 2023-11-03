@@ -70,13 +70,6 @@ fun GenderPickScreen(
         changeCurrentStep(PARAMETERS)
         navController.popBackStack()
     }
-
-//    LaunchedEffect(state.currentStep) {
-//        Log.d("ANANAS", "GenderPickScreen: $state")
-//        if (state.currentStep != RegistrationRoute.GENDER && state.currentStep != RegistrationRoute.INITIAL) {
-//            navController.navigateTo(state.currentStep) {}
-//        }
-//    }
 }
 
 @Composable

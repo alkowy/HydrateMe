@@ -5,20 +5,21 @@ import androidx.lifecycle.viewModelScope
 import core.input_validators.InputValidator
 import core.input_validators.ValidationState
 import core.input_validators.ValidationState.Valid
+import core.util.millisToLocalDate
+import core.util.toLocalDate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
-import java.time.ZoneOffset
+import java.time.LocalDate
 import javax.inject.Inject
 import javax.inject.Named
 
 @HiltViewModel
 class RegistrationParametersViewModel @Inject constructor(
-    @Named("WeightValidator") private val weightValidator: InputValidator,
+    @Named("DecimalValidator") private val decimalValidator: InputValidator,
     @Named("HeightValidator") private val heightValidator: InputValidator,
     @Named("DateValidator") private val dateValidator: InputValidator,
 ) : ViewModel() {
@@ -33,7 +34,7 @@ class RegistrationParametersViewModel @Inject constructor(
         validationJob = viewModelScope.launch {
             _parametersState.update {
                 it.copy(
-                    weightValidationState = weightValidator.isValid(weight),
+                    weightValidationState = decimalValidator.isValid(weight),
                     weight = weight.toDoubleOrNull()
                 )
             }
@@ -54,11 +55,11 @@ class RegistrationParametersViewModel @Inject constructor(
         }
     }
 
-    fun handleDatePickerStateChange(selectedDate: Long?) {
+    fun handleDatePickedStateChanged(selectedDate: Long?) {
         selectedDate?.let { date ->
             _parametersState.update {
                 it.copy(
-                    selectedDate = LocalDateTime.ofEpochSecond(date.div(1000), 0, ZoneOffset.UTC)
+                    selectedDate = date.millisToLocalDate()
                 )
             }
             validateAndMaybeEnableNextButton()
@@ -71,9 +72,19 @@ class RegistrationParametersViewModel @Inject constructor(
             _parametersState.update {
                 it.copy(
                     dateValidationState = dateValidator.isValid(input),
+                    selectedDate = parseDateFromString(input)
                 )
             }
             validateAndMaybeEnableNextButton()
+        }
+    }
+
+    private fun parseDateFromString(input: String): LocalDate? {
+        if (input.split("-").any { it.isEmpty() }) return null
+        return try {
+            input.toLocalDate()
+        } catch (_: Exception) {
+            null
         }
     }
 
@@ -92,7 +103,7 @@ data class RegistrationParametersState(
     val weightValidationState: ValidationState = ValidationState.Empty,
     val heightValidationState: ValidationState = ValidationState.Empty,
     val dateValidationState: ValidationState = ValidationState.Empty,
-    val selectedDate: LocalDateTime? = null,
+    val selectedDate: LocalDate? = null,
     val weight: Double? = null,
     val height: Double? = null,
     val isNextButtonEnabled: Boolean = false,

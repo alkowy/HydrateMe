@@ -18,7 +18,6 @@ class LocalPreferencesService @Inject constructor(
     }
 
     override fun setCurrentUser(userData: UserDataModel?) {
-        Log.d("ANANAS", "setCurrentUser: $userData")
         sharedPreferences.edit()
             .putString(CURRENT_USER_KEY, gson.toJson(userData))
             .apply()
@@ -27,7 +26,6 @@ class LocalPreferencesService @Inject constructor(
 
     override fun getCurrentUser(): UserDataModel {
         val json = sharedPreferences.getString(CURRENT_USER_KEY, DEFAULT_VALUE)
-        Log.d("ANANAS", "getCurrentUser: $json")
         return gson.fromJson(json, UserDataModel::class.java)
     }
 
@@ -42,7 +40,6 @@ class LocalPreferencesService @Inject constructor(
     }
 
     override fun getCurrentUserId(): String {
-        Log.d("ANANAS", "getCurrentUserId: ${sharedPreferences.getString(CURRENT_USER_ID_KEY, DEFAULT_VALUE)} ")
         return sharedPreferences.getString(CURRENT_USER_ID_KEY, DEFAULT_VALUE) ?: ""
     }
 }
