@@ -1,8 +1,6 @@
 package core.model
 
-import core.util.toLocalDate
 import core.util.toLocalDateTime
-import java.time.LocalDate
 
 data class FirestoreUserDataModel(
     val uid: String = "",
@@ -12,7 +10,7 @@ data class FirestoreUserDataModel(
     val height: Double? = 0.0,
     val weight: Double? = 0.0,
     val birthDate: Long? = -1, // in timestamp, epoch seconds
-    val hydrationGoal: Double? = 0.0,
+    val hydrationGoalMillis: Int? = 0,
     val userActivity: UserActivityEnum = UserActivityEnum.EMPTY,
     val hydrationData: List<FirestoreHydrationData> = emptyList(),
     val urineScanData: List<FirestoreUrineScanData> = emptyList(),

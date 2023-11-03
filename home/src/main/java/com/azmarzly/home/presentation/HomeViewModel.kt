@@ -1,23 +1,19 @@
 package com.azmarzly.home.presentation
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import core.DispatcherIO
 import core.domain.use_case.FetchCurrentUserUseCase
 import core.domain.use_case.UpdateFirestoreUserUseCase
 import core.model.FirestoreUserDataModel
-import core.model.HydrationData
 import core.model.Resource
 import core.model.UserDataModel
 import core.util.doNothing
-import core.util.toFirestoreUserDataModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
@@ -53,6 +49,7 @@ class HomeViewModel @Inject constructor(
                         _homeState.value.copy(
                             userData = fetchResult.data,
                             isLoading = false,
+                            remainingHydrationMillis = fetchResult.data?.hydrationGoalMillis ?: 2000
 //                            hydrationProgressPercentage = calculateHydrationProgress()
                         )
                     }
@@ -186,6 +183,7 @@ class HomeViewModel @Inject constructor(
 data class HomeState(
     val userData: UserDataModel? = null,
     val hydrationProgressPercentage: Int = 0,
+    val remainingHydrationMillis: Int = userData?.hydrationGoalMillis ?: 0,
     val isLoading: Boolean = false,
     val error: String = "",
 )

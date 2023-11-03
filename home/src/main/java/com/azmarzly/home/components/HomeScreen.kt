@@ -99,7 +99,7 @@ fun HomeScreenContent(
         Spacer(modifier = Modifier.height(45.dp))
 
         HomeHydrationProgressCard(
-            hydrationProgress = homeState.hydrationProgressPercentage,
+            homeState = homeState,
             onAddHydrationAction = { addWater(250.0) },
         )
         Spacer(modifier = Modifier.height(12.dp))

@@ -12,7 +12,7 @@ fun UserDataModel.toFirestoreUserDataModel(): FirestoreUserDataModel {
         height = this.height,
         name = this.name,
         weight = this.weight,
-        hydrationGoal = this.hydrationGoal,
+        hydrationGoalMillis = this.hydrationGoalMillis,
         userActivity = this.userActivity,
         hydrationData = this.hydrationData.map { it.toFirestoreHydrationData() },
         urineScanData = this.urineScanData.map { it.toFirestoreUrineScanData() }
@@ -28,7 +28,7 @@ fun FirestoreUserDataModel.toUserDataModel(): UserDataModel {
         height = this.height,
         name = this.name,
         weight = this.weight,
-        hydrationGoal = this.hydrationGoal,
+        hydrationGoalMillis = this.hydrationGoalMillis,
         userActivity = this.userActivity,
         hydrationData = this.hydrationData.map { it.toHydrationData() },
         urineScanData = this.urineScanData.map { it.toUrineScanData() },

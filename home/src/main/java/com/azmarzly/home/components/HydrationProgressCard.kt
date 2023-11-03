@@ -1,12 +1,9 @@
 package com.azmarzly.home.components
 
-import android.util.Log
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -43,6 +40,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.azmarzly.core.R
+import com.azmarzly.home.presentation.HomeState
 import core.ui.theme.HydrateMeTheme
 import core.ui.theme.VeryDarkBlue
 import core.ui.theme.displayTextStyle
@@ -151,7 +149,7 @@ fun AnimatedGoalProgress(
 @Composable
 fun HomeHydrationProgressCard(
     modifier: Modifier = Modifier,
-    hydrationProgress: Int,
+    homeState: HomeState,
     onAddHydrationAction: () -> Unit,
 ) {
     Column() {
@@ -174,12 +172,12 @@ fun HomeHydrationProgressCard(
                     .padding(vertical = 40.dp)
                     .fillMaxWidth(),
             ) {
-                HydrationProgress(goalProgress = hydrationProgress)
+                HydrationProgress(goalProgress = homeState.hydrationProgressPercentage)
 
                 Spacer(modifier = Modifier.height(40.dp))
 
                 Text(
-                    text = "Pozostalo 340 ml",
+                    text = "Pozostalo ${homeState.remainingHydrationMillis} ml",
                     style = MaterialTheme.typography.caption.copy(
                         color = MaterialTheme.colors.onBackground,
                     )
@@ -220,7 +218,7 @@ fun HomeHydrationProgressCard(
 fun HomeHydrationProgressCardPreview() {
     HydrateMeTheme() {
         HomeHydrationProgressCard(
-            hydrationProgress = 70,
+            homeState = HomeState(),
             onAddHydrationAction = { doNothing() },
         )
     }

@@ -56,7 +56,7 @@ fun GoalScreen(
         updateHydrationGoalData = { goal ->
             updateUserData(
                 registrationState.userModel!!.copy(
-                    hydrationGoal = goal
+                    hydrationGoalMillis = goal.times(1000).toInt(),
                 ),
             )
         },

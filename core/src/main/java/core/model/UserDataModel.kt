@@ -1,7 +1,6 @@
 package core.model
 
 import java.time.LocalDate
-import java.time.LocalDateTime
 
 //User profile data setup after sign up - can be edited in the profile section
 data class UserDataModel(
@@ -12,7 +11,7 @@ data class UserDataModel(
     val height: Double? = null,
     val weight: Double? = null,
     val birthDate: LocalDate? = null,
-    val hydrationGoal: Double? = null,
+    val hydrationGoalMillis: Int? = null,
     val userActivity: UserActivityEnum = UserActivityEnum.EMPTY,
     val hydrationData: List<HydrationData> = emptyList(),
     val urineScanData: List<UrineScanData> = emptyList(),
