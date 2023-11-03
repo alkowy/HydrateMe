@@ -49,7 +49,6 @@ import core.ui.theme.HydrateMeTheme
 import core.ui.theme.buttonLabelLinkTextStyle
 import core.util.HomeRoute
 import core.util.RegistrationRoute
-import core.util.doNothing
 import core.util.navigateTo
 
 @Composable
@@ -70,7 +69,7 @@ fun SignInScreen(navController: NavController) {
             }
         },
         onLogin = viewModel::loginWithEmailAndPassword,
-        onForgotPassword = { doNothing() },
+        onForgotPassword = { Toast.makeText(context, "Jeszcze nie dziala, pozdro", Toast.LENGTH_SHORT).show() },
         validateEmail = viewModel::validateEmail,
         validatePassword = viewModel::validatePassword,
     )

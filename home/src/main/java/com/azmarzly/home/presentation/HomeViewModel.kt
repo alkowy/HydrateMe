@@ -6,9 +6,12 @@ import core.DispatcherIO
 import core.domain.use_case.FetchCurrentUserUseCase
 import core.domain.use_case.UpdateFirestoreUserUseCase
 import core.model.FirestoreUserDataModel
+import core.model.HydrationData
 import core.model.Resource
 import core.model.UserDataModel
 import core.util.doNothing
+import core.util.isSameDayAs
+import core.util.toFirestoreUserDataModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,6 +19,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import javax.inject.Inject
@@ -27,6 +31,10 @@ class HomeViewModel @Inject constructor(
     private val fetchCurrentUserUseCase: FetchCurrentUserUseCase,
     private val updateFirestoreUserUseCase: UpdateFirestoreUserUseCase,
 ) : ViewModel() {
+
+    companion object {
+        const val DEFAULT_HYDRATION_GOAL = 2000
+    }
 
     private val _userDataState: MutableStateFlow<Resource<UserDataModel>> = MutableStateFlow(Resource.EmptyState)
     val userDataState: StateFlow<Resource<UserDataModel>> = _userDataState.asStateFlow()
@@ -46,11 +54,12 @@ class HomeViewModel @Inject constructor(
                     is Resource.Error -> _homeState.update { _homeState.value.copy(error = (fetchResult.errorMessage ?: "Unexpected error")) }
                     Resource.Loading -> _homeState.update { _homeState.value.copy(isLoading = true) }
                     is Resource.Success -> _homeState.update {
+                        val hydrationData = fetchResult.data?.hydrationData?.find { it.date.isSameDayAs(LocalDate.now()) }
                         _homeState.value.copy(
                             userData = fetchResult.data,
                             isLoading = false,
-                            remainingHydrationMillis = fetchResult.data?.hydrationGoalMillis ?: 2000
-//                            hydrationProgressPercentage = calculateHydrationProgress()
+                            remainingHydrationMillis = hydrationData?.calculateRemaining() ?: fetchResult.data?.hydrationGoalMillis ?: DEFAULT_HYDRATION_GOAL,
+                            hydrationProgressPercentage = hydrationData?.calculateProgress() ?: 0,
                         )
                     }
 
@@ -60,6 +69,57 @@ class HomeViewModel @Inject constructor(
             }
         }
     }
+
+    private fun calculateHydrationProgress(): Int {
+        val today = LocalDateTime.now()
+        return _homeState.value.userData?.hydrationData?.find { it.date.isSameDayAs(today) }?.calculateProgress() ?: 0
+    }
+
+    fun updateHydrationData(date: LocalDateTime = LocalDateTime.now(), amountOfWaterAdded: Int) {
+        _homeState.update { currentState ->
+            val userData = currentState.userData ?: return
+            val hydrationDataList = userData.hydrationData.toMutableList()
+
+            val existingData = hydrationDataList.find { it.date.isSameDayAs(date) }
+
+            if (existingData != null) {
+                // Update an existing entry
+                existingData.progress += amountOfWaterAdded
+                existingData.progressInPercentage = existingData.calculateProgress()
+            } else {
+                // Create a new entry
+                val newEntry = HydrationData(
+                    date = date,
+                    goalMillis = userData.hydrationGoalMillis,
+                    progress = amountOfWaterAdded,
+                    progressInPercentage = (amountOfWaterAdded * 100) / userData.hydrationGoalMillis
+                )
+                hydrationDataList.add(newEntry)
+            }
+
+            val updatedUserData = userData.copy(hydrationData = hydrationDataList)
+
+
+            var updatedHomeState = currentState.copy(
+                userData = updatedUserData,
+//                remainingHydrationMillis = updatedUserData.hydrationGoalMillis.minus(
+//                    updatedUserData.hydrationData.find { it.date.isSameDayAs(date) }?.progress ?: amountOfWaterAdded
+//                ),
+//                hydrationProgressPercentage = calculateHydrationProgress()
+            )
+            val hydrationData = updatedUserData.hydrationData.find { it.date.isSameDayAs(date) }
+            hydrationData?.let { data ->
+                updatedHomeState = updatedHomeState.copy(
+                    remainingHydrationMillis = data.calculateRemaining(),
+                    hydrationProgressPercentage = data.calculateProgress()
+                )
+            }
+
+            updatedHomeState
+        }
+        _homeState.value.userData?.toFirestoreUserDataModel()?.let { updateFirestoreUser(it) }
+    }
+
 
 //    private fun calculateHydrationProgress(): Int {
 //        val today = LocalDateTime.now()
@@ -94,10 +154,6 @@ class HomeViewModel @Inject constructor(
 //            goal = 2000.0
 //        )
 //    }
-
-    private fun LocalDateTime.isSameDayAs(date: LocalDateTime): Boolean {
-        return this.atZone(ZoneId.systemDefault()).toLocalDate().isEqual(date.atZone(ZoneId.systemDefault()).toLocalDate())
-    }
 
     //find today's hydration data and add amount to progress. Update progress in % too. If there is no hydration data for today, create new object with user's goal, this amount
     fun addWater(amount: Double) {
@@ -183,7 +239,16 @@ class HomeViewModel @Inject constructor(
 data class HomeState(
     val userData: UserDataModel? = null,
     val hydrationProgressPercentage: Int = 0,
-    val remainingHydrationMillis: Int = userData?.hydrationGoalMillis ?: 0,
+    var remainingHydrationMillis: Int = userData?.hydrationGoalMillis ?: 0,
     val isLoading: Boolean = false,
     val error: String = "",
-)
+) {
+
+    // verify
+    fun updateRemainingHydration() {
+        if (userData != null) {
+            val goal = userData.hydrationGoalMillis
+            remainingHydrationMillis = goal.minus(remainingHydrationMillis)
+        }
+    }
+}

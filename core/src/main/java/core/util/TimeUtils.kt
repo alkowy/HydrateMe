@@ -3,6 +3,7 @@ package core.util
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
@@ -31,7 +32,7 @@ fun Long?.millisToLocalDate(): LocalDate? {
 }
 
 fun Long.toLocalDateTime(): LocalDateTime {
-    return LocalDateTime.ofEpochSecond(this.div(1000), 0, ZoneOffset.UTC)
+    return LocalDateTime.ofEpochSecond(this, 0, ZoneOffset.UTC)
 }
 
 /**
@@ -45,4 +46,12 @@ fun String.toLocalDateTime(): LocalDateTime {
 fun String.toLocalDate(): LocalDate {
     val formatter = DateTimeFormatter.ofPattern("yyyy-M-d")
     return LocalDate.parse(this, formatter)
+}
+
+fun LocalDateTime.isSameDayAs(date: LocalDateTime): Boolean {
+    return this.atZone(ZoneOffset.UTC).toLocalDate().isEqual(date.atZone(ZoneOffset.UTC).toLocalDate())
+}
+
+fun LocalDateTime.isSameDayAs(date: LocalDate): Boolean {
+    return this.atZone(ZoneOffset.UTC).toLocalDate().isEqual(date)
 }

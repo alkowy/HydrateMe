@@ -51,7 +51,7 @@ import java.time.LocalDateTime
 
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel = hiltViewModel()
+    viewModel: HomeViewModel = hiltViewModel(),
 ) {
 
     val homeScreenState by viewModel.homeState.collectAsStateWithLifecycle()
@@ -59,7 +59,7 @@ fun HomeScreen(
     HomeScreenContent(
         homeState = homeScreenState,
         fetchCurrentUserData = viewModel::fetchCurrentUser,
-        addWater = viewModel::addWater,
+        addWater = { water -> viewModel.updateHydrationData(amountOfWaterAdded = water) },
     )
 }
 
@@ -68,7 +68,7 @@ fun HomeScreenContent(
     homeState: HomeState,
     modifier: Modifier = Modifier,
     fetchCurrentUserData: () -> Unit,
-    addWater: (Double) -> Unit,
+    addWater: (Int) -> Unit,
 ) {
 
     val scrollState = rememberScrollState()
@@ -100,7 +100,7 @@ fun HomeScreenContent(
 
         HomeHydrationProgressCard(
             homeState = homeState,
-            onAddHydrationAction = { addWater(250.0) },
+            onAddHydrationAction = addWater,
         )
         Spacer(modifier = Modifier.height(12.dp))
 

@@ -1,22 +1,22 @@
 package core.model
 
 import core.util.toTimestamp
-import java.time.LocalDate
 import java.time.LocalDateTime
 
 data class HydrationData(
     val date: LocalDateTime,
-    var goal: Double = 2000.0,
-    var progress: Double,
+    var goalMillis: Int,
+    var progress: Int,
     var progressInPercentage: Int,
 ) {
 
-    fun calculateProgress(): Int = progress.div(goal).times(10).toInt()
+    fun calculateProgress(): Int = progress.times(100).div(goalMillis)
+    fun calculateRemaining(): Int = goalMillis.minus(progress).coerceAtLeast(0)
 
     fun toFirestoreHydrationData(): FirestoreHydrationData {
         return FirestoreHydrationData(
             date = this.date.toTimestamp(),
-            goal = this.goal,
+            goalMillis = this.goalMillis,
             progress = this.progress,
             progressInPercentage = this.progressInPercentage
         )

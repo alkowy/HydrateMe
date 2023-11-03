@@ -2,6 +2,7 @@ package com.azmarzly.home.components
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
@@ -128,7 +129,7 @@ fun AnimatedGoalProgress(
 
             val brush = Brush.sweepGradient(
                 0f to startColor,
-                sweepAngleAnimateNumber.value.div(100) to if(isGoalReached) startColor else endColor,
+                sweepAngleAnimateNumber.value.div(100) to if (isGoalReached) startColor else endColor,
             )
             drawArc(
                 brush = brush,
@@ -150,7 +151,7 @@ fun AnimatedGoalProgress(
 fun HomeHydrationProgressCard(
     modifier: Modifier = Modifier,
     homeState: HomeState,
-    onAddHydrationAction: () -> Unit,
+    onAddHydrationAction: (Int) -> Unit,
 ) {
     Column() {
         Text(
@@ -175,9 +176,12 @@ fun HomeHydrationProgressCard(
                 HydrationProgress(goalProgress = homeState.hydrationProgressPercentage)
 
                 Spacer(modifier = Modifier.height(40.dp))
-
+                val remaining by animateIntAsState(
+                    targetValue = homeState.remainingHydrationMillis, label = "remaining",
+                    animationSpec = tween(1500)
+                )
                 Text(
-                    text = "Pozostalo ${homeState.remainingHydrationMillis} ml",
+                    text = "Pozostalo $remaining ml",
                     style = MaterialTheme.typography.caption.copy(
                         color = MaterialTheme.colors.onBackground,
                     )
@@ -186,7 +190,7 @@ fun HomeHydrationProgressCard(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Button(
-                    onClick = { onAddHydrationAction() },
+                    onClick = { onAddHydrationAction(250) },
                     modifier = Modifier
                         .padding(horizontal = 24.dp),
                     shape = RoundedCornerShape(25.dp),

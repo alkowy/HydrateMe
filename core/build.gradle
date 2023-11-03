@@ -11,7 +11,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
     // compose
-    api 'androidx.activity:activity-compose:1.7.1'
+    api 'androidx.activity:activity-compose:1.8.0'
     api "androidx.compose.ui:ui:1.4.3"
     api "androidx.compose.ui:ui-tooling-preview:1.4.3"
     api 'androidx.compose.material:material:1.4.3'
