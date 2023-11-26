@@ -62,6 +62,7 @@ class HomeViewModel @Inject constructor(
                             isLoading = false,
                             remainingHydrationMillis = hydrationData?.calculateRemaining() ?: fetchResult.data?.hydrationGoalMillis ?: DEFAULT_HYDRATION_GOAL,
                             hydrationProgressPercentage = hydrationData?.calculateProgress() ?: 0,
+                            hydrationGoal = hydrationData?.goalMillis ?: 0
                         )
                     }
 
@@ -276,6 +277,7 @@ data class HomeState(
     val userData: UserDataModel? = null,
     val hydrationProgressPercentage: Int = 0,
     var remainingHydrationMillis: Int = userData?.hydrationGoalMillis ?: 0,
+    var hydrationGoal: Int = userData?.hydrationData?.find { it.date.isSameDayAs(LocalDate.now()) }?.goalMillis ?: 0,
     val isLoading: Boolean = false,
     val error: String = "",
 ) {

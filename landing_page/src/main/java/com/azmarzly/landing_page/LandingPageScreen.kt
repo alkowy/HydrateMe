@@ -1,6 +1,5 @@
 package com.azmarzly.landing_page
 
-import android.util.Log
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.infiniteRepeatable
@@ -9,6 +8,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -32,19 +32,7 @@ fun LandingPageScreen(navController: NavController) {
     val landingPageViewModel: LandingPageViewModel = hiltViewModel()
     val state by landingPageViewModel.state.collectAsStateWithLifecycle()
 
-    LandingPageContent(
-        state = state,
-        onNavigateToHome = {
-            navController.navigateTo(HomeRoute.HOME_ROOT) {
-                popUpTo(navController.graph.id) { inclusive = true }
-            }
-        },
-        onNavigateToSignIn = {
-            navController.navigateTo(SignInRoute) {
-                popUpTo(navController.graph.id) { inclusive = true }
-            }
-        },
-    )
+    LandingPageContent()
 
     LaunchedEffect(state) {
         when (state) {
@@ -65,18 +53,14 @@ fun LandingPageScreen(navController: NavController) {
 }
 
 @Composable
-fun LandingPageContent(
-    state: LandingPageState,
-    onNavigateToHome: () -> Unit,
-    onNavigateToSignIn: () -> Unit,
-) {
+fun LandingPageContent() {
     val infiniteTransition = rememberInfiniteTransition()
 
     val logoColor by infiniteTransition.animateColor(
-        initialValue = Color.White.copy(alpha = 0.3f),
-        targetValue = Color.White,
+        initialValue = MaterialTheme.colors.primary.copy(alpha = 0.3f),
+        targetValue = MaterialTheme.colors.primary,
         animationSpec = infiniteRepeatable(
-            tween(1000),
+            tween(600),
             repeatMode = RepeatMode.Reverse
         )
     )
@@ -85,12 +69,6 @@ fun LandingPageContent(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        Image(
-            painter = painterResource(com.azmarzly.core.R.drawable.splash_bg),
-            contentDescription = "splash_bg",
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxSize(),
-        )
         Image(
             painter = painterResource(com.azmarzly.core.R.drawable.hydrateme_logo),
             contentDescription = "logo",

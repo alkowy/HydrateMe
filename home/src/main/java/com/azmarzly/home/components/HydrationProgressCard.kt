@@ -37,6 +37,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -46,8 +48,9 @@ import core.ui.theme.HydrateMeTheme
 import core.ui.theme.VeryDarkBlue
 import core.ui.theme.displayTextStyle
 import core.ui.theme.emptyProgressColor
+import core.ui.theme.remainingOutOfTextColor
 import core.util.doNothing
-import core.util.toPercent
+import core.util.toPercentageString
 
 
 @Composable
@@ -59,7 +62,7 @@ fun HydrationProgress(goalProgress: Int) {
         AnimatedGoalProgress(
             modifier = Modifier.padding(horizontal = 105.dp, vertical = 40.dp),
             progress = goalProgress,
-            strokeWidth = 48f,
+            strokeWidth = 64f,
         )
     }
 }
@@ -104,7 +107,7 @@ fun AnimatedGoalProgress(
         modifier = Modifier.fillMaxSize(),
     ) {
         Text(
-            text = sweepAngleAnimateNumber.value.toPercent(),
+            text = sweepAngleAnimateNumber.value.toPercentageString(),
             style = displayTextStyle.copy(
                 color = MaterialTheme.colors.primary
             )
@@ -180,12 +183,22 @@ fun HomeHydrationProgressCard(
                     targetValue = homeState.remainingHydrationMillis, label = "remaining",
                     animationSpec = tween(1500)
                 )
-                Text(
-                    text = "Pozostalo $remaining ml",
-                    style = MaterialTheme.typography.caption.copy(
-                        color = MaterialTheme.colors.onBackground,
-                    )
-                )
+                val remainingText = buildAnnotatedString {
+                    withStyle(
+                        style = MaterialTheme.typography.body1.toSpanStyle()
+                    ) {
+                        append("Pozostało $remaining ml")
+                    }
+                    withStyle(
+                        style = MaterialTheme.typography.body1.toSpanStyle().copy(
+                            color = MaterialTheme.colors.remainingOutOfTextColor
+                        )
+
+                    ) {
+                        append(" / ${homeState.hydrationGoal} ml")
+                    }
+                }
+                Text(text = remainingText,)
 
                 Spacer(modifier = Modifier.height(8.dp))
 

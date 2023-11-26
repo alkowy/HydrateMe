@@ -53,7 +53,6 @@ import java.time.LocalDateTime
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
-
     val homeScreenState by viewModel.homeState.collectAsStateWithLifecycle()
 
     HomeScreenContent(
@@ -104,7 +103,7 @@ fun HomeScreenContent(
         )
         Spacer(modifier = Modifier.height(12.dp))
 
-        HomeCompactCalendar()
+        HomeCompactCalendar(hydrationData = homeState.userData?.hydrationData ?: emptyList())
 
         Spacer(modifier = Modifier.height(24.dp))
 

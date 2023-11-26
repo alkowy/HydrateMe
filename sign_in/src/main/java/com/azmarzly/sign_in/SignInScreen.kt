@@ -110,7 +110,7 @@ fun SignInScreenContent(
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxSize()
-                .offset(y = (-300).dp),
+//                .offset(y = (-300).dp),
         )
         Image(
             painter = painterResource(R.drawable.hydrateme_logo),

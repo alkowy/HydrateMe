@@ -15,7 +15,7 @@ private val DarkColorPalette = darkColors(
     secondary = Blue400,
     primaryVariant = Blue400,
     surface = VeryDarkBlue,
-    background = Grey600,
+    background = Grey800,
     onBackground = Blue100,
     onSurface = Blue100,
     onPrimary = Blue900
@@ -28,7 +28,7 @@ private val LightColorPalette = lightColors(
     primaryVariant = Blue300,
     secondary = Blue300,
     surface = Grey300,
-    background = Grey100,
+    background = VeryWhite,
     onBackground = Blue900,
     onSurface = Blue900,
     onPrimary = Grey100,
@@ -48,7 +48,13 @@ val Colors.blue200: Color
     get() = if (isLight) Color.Blue else Color.Red
 
 val Colors.emptyProgressColor: Color
+    get() = if (isLight) Grey200 else Grey600
+
+val Colors.verticalFilledProgressColor: Color
     get() = if (isLight) Grey300 else Grey500
+
+val Colors.compactCalendarProgressText: Color
+    get() = if (isLight) Grey400 else Grey400
 
 val Colors.caption: Color
     get() = if (isLight) Blue900 else Blue100
@@ -64,6 +70,9 @@ val Colors.registrationStepDot: Color
 
 val Colors.registrationTextColor: Color
     get() = if (isLight) Grey900 else Grey100
+
+val Colors.remainingOutOfTextColor: Color
+    get() = if (isLight) Grey400 else Grey600
 
 //val Colors.registrationSurface: Color
 //    get() = if (isLight) VeryWhite else Grey800

@@ -7,7 +7,7 @@ import java.util.Locale
 
 fun doNothing() = Unit
 
-fun Number.toPercent() = NumberFormatter.withLocale(Locale.getDefault())
+fun Number.toPercentageString() = NumberFormatter.withLocale(Locale.getDefault())
     .unit(MeasureUnit.PERCENT)
     .precision(Precision.maxFraction(0))
     .format(this)
