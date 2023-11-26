@@ -3,7 +3,6 @@ package core.util
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.ZoneId
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
@@ -15,8 +14,8 @@ fun LocalDateTime.toTimestamp(): Long {
     return this.toEpochSecond(ZoneOffset.UTC)
 }
 
-fun Long?.toLocalDate(): LocalDate? {
-    return this?.let {
+fun Long.toLocalDate(): LocalDate {
+    return this.let {
         Instant.ofEpochSecond(it)
             .atZone(ZoneOffset.UTC)
             .toLocalDate()
@@ -54,4 +53,8 @@ fun LocalDateTime.isSameDayAs(date: LocalDateTime): Boolean {
 
 fun LocalDateTime.isSameDayAs(date: LocalDate): Boolean {
     return this.atZone(ZoneOffset.UTC).toLocalDate().isEqual(date)
+}
+
+fun LocalDate.isSameDayAs(date: LocalDate): Boolean {
+    return this.atStartOfDay(ZoneOffset.UTC).isEqual(date.atStartOfDay(ZoneOffset.UTC))
 }

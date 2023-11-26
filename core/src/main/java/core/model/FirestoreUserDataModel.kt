@@ -1,5 +1,7 @@
 package core.model
 
+import core.model.HydrationData.HydrationChunk
+import core.util.toLocalDate
 import core.util.toLocalDateTime
 
 data class FirestoreUserDataModel(
@@ -25,13 +27,15 @@ data class FirestoreHydrationData(
     val goalMillis: Int = 2000,
     val progress: Int = 0,
     val progressInPercentage: Int = 0,
+    val hydrationChunksList: List<FirestoreHydrationChunkData> = emptyList(),
 ) {
     fun toHydrationData(): HydrationData {
         return HydrationData(
-            date = this.date.toLocalDateTime(),
+            date = this.date.toLocalDate(),
             goalMillis = this.goalMillis,
             progress = this.progress,
             progressInPercentage = this.progressInPercentage,
+            hydrationChunksList = this.hydrationChunksList.map { it.toHydrationChunk() },
         )
     }
 }
@@ -44,6 +48,18 @@ data class FirestoreUrineScanData(
         return UrineScanData(
             date = this.date.toLocalDateTime(),
             scanInfo = this.scanInfo
+        )
+    }
+}
+
+data class FirestoreHydrationChunkData(
+    val dateTime: Long = -1,
+    val amount: Int = 0,
+) {
+    fun toHydrationChunk(): HydrationChunk {
+        return HydrationChunk(
+            dateTime = this.dateTime.toLocalDateTime(),
+            amount = this.amount,
         )
     }
 }

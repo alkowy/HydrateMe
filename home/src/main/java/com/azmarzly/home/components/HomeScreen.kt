@@ -59,7 +59,7 @@ fun HomeScreen(
     HomeScreenContent(
         homeState = homeScreenState,
         fetchCurrentUserData = viewModel::fetchCurrentUser,
-        addWater = { water -> viewModel.updateHydrationData(amountOfWaterAdded = water) },
+        addWater = { water -> viewModel.addHydration(amountOfWaterAdded = water) },
     )
 }
 

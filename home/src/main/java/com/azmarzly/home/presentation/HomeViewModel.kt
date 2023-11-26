@@ -1,5 +1,6 @@
 package com.azmarzly.home.presentation
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import core.DispatcherIO
@@ -7,6 +8,7 @@ import core.domain.use_case.FetchCurrentUserUseCase
 import core.domain.use_case.UpdateFirestoreUserUseCase
 import core.model.FirestoreUserDataModel
 import core.model.HydrationData
+import core.model.HydrationData.HydrationChunk
 import core.model.Resource
 import core.model.UserDataModel
 import core.util.doNothing
@@ -71,13 +73,13 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun calculateHydrationProgress(): Int {
-        val today = LocalDateTime.now()
+        val today = LocalDate.now()
         return _homeState.value.userData?.hydrationData?.find { it.date.isSameDayAs(today) }?.calculateProgress() ?: 0
     }
 
-    fun updateHydrationData(
-        date: LocalDateTime = LocalDateTime.now(),
-        amountOfWaterAdded: Int
+    fun addHydration(
+        date: LocalDate = LocalDate.now(),
+        amountOfWaterAdded: Int,
     ) {
         _homeState.update { currentState ->
             val userData = currentState.userData ?: return
@@ -96,24 +98,44 @@ class HomeViewModel @Inject constructor(
 
     private fun updateOrAddHydrationData(
         userData: UserDataModel,
-        date: LocalDateTime,
-        amountOfWaterAdded: Int
+        date: LocalDate,
+        amountOfWaterAdded: Int,
     ): List<HydrationData> {
         val updatedHydrationData = userData.hydrationData.toMutableList()
         val existingData = updatedHydrationData.find { it.date.isSameDayAs(date) }
 
+        Log.d("ANANAS", "updateOrAddHydrationData: 111 $updatedHydrationData")
+        Log.d("ANANAS", "updateOrAddHydrationData: existingdata $existingData")
         if (existingData != null) {
+            val hydrationChunksList = existingData.hydrationChunksList.toMutableList()
+            hydrationChunksList.add(
+                HydrationChunk(
+                    dateTime = LocalDateTime.now(),
+                    amount = amountOfWaterAdded
+                )
+            )
             existingData.progress += amountOfWaterAdded
             existingData.progressInPercentage = existingData.calculateProgress()
+            existingData.hydrationChunksList = hydrationChunksList
+            Log.d("ANANAS", "updateOrAddHydrationData: existingdata2222 $existingData")
+
         } else {
             val newEntry = HydrationData(
                 date = date,
                 goalMillis = userData.hydrationGoalMillis,
                 progress = amountOfWaterAdded,
-                progressInPercentage = (amountOfWaterAdded * 100) / userData.hydrationGoalMillis
+                progressInPercentage = (amountOfWaterAdded * 100) / userData.hydrationGoalMillis,
+                hydrationChunksList = listOf(
+                    HydrationChunk(
+                        dateTime = LocalDateTime.now(),
+                        amount = amountOfWaterAdded,
+                    )
+                )
+
             )
             updatedHydrationData.add(newEntry)
         }
+        Log.d("ANANAS", "updateOrAddHydrationData: 222 $updatedHydrationData")
 
         return updatedHydrationData
     }
@@ -121,7 +143,7 @@ class HomeViewModel @Inject constructor(
     private fun updateHomeStateWithNewUserDataModel(
         currentState: HomeState,
         updatedUserData: UserDataModel,
-        date: LocalDateTime
+        date: LocalDate,
     ): HomeState {
         val hydrationData = updatedUserData.hydrationData.find { it.date.isSameDayAs(date) }
         val hydrationProgressPercentage = hydrationData?.calculateProgress() ?: 0
@@ -235,7 +257,8 @@ class HomeViewModel @Inject constructor(
 
     }
 
-    fun updateFirestoreUser(updatedUserData: FirestoreUserDataModel) {
+    private fun updateFirestoreUser(updatedUserData: FirestoreUserDataModel) {
+        Log.d("ANANAS", "updateFirestoreUser: $updatedUserData")
         viewModelScope.launch(dispatcherIO) {
             updateFirestoreUserUseCase(updatedUserData)
                 .collect { updateResult ->
