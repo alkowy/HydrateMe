@@ -1,12 +1,13 @@
 package com.azmarzly.registration.presentation
 
+import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -14,6 +15,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.DisplayMode
@@ -36,10 +38,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import core.common_components.PlaneValidatedTextField
+import core.common_components.RoundedButtonWithContent
 import core.input_validators.ValidationState
 import core.model.UserDataModel
 import core.ui.theme.HydrateMeTheme
-import core.ui.theme.registrationTextColor
+import core.ui.theme.shadowedTextColor
 import core.util.RegistrationRoute
 import core.util.navigateTo
 import java.time.LocalDate
@@ -114,7 +117,7 @@ fun ParametersPickContent(
     var showDatePickerDialog by remember { mutableStateOf(false) }
     val datePickerState = rememberDatePickerState(
         initialDisplayMode = DisplayMode.Picker,
-        yearRange = 1900..currentYear
+        yearRange = 1900..currentYear,
     )
 
     RegistrationStepWithBottomBar(
@@ -154,6 +157,7 @@ fun ParametersPickContent(
         }
 
         if (showDatePickerDialog) {
+            Log.d("ANANAS", "ParametersPickContent: showDatePickerDialog $showDatePickerDialog")
             DatePickerDialog(
                 onDismiss = { showDatePickerDialog = false },
                 onConfirm = {
@@ -165,6 +169,7 @@ fun ParametersPickContent(
         }
 
         LaunchedEffect(state.selectedDate) {
+            Log.d("ANANAS", "ParametersPickContent:         LaunchedEffect(state.selectedDate) {\n")
             state.selectedDate?.let {
                 day.value = it.dayOfMonth.toString()
                 month.value = it.month.value.toString()
@@ -173,6 +178,7 @@ fun ParametersPickContent(
         }
 
         LaunchedEffect(day.value, month.value, year.value) {
+            Log.d("ANANAS", "ParametersPickContent:        LaunchedEffect(day.value, month.value, year.value) {\n ")
             validateDate("${year.value}-${month.value}-${day.value}")
         }
     }
@@ -184,23 +190,23 @@ private fun HeightRow(height: MutableState<String>, validateHeight: (String) -> 
         verticalAlignment = CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Text(
-            text = "Wzrost",
-            style = MaterialTheme.typography.h4,
-            color = MaterialTheme.colors.registrationTextColor,
-        )
         PlaneValidatedTextField(
             value = height,
             onValueChange = validateHeight,
             label = "Wzrost",
-            style = MaterialTheme.typography.caption,
+            style = MaterialTheme.typography.body1,
             keyboardType = KeyboardType.Number,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
+            trailingIcon = {
+                Text(
+                    "cm",
+                    style = MaterialTheme.typography.body1.copy(
+                        color = MaterialTheme.colors.shadowedTextColor
+                    )
+                )
+            }
         )
-        Text(
-            "cm",
-            style = MaterialTheme.typography.caption,
-        )
+
     }
 }
 
@@ -210,24 +216,24 @@ private fun WeightRow(weight: MutableState<String>, validateWeight: (String) -> 
         verticalAlignment = CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Text(
-            text = "Waga",
-            style = MaterialTheme.typography.h4,
-            color = MaterialTheme.colors.registrationTextColor
-        )
         PlaneValidatedTextField(
             value = weight,
             onValueChange = validateWeight,
             label = "Waga",
-            style = MaterialTheme.typography.caption,
+            style = MaterialTheme.typography.body1,
             keyboardType = KeyboardType.Decimal,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
+            trailingIcon = {
+                Text(
+                    "kg",
+                    style = MaterialTheme.typography.body1.copy(
+                        color = MaterialTheme.colors.shadowedTextColor
+                    ),
+                    modifier = Modifier.padding(start = 12.dp, end = 12.dp)
+                )
+            }
         )
-        Text(
-            "kg",
-            style = MaterialTheme.typography.caption,
-            modifier = Modifier.padding(start = 12.dp, end = 12.dp)
-        )
+
     }
 }
 
@@ -243,17 +249,12 @@ private fun AgeRow(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = CenterVertically,
     ) {
-        Text(
-            text = "Wiek",
-            style = MaterialTheme.typography.h4,
-            color = MaterialTheme.colors.registrationTextColor
-        )
         PlaneValidatedTextField(
             modifier = Modifier.weight(1f),
             value = day,
             onValueChange = {},
             label = "DD",
-            style = MaterialTheme.typography.caption,
+            style = MaterialTheme.typography.body1,
             keyboardType = KeyboardType.Number,
             isError = state.dateValidationState == ValidationState.Invalid,
         )
@@ -262,7 +263,7 @@ private fun AgeRow(
             value = month,
             onValueChange = {},
             label = "MM",
-            style = MaterialTheme.typography.caption,
+            style = MaterialTheme.typography.body1,
             keyboardType = KeyboardType.Number,
             isError = state.dateValidationState == ValidationState.Invalid
         )
@@ -271,12 +272,15 @@ private fun AgeRow(
             value = year,
             onValueChange = {},
             label = "YYYY",
-            style = MaterialTheme.typography.caption,
+            style = MaterialTheme.typography.body1,
             keyboardType = KeyboardType.Number,
             isError = state.dateValidationState == ValidationState.Invalid
         )
         IconButton(onClick = onCalendarClick) {
-            Icon(imageVector = Icons.Default.CalendarMonth, contentDescription = "calendar")
+            Icon(
+                imageVector = Icons.Default.CalendarMonth, contentDescription = "calendar",
+                tint = MaterialTheme.colors.primary
+            )
         }
     }
 }
@@ -284,21 +288,62 @@ private fun AgeRow(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun DatePickerDialog(onDismiss: () -> Unit, onConfirm: () -> Unit, datePickerState: DatePickerState) {
+    Log.d("ANANAS", "DatePickerDialog: ")
     DatePickerDialog(
         onDismissRequest = onDismiss,
         confirmButton = {
-            Button(onClick = onConfirm) {
+            RoundedButtonWithContent(onClick = onConfirm) {
                 Text(text = "Potwierdź")
             }
-        }
+        },
+        colors = DatePickerDefaults.colors(
+            containerColor = MaterialTheme.colors.background,
+            subheadContentColor = MaterialTheme.colors.onBackground,
+            )
     ) {
-        DatePicker(state = datePickerState, showModeToggle = false)
+        DatePicker(
+            state = datePickerState, showModeToggle = false, title = null,
+            colors = DatePickerDefaults.colors(
+                containerColor = MaterialTheme.colors.background,
+                selectedDayContainerColor = MaterialTheme.colors.primary,
+                selectedDayContentColor = MaterialTheme.colors.onPrimary,
+                todayDateBorderColor = MaterialTheme.colors.primary,
+                dayContentColor = MaterialTheme.colors.onBackground,
+                todayContentColor = MaterialTheme.colors.onBackground,
+                dayInSelectionRangeContentColor = MaterialTheme.colors.onBackground,
+                yearContentColor = MaterialTheme.colors.onBackground,
+                titleContentColor = MaterialTheme.colors.onBackground,
+                headlineContentColor = MaterialTheme.colors.onBackground,
+                currentYearContentColor = MaterialTheme.colors.onBackground,
+                selectedYearContainerColor = MaterialTheme.colors.primary,
+                selectedYearContentColor = MaterialTheme.colors.onPrimary,
+                subheadContentColor = MaterialTheme.colors.onBackground,
+                )
+        )
     }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun ParametersPickContentPreview() {
+    HydrateMeTheme {
+        ParametersPickContent(
+            state = RegistrationParametersState(),
+            onNavigateToHome = {},
+            setUserParameters = { _, _, _ -> Unit },
+            validateWeight = { _ -> Unit },
+            validateHeight = { _ -> Unit },
+            handleDatePicked = { _ -> LocalDateTime.now() },
+            validateDate = {},
+            onNavigateToNextStep = {},
+            bottomBarState = RegistrationBottomBarState()
+        )
+    }
+}
+
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL)
+@Composable
+fun ParametersPickContentPreviewDark() {
     HydrateMeTheme {
         ParametersPickContent(
             state = RegistrationParametersState(),

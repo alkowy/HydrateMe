@@ -85,6 +85,7 @@ fun PlaneValidatedTextField(
     style: TextStyle,
     keyboardType: KeyboardType = KeyboardType.Text,
     suffix: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
 ) {
 
     TextField(
@@ -109,7 +110,7 @@ fun PlaneValidatedTextField(
             imeAction = imeAction
         ),
         maxLines = 1,
-        shape = RoundedCornerShape(25.dp),
+        shape = RoundedCornerShape(12.dp),
         colors = TextFieldDefaults.colors(
             unfocusedContainerColor = MaterialTheme.colors.backgroundContainer,
             focusedContainerColor = MaterialTheme.colors.backgroundContainer,
@@ -117,9 +118,14 @@ fun PlaneValidatedTextField(
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
             disabledIndicatorColor = Color.Transparent,
+            disabledSuffixColor = MaterialTheme.colors.textFieldLabel,
+            unfocusedSuffixColor = MaterialTheme.colors.textFieldLabel,
+            focusedSuffixColor = MaterialTheme.colors.textFieldLabel,
+            cursorColor = MaterialTheme.colors.primary
         ),
         textStyle = style,
         suffix = suffix,
+        trailingIcon = trailingIcon,
     )
 }
 
@@ -165,7 +171,7 @@ fun SecuredValidatedTextField(
             }
         },
         maxLines = 1,
-        shape = RoundedCornerShape(25.dp),
+        shape = RoundedCornerShape(12.dp),
         trailingIcon = {
             IconButton(onClick = {
                 isInputVisible = !isInputVisible
@@ -206,7 +212,10 @@ fun SecuredValidatedTextField(
             errorContainerColor = MaterialTheme.colors.backgroundContainer,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
-            disabledIndicatorColor = Color.Transparent
+            disabledIndicatorColor = Color.Transparent,
+            disabledSuffixColor = MaterialTheme.colors.textFieldLabel,
+            unfocusedSuffixColor = MaterialTheme.colors.textFieldLabel,
+            focusedSuffixColor = MaterialTheme.colors.textFieldLabel,
         ),
         textStyle = style
     )

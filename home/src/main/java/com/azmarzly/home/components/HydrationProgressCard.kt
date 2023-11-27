@@ -48,7 +48,7 @@ import core.ui.theme.HydrateMeTheme
 import core.ui.theme.VeryDarkBlue
 import core.ui.theme.displayTextStyle
 import core.ui.theme.emptyProgressColor
-import core.ui.theme.remainingOutOfTextColor
+import core.ui.theme.shadowedTextColor
 import core.util.doNothing
 import core.util.toPercentageString
 
@@ -191,7 +191,7 @@ fun HomeHydrationProgressCard(
                     }
                     withStyle(
                         style = MaterialTheme.typography.body1.toSpanStyle().copy(
-                            color = MaterialTheme.colors.remainingOutOfTextColor
+                            color = MaterialTheme.colors.shadowedTextColor
                         )
 
                     ) {

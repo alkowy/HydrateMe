@@ -119,7 +119,7 @@ fun AddWaterDialog(
                     },
                     label = "Wpisz pojemność",
                     style = MaterialTheme.typography.body1,
-                    suffix = {
+                    trailingIcon = {
                         Text(text = "ml", style = MaterialTheme.typography.caption)
                     },
                     keyboardType = KeyboardType.Number

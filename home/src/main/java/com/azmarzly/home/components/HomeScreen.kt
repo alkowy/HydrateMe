@@ -34,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.azmarzly.core.R
@@ -51,12 +52,14 @@ import java.time.LocalDateTime
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel,
+    bottomBarPadding: Dp,
 ) {
     val homeScreenState by viewModel.homeState.collectAsStateWithLifecycle()
 
     HomeScreenContent(
         homeState = homeScreenState,
         addWater = { water -> viewModel.addHydration(amountOfWaterAdded = water) },
+        bottomBarPadding = bottomBarPadding,
     )
 }
 
@@ -64,8 +67,8 @@ fun HomeScreen(
 fun HomeScreenContent(
     homeState: HomeState,
     addWater: (Int) -> Unit,
+    bottomBarPadding: Dp,
 ) {
-
     val scrollState = rememberScrollState()
 
     Column(
@@ -73,7 +76,7 @@ fun HomeScreenContent(
             .fillMaxWidth()
             .background(MaterialTheme.colors.surface)
             .verticalScroll(scrollState)
-            .padding(start = 20.dp, end = 20.dp, top = 45.dp)
+            .padding(start = 20.dp, end = 20.dp, top = 45.dp, bottom = bottomBarPadding)
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -127,6 +130,6 @@ fun HomeScreenContent(
 @Composable
 fun HomeContentPreview() {
     HydrateMeTheme() {
-        HomeScreenContent(homeState = HomeState(), addWater = { doNothing() })
+        HomeScreenContent(homeState = HomeState(), addWater = { doNothing() }, 0.dp)
     }
 }

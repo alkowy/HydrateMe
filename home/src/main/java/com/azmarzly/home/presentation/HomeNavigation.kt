@@ -1,12 +1,8 @@
 package com.azmarzly.home.presentation
 
-import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.scaleIn
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -19,18 +15,15 @@ fun HomeNavGraph(
     navController: NavHostController,
     homeViewModel: HomeViewModel,
     navigateToSignIn: () -> Unit,
+    bottomBarPadding: Dp,
 ) {
     NavHost(
         navController = navController,
         startDestination = HomeRoute.HOME.route,
         route = HomeRoute.HOME_ROOT.route,
-
     ) {
-        composable(
-            route = HomeRoute.HOME.route,
-
-        ) {
-            HomeScreen(homeViewModel)
+        composable(route = HomeRoute.HOME.route) {
+            HomeScreen(homeViewModel, bottomBarPadding)
         }
         composable(route = HomeRoute.CALENDAR.route) {
             Text(text = "calendar")
@@ -41,12 +34,10 @@ fun HomeNavGraph(
             ProfileScreen(
                 navigateToSignIn = { navigateToSignIn() }
             )
-
         }
         composable(route = HomeRoute.NEWS.route) {
             Text(text = "News")
             HealthNewsScreen()
         }
     }
-
 }

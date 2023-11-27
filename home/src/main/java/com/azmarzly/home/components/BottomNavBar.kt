@@ -4,11 +4,14 @@ import android.view.animation.OvershootInterpolator
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.FloatingActionButtonDefaults
@@ -16,25 +19,38 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.blur
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.isSpecified
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.azmarzly.core.R
-import com.exyte.animatednavbar.AnimatedNavigationBar
+import com.exyte.animatednavbar.animation.balltrajectory.BallAnimInfo
 import com.exyte.animatednavbar.animation.balltrajectory.BallAnimation
+import com.exyte.animatednavbar.animation.balltrajectory.Parabolic
 import com.exyte.animatednavbar.animation.balltrajectory.Teleport
 import com.exyte.animatednavbar.animation.indendshape.Height
+import com.exyte.animatednavbar.animation.indendshape.IndentAnimation
+import com.exyte.animatednavbar.animation.indendshape.ShapeCornerRadius
 import com.exyte.animatednavbar.animation.indendshape.shapeCornerRadius
 import com.exyte.animatednavbar.items.dropletbutton.DropletButton
+import com.exyte.animatednavbar.layout.animatedNavBarMeasurePolicy
+import com.exyte.animatednavbar.utils.ballTransform
 import core.ui.theme.HydrateMeTheme
 import core.util.doNothing
 
@@ -52,7 +68,11 @@ const val DoubleDuration = 1000
 fun DropletButtonNavBar(
     dropletButtons: List<HomeScreenBottomBarItem>,
     ballAnimation: BallAnimation = Teleport(tween(Duration, easing = LinearOutSlowInEasing)),
-    barColor: Color = MaterialTheme.colors.background,
+    barColor: Brush = Brush.verticalGradient(
+        colors = listOf(Color.Transparent, Color.White.copy(alpha = 0.1f)),
+        startY = 0.0f,
+        endY = 400.0f
+    ),// = MaterialTheme.colors.background,
     dropletColor: Color = MaterialTheme.colors.primary,
     unselectedIconColor: Color = MaterialTheme.colors.onBackground,
     onNavigateToHome: () -> Unit,
@@ -61,9 +81,9 @@ fun DropletButtonNavBar(
     onNavigateToNews: () -> Unit,
     onFloatingActionButtonAction: () -> Unit,
 ) {
-    var selectedItem by remember { mutableStateOf(0) }
+    var selectedItem by remember { mutableIntStateOf(0) }
 
-    Box(modifier = Modifier) {
+    Box {
         AnimatedNavigationBar(
             modifier = Modifier
                 .padding(horizontal = 0.dp, vertical = 0.dp)
@@ -171,8 +191,7 @@ fun BottomNavBarPreview() {
             onNavigateToHome = { /*TODO*/ },
             onNavigateToCalendar = { /*TODO*/ },
             onNavigateToProfile = { /*TODO*/ },
-            onNavigateToNews = {/*TODO*/ },
-            onFloatingActionButtonAction = {/*TODO*/ }
-        )
+            onNavigateToNews = {/*TODO*/ }
+        ) {/*TODO*/ }
     }
 }

@@ -6,6 +6,7 @@ import androidx.compose.material.Colors
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
+import androidx.compose.material3.ColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
@@ -18,7 +19,7 @@ private val DarkColorPalette = darkColors(
     background = Grey900,
     onBackground = VeryWhite,
     onSurface = Blue100,
-    onPrimary = Blue900
+    onPrimary = Blue900,
 
 )
 
@@ -71,7 +72,7 @@ val Colors.registrationStepDot: Color
 val Colors.registrationTextColor: Color
     get() = if (isLight) Grey900 else Grey100
 
-val Colors.remainingOutOfTextColor: Color
+val Colors.shadowedTextColor: Color
     get() = if (isLight) Grey400 else Grey600
 
 //val Colors.registrationSurface: Color
