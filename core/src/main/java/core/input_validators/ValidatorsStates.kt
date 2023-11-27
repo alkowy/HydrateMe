@@ -1,7 +1,7 @@
 package core.input_validators
 
 sealed interface ValidationState {
-    object Empty : ValidationState
-    object Valid : ValidationState
-    object Invalid : ValidationState
+    data object Empty : ValidationState
+    data object Valid : ValidationState
+    data object Invalid : ValidationState
 }

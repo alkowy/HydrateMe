@@ -117,7 +117,7 @@ private fun RowScope.CompactCalendarDay(
             modifier = Modifier
                 .wrapContentWidth(unbounded = true)
                 .padding(top = 4.dp),
-            text = hydrationAmount.toDouble().div(1000).toString(),
+            text = String.format("%.2f",hydrationAmount.toDouble().div(1000)),
             style = MaterialTheme.typography.caption.copy(
                 color = if (metGoal) MaterialTheme.colors.primary else MaterialTheme.colors.compactCalendarProgressText
             )

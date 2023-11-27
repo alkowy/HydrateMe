@@ -6,6 +6,7 @@ import core.input_validators.HeightValidator
 import core.input_validators.InputValidator
 import core.input_validators.PasswordInputValidator
 import core.input_validators.DecimalNumberValidator
+import core.input_validators.WholeNumberValidator
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -35,4 +36,8 @@ abstract class ValidatorModule {
     @Binds
     @Named("DateValidator")
     abstract fun bindsDateValidator(service: DateValidator): InputValidator
+
+    @Binds
+    @Named("WholeNumberValidator")
+    abstract fun bindsWholeNumberValidator(service: WholeNumberValidator): InputValidator
 }

@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import core.DispatcherIO
 import core.domain.use_case.FetchCurrentUserUseCase
 import core.domain.use_case.UpdateFirestoreUserUseCase
+import core.input_validators.InputValidator
+import core.input_validators.ValidationState
 import core.model.FirestoreUserDataModel
 import core.model.HydrationData
 import core.model.HydrationData.HydrationChunk
@@ -25,6 +27,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import javax.inject.Inject
+import javax.inject.Named
 
 
 @HiltViewModel
@@ -32,6 +35,7 @@ class HomeViewModel @Inject constructor(
     @DispatcherIO private val dispatcherIO: CoroutineDispatcher,
     private val fetchCurrentUserUseCase: FetchCurrentUserUseCase,
     private val updateFirestoreUserUseCase: UpdateFirestoreUserUseCase,
+    @Named("WholeNumberValidator") private val numberValidator: InputValidator,
 ) : ViewModel() {
 
     companion object {
@@ -71,6 +75,10 @@ class HomeViewModel @Inject constructor(
 
             }
         }
+    }
+
+    fun validateNumber(amount: String): ValidationState {
+        return numberValidator.isValid(amount)
     }
 
     private fun calculateHydrationProgress(): Int {

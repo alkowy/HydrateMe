@@ -24,7 +24,8 @@ fun RoundedButtonWithContent(
         modifier = modifier,
         shape = RoundedCornerShape(25.dp),
         colors = ButtonDefaults.buttonColors(
-            backgroundColor = backgroundColor
+            backgroundColor = backgroundColor,
+            disabledBackgroundColor = backgroundColor.copy(alpha = 0.36f)
         ),
         enabled = enabled,
         contentPadding = PaddingValues(horizontal = 20.dp, vertical = 12.dp)

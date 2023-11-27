@@ -51,7 +51,7 @@ import java.time.LocalDateTime
 
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel = hiltViewModel(),
+    viewModel: HomeViewModel,
 ) {
     val homeScreenState by viewModel.homeState.collectAsStateWithLifecycle()
 

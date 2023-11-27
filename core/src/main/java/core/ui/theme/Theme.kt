@@ -15,7 +15,7 @@ private val DarkColorPalette = darkColors(
     secondary = Blue400,
     primaryVariant = Blue400,
     surface = VeryDarkBlue,
-    background = Grey800,
+    background = Grey900,
     onBackground = Blue100,
     onSurface = Blue100,
     onPrimary = Blue900
@@ -63,7 +63,7 @@ val Colors.textFieldLabel: Color
     get() = if (isLight) Grey500 else Grey200
 
 val Colors.backgroundContainer: Color
-    get() = if (isLight) Grey300 else Grey600
+    get() = if (isLight) Grey200 else Grey600
 
 val Colors.registrationStepDot: Color
     get() = if (isLight) Grey300 else Grey600

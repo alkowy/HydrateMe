@@ -16,6 +16,7 @@ import core.util.HomeRoute
 @Composable
 fun HomeNavGraph(
     navController: NavHostController,
+    homeViewModel: HomeViewModel,
     navigateToSignIn: () -> Unit,
 ) {
     NavHost(
@@ -24,7 +25,7 @@ fun HomeNavGraph(
         route = HomeRoute.HOME_ROOT.route
     ) {
         composable(route = HomeRoute.HOME.route) {
-            HomeScreen()
+            HomeScreen(homeViewModel)
         }
         composable(route = HomeRoute.CALENDAR.route) {
             Text(text = "calendar")

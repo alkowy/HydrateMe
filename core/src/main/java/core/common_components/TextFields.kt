@@ -84,6 +84,7 @@ fun PlaneValidatedTextField(
     imeAction: ImeAction = ImeAction.Next,
     style: TextStyle,
     keyboardType: KeyboardType = KeyboardType.Text,
+    suffix: @Composable (() -> Unit)? = null,
 ) {
 
     TextField(
@@ -118,6 +119,7 @@ fun PlaneValidatedTextField(
             disabledIndicatorColor = Color.Transparent,
         ),
         textStyle = style,
+        suffix = suffix,
     )
 }
 
