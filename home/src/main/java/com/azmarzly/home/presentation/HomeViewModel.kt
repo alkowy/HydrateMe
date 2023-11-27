@@ -66,7 +66,7 @@ class HomeViewModel @Inject constructor(
                             isLoading = false,
                             remainingHydrationMillis = hydrationData?.calculateRemaining() ?: fetchResult.data?.hydrationGoalMillis ?: DEFAULT_HYDRATION_GOAL,
                             hydrationProgressPercentage = hydrationData?.calculateProgress() ?: 0,
-                            hydrationGoal = hydrationData?.goalMillis ?: 0
+                            hydrationGoal = fetchResult.data?.hydrationGoalMillis ?: DEFAULT_HYDRATION_GOAL//hydrationData?.goalMillis ?: 0
                         )
                     }
 
@@ -79,11 +79,6 @@ class HomeViewModel @Inject constructor(
 
     fun validateNumber(amount: String): ValidationState {
         return numberValidator.isValid(amount)
-    }
-
-    private fun calculateHydrationProgress(): Int {
-        val today = LocalDate.now()
-        return _homeState.value.userData?.hydrationData?.find { it.date.isSameDayAs(today) }?.calculateProgress() ?: 0
     }
 
     fun addHydration(
@@ -165,107 +160,6 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-//    private fun calculateHydrationProgress(): Int {
-//        val today = LocalDateTime.now()
-//        val goal =
-//            _homeState.value.userData?.hydrationData?.find { it.date.isSameDayAs(today) }?.goal ?: 2000.0
-//        val progress =
-//            _homeState.value.userData?.hydrationData?.find { it.date.isSameDayAs(today) }?.progress?.toInt()
-//                ?: 0
-//
-//        return progress.div(goal).times(10).toInt()
-//    }
-
-    fun addWater2(amount: Double) {
-        val today = LocalDateTime.now().atZone(ZoneId.systemDefault()).toLocalDateTime()
-//        val oldProgress =
-//            homeState.value.userData?.hydrationData?.find { it.date.atZone(ZoneId.systemDefault()).toLocalDateTime() == today }?.progress ?: 0.0
-        val newProgressPercentage =
-            _homeState.update {
-                _homeState.value.copy(
-//                    hydrationProgressPercentage = it.hydrationProgressPercentage.plus(amount)
-                )
-            }
-
-
-    }
-
-//    private fun findTodaysGoal(): Double {
-//        val goal = _homeState.value.userData?.hydrationData?.find { it.date.isSameDayAs(LocalDateTime.now()) } ?: HydrationData(
-//            date = LocalDateTime.now(),
-//            progress = 0.0,
-//            progressInPercentage = 0,
-//            goal = 2000.0
-//        )
-//    }
-
-    //find today's hydration data and add amount to progress. Update progress in % too. If there is no hydration data for today, create new object with user's goal, this amount
-    fun addWater(amount: Double) {
-        val today = LocalDateTime.now()
-//        val oldProgress =
-//            homeState.value.userData?.hydrationData?.find { it.date.isSameDayAs(today) }?.progress ?: 0.0
-//        val newProgress = oldProgress + amount
-//
-//
-//        Log.d("ANANAS", "HomeViewModel, addWater: oldProgress $oldProgress ")
-//
-//        val modifiedUserData = homeState.value.userData?.copy()
-
-//        val modifiedHydrationData = modifiedUserData?.hydrationData?.toMutableList()
-//        val hydrationDataToUpdate =
-//            modifiedHydrationData?.find { it.date.isSameDayAs(today) } ?: HydrationData(
-//                date = LocalDateTime.now(),
-//                progress = 0.0,
-//                progressInPercentage = 0,
-//                goal = 2000.0
-//            )
-//        Log.d("ANANAS", "HomeViewModel, addWater: hydrationDataToUpdate $hydrationDataToUpdate ")
-
-//        hydrationDataToUpdate.progress = hydrationDataToUpdate.progress.plus(amount)
-//        val modifiedUserDataWithUpdatedHydration = modifiedUserData?.copy(hydrationData = modifiedHydrationData?.toList() ?: emptyList())
-//
-//        Log.d("ANANAS", "HomeViewModel, addWater: modifiedUserDataWithUpdatedHydration $modifiedUserDataWithUpdatedHydration ")
-//
-//        val modifiedUserData111111 = homeState.value.userData?.copy(
-//            hydrationData = homeState.value.userData!!.hydrationData.map { hydrationData ->
-//                if (hydrationData.date.isSameDayAs(today)) {
-//                    hydrationData.copy(
-//                        progress = hydrationData.progress + amount,
-//                        progressInPercentage = calculateHydrationProgress()
-//                    )
-//                } else {
-//                    hydrationData
-//                }
-//            }.let { m33odifiedHydrationData ->
-//                if (m33odifiedHydrationData.none { it.date.isSameDayAs(today) }) {
-//                    m33odifiedHydrationData + HydrationData(
-//                        date = LocalDateTime.now(),
-//                        progress = 0.0,
-//                        progressInPercentage = 0,
-//                        goal = 2000.0
-//                    )
-//                } else {
-//                    m33odifiedHydrationData
-//                }
-//            }
-//        )
-//        Log.d("ANANAS", "HomeViewModel, addWater: modifiedUserData111111 $modifiedUserData111111 ")
-
-//
-//        viewModelScope.launch(dispatcherIO) {
-//            updateFirestoreUserUseCase.invoke(modifiedUserDataWithUpdatedHydration!!.toFirestoreUserDataModel()).collect()
-//            _homeState.update {
-//                _homeState.value.copy(
-//                    userData = modifiedUserData111111,
-//                    hydrationProgressPercentage = calculateHydrationProgress()
-//                )
-//            }
-//        }
-
-//        Log.d("ANANAS", "HomeViewModel, addWater: _homeState ${_homeState.value} ")
-
-    }
-
     private fun updateFirestoreUser(updatedUserData: FirestoreUserDataModel) {
         Log.d("ANANAS", "updateFirestoreUser: $updatedUserData")
         viewModelScope.launch(dispatcherIO) {
@@ -285,7 +179,7 @@ data class HomeState(
     val userData: UserDataModel? = null,
     val hydrationProgressPercentage: Int = 0,
     var remainingHydrationMillis: Int = userData?.hydrationGoalMillis ?: 0,
-    var hydrationGoal: Int = userData?.hydrationData?.find { it.date.isSameDayAs(LocalDate.now()) }?.goalMillis ?: 0,
+    var hydrationGoal: Int = userData?.hydrationGoalMillis ?: 2000, //userData?.hydrationData?.find { it.date.isSameDayAs(LocalDate.now()) }?.goalMillis ?: 0,
     val isLoading: Boolean = false,
     val error: String = "",
 ) {

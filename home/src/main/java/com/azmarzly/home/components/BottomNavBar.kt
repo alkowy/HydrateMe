@@ -86,11 +86,11 @@ fun DropletButtonNavBar(
     Box {
         AnimatedNavigationBar(
             modifier = Modifier
-                .padding(horizontal = 0.dp, vertical = 0.dp)
+                .padding(horizontal = 20.dp, vertical = 10.dp)
                 .height(60.dp),
             selectedIndex = selectedItem,
             ballColor = dropletColor,
-            cornerRadius = shapeCornerRadius(topLeft = 25.dp, topRight = 25.dp, bottomLeft = 0.dp, bottomRight = 0.dp),
+            cornerRadius = shapeCornerRadius(topLeft = 25.dp, topRight = 25.dp, bottomLeft = 25.dp, bottomRight = 25.dp),
             ballAnimation = ballAnimation,
             indentAnimation = Height(
                 indentWidth = 56.dp,
