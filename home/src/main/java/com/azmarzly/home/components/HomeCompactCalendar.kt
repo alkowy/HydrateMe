@@ -129,7 +129,6 @@ private fun RowScope.CompactCalendarDay(
 private fun ProgressVerticalBar(
     progressPercentage: Int,
 ) {
-    Log.d("ANANAS", "ProgressVerticalBar: $progressPercentage")
     val animatedProgressValue = animateFloatAsState(
         targetValue = progressPercentage.toFloat().div(100),
         animationSpec = tween(
@@ -161,38 +160,6 @@ private fun ProgressVerticalBar(
                 )
             }
         }
-    }
-}
-
-@Composable
-fun CompactCalendarItem(day: String, progress: Int) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-//            .fillMaxSize()
-            .border(5.dp, color = Color.Red)
-    ) {
-        Text(text = day)
-
-        VerticalProgressBar(progress = progress)
-    }
-}
-
-@Composable
-fun VerticalProgressBar(
-    progress: Int,
-    barColor: Color = MaterialTheme.colors.primary,
-    backgroundBarColor: Color = Color.Gray, // todo replace with some theme color
-) {
-
-
-}
-
-@Preview
-@Composable
-fun CompactCalendarItemPreview() {
-    HydrateMeTheme() {
-        CompactCalendarItem("PN", 75)
     }
 }
 

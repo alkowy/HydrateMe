@@ -1,5 +1,7 @@
 package com.azmarzly.hydrateme.navigation
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.scaleIn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -42,7 +44,14 @@ fun AppNavHost(
         composable(SignInRoute.route) {
             SignInScreen(navController)
         }
-        composable(HomeRoute.HOME_ROOT.route) {
+        composable(
+            HomeRoute.HOME_ROOT.route,
+            enterTransition = {
+                scaleIn(
+                    animationSpec = tween(750)
+                )
+            },
+        ) {
             ParentHomeScreen(
                 navigateToSignIn = {
                     navController.navigateTo(SignInRoute) {

@@ -35,7 +35,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.azmarzly.core.R
 import com.azmarzly.home.presentation.HomeState
@@ -57,7 +56,6 @@ fun HomeScreen(
 
     HomeScreenContent(
         homeState = homeScreenState,
-        fetchCurrentUserData = viewModel::fetchCurrentUser,
         addWater = { water -> viewModel.addHydration(amountOfWaterAdded = water) },
     )
 }
@@ -65,8 +63,6 @@ fun HomeScreen(
 @Composable
 fun HomeScreenContent(
     homeState: HomeState,
-    modifier: Modifier = Modifier,
-    fetchCurrentUserData: () -> Unit,
     addWater: (Int) -> Unit,
 ) {
 
@@ -119,121 +115,11 @@ fun HomeScreenContent(
                 )
             )
         )
-        //homeState.userData!!.urineScanData.last()) // find todays date
-
 
     }
-    LaunchedEffect(Unit) {
-        Log.d("ANANAS", "HomeScreenContent: launchedeffect Unit $homeState")
-//         fetchCurrentUserData() // commented out, called in vm init block. probably to be removed
-    }
+
     LaunchedEffect(homeState) {
         Log.d("ANANAS", "HomeScreenContent: launchedeffect homeState: $homeState")
-    }
-}
-
-@Composable
-fun UrineScanCard(urineScanData: UrineScanData?) {
-    Column() {
-        Text(
-            text = "Skan moczu", // todo extract string resource
-            style = MaterialTheme.typography.h3.copy(color = VeryDarkBlue),
-            modifier = Modifier.padding(bottom = 12.dp),
-            color = MaterialTheme.colors.onSurface
-        )
-        Card(
-            shape = RoundedCornerShape(16.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colors.background.copy(alpha = 0.9f)
-            )
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 30.dp, bottom = 20.dp, start = 16.dp, end = 16.dp)
-            ) {
-                IconButton(
-                    onClick = { doNothing() },
-                    modifier = Modifier
-                        .align(Alignment.End)
-                        .padding(end = 10.dp)
-                ) {
-                    Icon(painter = painterResource(id = R.drawable.ic_add_circle), contentDescription = "add")
-                }
-                urineScanData?.let {
-                    Column(modifier = Modifier.fillMaxWidth()) {
-                        urineScanData.scanInfo.forEach { item ->
-                            UrineDataRow(scanData = item)
-                        }
-                    }
-                }
-
-            }
-
-        }
-    }
-}
-
-@Composable
-fun UrineDataRow(scanData: ScanData) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp)
-            .height(IntrinsicSize.Min),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = scanData.hour,
-            style = MaterialTheme.typography.caption,
-            color = MaterialTheme.colors.caption
-        )
-        Divider(
-            color = MaterialTheme.colors.caption,
-            modifier = Modifier
-                .fillMaxHeight()
-                .padding(horizontal = 20.dp)
-                .width(1.dp)
-        )
-        Canvas(modifier = Modifier.size(32.dp)) {
-            drawCircle(color = scanData.color.toColor())
-        }
-        Text(
-            text = scanData.message,
-            style = MaterialTheme.typography.body2,
-            color = MaterialTheme.colors.caption,
-            modifier = Modifier.padding(start = 8.dp)
-        )
-    }
-}
-
-@Preview
-@Composable
-fun UrineDataRowPreview() {
-    HydrateMeTheme() {
-        UrineDataRow(
-            scanData = ScanData(color = UrineColor.OK, message = "Nawodnienie dobre", hour = "12:23"),
-        )
-    }
-}
-
-@Preview
-@Composable
-fun UrineScanPreview() {
-    HydrateMeTheme {
-        UrineScanCard(
-            UrineScanData(
-                LocalDateTime.now(),
-                listOf(
-                    ScanData(color = UrineColor.OK, message = "Nawodnienie dobre", hour = "12:23"),
-                    ScanData(
-                        color = UrineColor.BAD,
-                        message = "Nawodnienie niewystarczającesdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsd",
-                        hour = "15:23"
-                    )
-                )
-            )
-        )
     }
 }
 
@@ -241,6 +127,6 @@ fun UrineScanPreview() {
 @Composable
 fun HomeContentPreview() {
     HydrateMeTheme() {
-        HomeScreenContent(homeState = HomeState(), fetchCurrentUserData = { doNothing() }, addWater = { doNothing() })
+        HomeScreenContent(homeState = HomeState(), addWater = { doNothing() })
     }
 }

@@ -17,7 +17,7 @@ fun RoundedButtonWithContent(
     onClick: () -> Unit,
     backgroundColor: Color = MaterialTheme.colors.primary,
     enabled: Boolean = true,
-    content: @Composable() (RowScope.() -> Unit)
+    content: @Composable() (RowScope.() -> Unit),
 ) {
     Button(
         onClick = { onClick() },

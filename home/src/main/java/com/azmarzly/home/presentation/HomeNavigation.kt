@@ -1,15 +1,16 @@
 package com.azmarzly.home.presentation
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.scaleIn
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.azmarzly.home.components.HomeScreen
-import com.azmarzly.home.components.HomeScreenContent
 import com.azmarzly.profile.presentation.ProfileScreen
 import core.util.HomeRoute
 
@@ -22,9 +23,13 @@ fun HomeNavGraph(
     NavHost(
         navController = navController,
         startDestination = HomeRoute.HOME.route,
-        route = HomeRoute.HOME_ROOT.route
+        route = HomeRoute.HOME_ROOT.route,
+
     ) {
-        composable(route = HomeRoute.HOME.route) {
+        composable(
+            route = HomeRoute.HOME.route,
+
+        ) {
             HomeScreen(homeViewModel)
         }
         composable(route = HomeRoute.CALENDAR.route) {
