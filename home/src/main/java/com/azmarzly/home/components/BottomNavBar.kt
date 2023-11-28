@@ -86,7 +86,7 @@ fun DropletButtonNavBar(
     Box {
         AnimatedNavigationBar(
             modifier = Modifier
-                .padding(horizontal = 20.dp, vertical = 10.dp)
+                .padding(top = 20.dp)
                 .height(60.dp),
             selectedIndex = selectedItem,
             ballColor = dropletColor,
@@ -122,7 +122,7 @@ fun DropletButtonNavBar(
             onClick = { onFloatingActionButtonAction() },
             modifier = Modifier
                 .align(Alignment.TopCenter)
-                .offset(y = (-32).dp),
+                .offset(y = (-12).dp),
             backgroundColor = MaterialTheme.colors.primary,
             elevation = FloatingActionButtonDefaults.elevation(0.dp)
 
