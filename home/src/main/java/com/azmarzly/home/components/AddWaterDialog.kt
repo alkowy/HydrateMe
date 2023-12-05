@@ -86,7 +86,7 @@ fun AddWaterDialog(
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    DrinkType.entries.forEach { drinkType ->
+                    DrinkType.entries.filterNot { it == DrinkType.CUSTOM }.forEach { drinkType ->
                         AddWaterItem(
                             drinkType = drinkType,
                             onSelected = {

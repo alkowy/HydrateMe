@@ -2,8 +2,8 @@
 <resources>
 
     <style name="Theme.HydrateMe" parent="android:Theme.Material.Light.NoActionBar">
-        <item name="android:statusBarColor">@color/colorPrimary</item>
-        <item name="android:windowBackground">@color/white</item>
+        <item name="android:statusBarColor">@color/lightSurface</item>
+        <item name="android:windowBackground">@color/whiteBackground</item>
     </style>
 
 </resources>

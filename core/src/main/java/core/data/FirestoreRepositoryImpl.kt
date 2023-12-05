@@ -39,8 +39,8 @@ class FirestoreRepositoryImpl @Inject constructor(
         }
     }.catch { emit(Resource.Error(it.message)) }
 
-    override fun fetchUserFromFirestore(userId: String) = flow {
-        emit(Resource.Loading)
+    override fun fetchUserFromFirestore(userId: String) = channelFlow  {
+        send(Resource.Loading)
         val user = firestore.collection(USERS_COLLECTION)
             .document(userId)
             .get()
@@ -48,9 +48,9 @@ class FirestoreRepositoryImpl @Inject constructor(
             .toObject(FirestoreUserDataModel::class.java)
 
         if (user == null) {
-            emit(Resource.Error("Error fetching the user data"))
+            send(Resource.Error("Error fetching the user data"))
         } else {
-            emit(Resource.Success(user.toUserDataModel()))
+            send(Resource.Success(user.toUserDataModel()))
         }
     }.catch {
         emit(Resource.Error(it.message))

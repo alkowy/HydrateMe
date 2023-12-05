@@ -3,11 +3,22 @@ package core.util
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.Month
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
+import java.time.format.TextStyle
+import java.util.Locale
 
 fun LocalDate.toTimestamp(): Long {
     return this.atStartOfDay(ZoneOffset.UTC).toEpochSecond()
+}
+
+fun LocalDate.toStringFormatted(): String {
+    return "${this.dayOfMonth} ${this.month.getDisplayName(TextStyle.FULL, Locale.getDefault())} ${this.year}"
+}
+
+fun LocalDate.toCalendarHeader(): String {
+    return "${this.month.getDisplayName(TextStyle.FULL_STANDALONE, Locale.getDefault())} ${this.year}"
 }
 
 fun LocalDateTime.toTimestamp(): Long {
@@ -57,4 +68,8 @@ fun LocalDateTime.isSameDayAs(date: LocalDate): Boolean {
 
 fun LocalDate.isSameDayAs(date: LocalDate): Boolean {
     return this.atStartOfDay(ZoneOffset.UTC).isEqual(date.atStartOfDay(ZoneOffset.UTC))
+}
+
+fun LocalDate.isSameMonthAs(month: Month): Boolean {
+    return this.month.compareTo(month) == 0
 }

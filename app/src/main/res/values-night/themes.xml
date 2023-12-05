@@ -1,0 +1,7 @@
+<resources>
+
+    <style name="Theme.HydrateMe" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="android:statusBarColor">@color/darkSurface</item>
+        <item name="android:windowBackground">@color/darkBackground</item>
+    </style>
+</resources>

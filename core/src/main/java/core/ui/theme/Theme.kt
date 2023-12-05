@@ -6,7 +6,6 @@ import androidx.compose.material.Colors
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
-import androidx.compose.material3.ColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
@@ -15,13 +14,13 @@ private val DarkColorPalette = darkColors(
     primary = Blue500,
     secondary = Blue400,
     primaryVariant = Blue400,
-    surface = VeryDarkBlue,
-    background = Grey900,
+    surface = Grey900,
+    background = Grey800,
     onBackground = VeryWhite,
     onSurface = Blue100,
     onPrimary = Blue900,
 
-)
+    )
 
 @SuppressLint("ConflictingOnColor")
 private val LightColorPalette = lightColors(
@@ -74,6 +73,9 @@ val Colors.registrationTextColor: Color
 
 val Colors.shadowedTextColor: Color
     get() = if (isLight) Grey400 else Grey600
+
+val Colors.weekDaysColor: Color
+    get() = if (isLight) Grey600 else Grey400
 
 //val Colors.registrationSurface: Color
 //    get() = if (isLight) VeryWhite else Grey800

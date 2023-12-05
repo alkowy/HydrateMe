@@ -8,6 +8,11 @@ enum class DrinkType(
     @DrawableRes val resIdUnselected: Int,
     val amountOfWater: Int,
 ) {
+    CUSTOM(
+        amountOfWater = -1,
+        resIdUnselected = R.drawable.ic_water_custom_outlined,
+        resIdSelected = R.drawable.ic_water_custom_outlined
+    ),
     CUP(
         amountOfWater = 250,
         resIdSelected = R.drawable.ic_cup_filled,
@@ -22,5 +27,5 @@ enum class DrinkType(
         amountOfWater = 500,
         resIdSelected = R.drawable.ic_bottle_filled,
         resIdUnselected = R.drawable.ic_bottle_outlined
-    ),
+    );
 }

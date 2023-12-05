@@ -35,5 +35,14 @@ data class HydrationData(
                 amount = this.amount,
             )
         }
+
+        fun amountToDrinkType(): DrinkType {
+            return when (this.amount) {
+                DrinkType.CUP.amountOfWater -> DrinkType.CUP
+                DrinkType.BIG_CUP.amountOfWater -> DrinkType.BIG_CUP
+                DrinkType.BOTTLE.amountOfWater -> DrinkType.BOTTLE
+                else -> DrinkType.CUSTOM
+            }
+        }
     }
 }

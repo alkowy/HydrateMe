@@ -1,12 +1,12 @@
 package com.azmarzly.home.presentation
 
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.azmarzly.home.components.HomeScreen
+import com.azmarzly.home.presentation.calendar.CalendarScreen
 import com.azmarzly.profile.presentation.ProfileScreen
 import core.util.HomeRoute
 
@@ -26,17 +26,14 @@ fun HomeNavGraph(
             HomeScreen(homeViewModel, bottomBarPadding)
         }
         composable(route = HomeRoute.CALENDAR.route) {
-            Text(text = "calendar")
-            CalendarScreen()
+            CalendarScreen(bottomBarPadding)
         }
         composable(route = HomeRoute.PROFILE.route) {
-            Text(text = "PRofile")
             ProfileScreen(
                 navigateToSignIn = { navigateToSignIn() }
             )
         }
         composable(route = HomeRoute.NEWS.route) {
-            Text(text = "News")
             HealthNewsScreen()
         }
     }
