@@ -33,6 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import core.model.HydrationData
 import core.ui.theme.HydrateMeTheme
+import core.ui.theme.backgroundContainer
 import core.ui.theme.compactCalendarProgressText
 import core.ui.theme.emptyProgressColor
 import core.ui.theme.verticalFilledProgressColor

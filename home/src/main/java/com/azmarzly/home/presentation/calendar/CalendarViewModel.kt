@@ -95,7 +95,6 @@ class CalendarViewModel @Inject constructor(
                         _calendarState.update { calendarState ->
                             calendarState.copy(
                                 isLoading = false,
-                                selectedDayData = resource.data?.find { it.date.isSameDayAs(date) },
                                 currentMonthData = resource.data ?: emptyList(),
                                 selectedWeekData = resource.data?.filter { it.date.with(previousOrSame(DayOfWeek.MONDAY)).equals(date.with(previousOrSame(DayOfWeek.MONDAY))) }
                                     ?: emptyList(),

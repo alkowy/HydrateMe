@@ -15,7 +15,6 @@ data class FirestoreUserDataModel(
     val hydrationGoalMillis: Int = 0,
     val userActivity: UserActivityEnum = UserActivityEnum.EMPTY,
     val hydrationData: List<FirestoreHydrationData> = emptyList(),
-    val urineScanData: List<FirestoreUrineScanData> = emptyList(),
 )
 
 enum class UserActivityEnum {
@@ -36,18 +35,6 @@ data class FirestoreHydrationData(
             progress = this.progress,
             progressInPercentage = this.progressInPercentage,
             hydrationChunksList = this.hydrationChunksList.map { it.toHydrationChunk() },
-        )
-    }
-}
-
-data class FirestoreUrineScanData(
-    val date: Long,
-    val scanInfo: List<ScanData>,
-) {
-    fun toUrineScanData(): UrineScanData {
-        return UrineScanData(
-            date = this.date.toLocalDateTime(),
-            scanInfo = this.scanInfo
         )
     }
 }
