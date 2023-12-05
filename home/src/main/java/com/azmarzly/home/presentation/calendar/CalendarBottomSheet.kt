@@ -33,6 +33,7 @@ import core.model.CalendarDay
 import core.ui.theme.bodySmall
 import core.ui.theme.emptyProgressColor
 import core.ui.theme.shadowedTextColor
+import core.ui.theme.verticalFilledProgressColor
 import core.util.toStringFormatted
 import java.time.LocalDate
 
@@ -89,19 +90,35 @@ private fun BottomSheetHeaderGeneralInfoRow(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
+
         Box(
             modifier = Modifier
                 .size(36.dp)
-                .clip(RoundedCornerShape(12.dp))
-                .background(if (isGoalMet) MaterialTheme.colors.primary else MaterialTheme.colors.emptyProgressColor),
-            contentAlignment = Alignment.Center
+                .clip(RoundedCornerShape(25))
+                .background(MaterialTheme.colors.emptyProgressColor),
+            contentAlignment = Alignment.BottomCenter
         ) {
-            if (isGoalMet) {
-                Icon(
-                    imageVector = Icons.Default.Check,
-                    contentDescription = null,
-                    tint = MaterialTheme.colors.onPrimary
-                )
+            Box(
+                modifier = Modifier
+                    .fillMaxHeight(
+                        progressInPercentage
+                            .toFloat()
+                            .div(100)
+                    )
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(25))
+                    .background(if (isGoalMet) MaterialTheme.colors.primary else MaterialTheme.colors.verticalFilledProgressColor)
+            ) {
+                if (isGoalMet) {
+                    Icon(
+                        modifier = Modifier
+                            .align(Alignment.BottomCenter)
+                            .padding(bottom = 10.dp),
+                        imageVector = Icons.Default.Check,
+                        contentDescription = "Goal met check",
+                        tint = MaterialTheme.colors.onPrimary
+                    )
+                }
             }
         }
 

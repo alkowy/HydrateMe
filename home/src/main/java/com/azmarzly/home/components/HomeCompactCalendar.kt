@@ -1,10 +1,8 @@
 package com.azmarzly.home.components
 
-import android.util.Log
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,13 +25,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import core.model.HydrationData
 import core.ui.theme.HydrateMeTheme
-import core.ui.theme.backgroundContainer
+import core.ui.theme.VeryDarkBlue
 import core.ui.theme.compactCalendarProgressText
 import core.ui.theme.emptyProgressColor
 import core.ui.theme.verticalFilledProgressColor
@@ -46,49 +43,52 @@ import java.util.Locale
 fun HomeCompactCalendar(
     hydrationData: List<HydrationData>,
 ) {
-    Log.d("ANANAS", "HomeCompactCalendar: $hydrationData ")
     val today = LocalDate.now()
-    Card(
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colors.background
+    Column {
+        Text(
+            text = "Tygodniowe zestawienie", // todo extract string resource
+            style = MaterialTheme.typography.h3.copy(color = VeryDarkBlue),
+            modifier = Modifier.padding(bottom = 12.dp),
+            color = MaterialTheme.colors.onSurface
         )
-    ) {
-        Column(
-            modifier = Modifier
-                .padding(
-                    horizontal = 20.dp,
-                    vertical = 20.dp
-                )
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = "Week progress",
-                style = MaterialTheme.typography.h4
-            )
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
-                (6L downTo 0L).map { daysBack ->
-                    val hydrationDataForSingleDay = hydrationData.find { it.date.isSameDayAs(today.minusDays(daysBack)) }
-                    if (hydrationDataForSingleDay == null) {
-                        CompactCalendarDay(
-                            day = today.minusDays(daysBack),
-                            hydrationProgressInPercentage = 0,
-                            hydrationAmount = 0
-                        )
 
-                    } else {
-                        CompactCalendarDay(
-                            day = today.minusDays(daysBack),
-                            hydrationProgressInPercentage = hydrationDataForSingleDay.progressInPercentage,
-                            hydrationAmount = hydrationDataForSingleDay.progress,
-                        )
+        Card(
+            shape = RoundedCornerShape(16.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colors.background
+            )
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(
+                        horizontal = 20.dp,
+                        vertical = 20.dp
+                    )
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    (6L downTo 0L).map { daysBack ->
+                        val hydrationDataForSingleDay = hydrationData.find { it.date.isSameDayAs(today.minusDays(daysBack)) }
+                        if (hydrationDataForSingleDay == null) {
+                            CompactCalendarDay(
+                                day = today.minusDays(daysBack),
+                                hydrationProgressInPercentage = 0,
+                                hydrationAmount = 0
+                            )
+
+                        } else {
+                            CompactCalendarDay(
+                                day = today.minusDays(daysBack),
+                                hydrationProgressInPercentage = hydrationDataForSingleDay.progressInPercentage,
+                                hydrationAmount = hydrationDataForSingleDay.progress,
+                            )
+                        }
                     }
                 }
             }
-
         }
     }
 }
@@ -118,7 +118,7 @@ private fun RowScope.CompactCalendarDay(
             modifier = Modifier
                 .wrapContentWidth(unbounded = true)
                 .padding(top = 4.dp),
-            text = String.format("%.2f",hydrationAmount.toDouble().div(1000)),
+            text = String.format("%.2f", hydrationAmount.toDouble().div(1000)),
             style = MaterialTheme.typography.caption.copy(
                 color = if (metGoal) MaterialTheme.colors.primary else MaterialTheme.colors.compactCalendarProgressText
             )

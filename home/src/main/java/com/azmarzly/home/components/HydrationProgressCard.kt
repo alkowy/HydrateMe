@@ -166,7 +166,7 @@ fun HomeHydrationProgressCard(
         Card(
             shape = RoundedCornerShape(16.dp),
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colors.background.copy(alpha = 0.9f)
+                containerColor = MaterialTheme.colors.background
             )
         ) {
             Column(

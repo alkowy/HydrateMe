@@ -65,6 +65,7 @@ class HomeViewModel @Inject constructor(
                             isLoading = false,
                             remainingHydrationMillis = hydrationData?.calculateRemaining() ?: fetchResult.data?.hydrationGoalMillis ?: DEFAULT_HYDRATION_GOAL,
                             hydrationProgressPercentage = hydrationData?.calculateProgress() ?: 0,
+                            todayHydrationChunks = hydrationData?.hydrationChunksList ?: emptyList(),
                             hydrationGoal = fetchResult.data?.hydrationGoalMillis ?: DEFAULT_HYDRATION_GOAL//hydrationData?.goalMillis ?: 0
                         )
                     }
@@ -155,7 +156,8 @@ class HomeViewModel @Inject constructor(
         return currentState.copy(
             userData = updatedUserData,
             remainingHydrationMillis = remainingHydrationMillis,
-            hydrationProgressPercentage = hydrationProgressPercentage
+            hydrationProgressPercentage = hydrationProgressPercentage,
+            todayHydrationChunks = hydrationData?.hydrationChunksList ?: emptyList()
         )
     }
 
@@ -178,6 +180,7 @@ data class HomeState(
     val userData: UserDataModel? = null,
     val hydrationProgressPercentage: Int = 0,
     var remainingHydrationMillis: Int = userData?.hydrationGoalMillis ?: 0,
+    val todayHydrationChunks: List<HydrationChunk> = emptyList(),
     var hydrationGoal: Int = userData?.hydrationGoalMillis ?: 2000, //userData?.hydrationData?.find { it.date.isSameDayAs(LocalDate.now()) }?.goalMillis ?: 0,
     val isLoading: Boolean = false,
     val error: String = "",

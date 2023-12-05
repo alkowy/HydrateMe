@@ -82,12 +82,14 @@ fun HomeScreenContent(
             homeState = homeState,
             onAddHydrationAction = addWater,
         )
+
+        HomeTodaysHydrationChunks(todayHydrationChunks = homeState.todayHydrationChunks)
+
         Spacer(modifier = Modifier.height(12.dp))
 
         HomeCompactCalendar(hydrationData = homeState.userData?.hydrationData ?: emptyList())
 
         Spacer(modifier = Modifier.height(24.dp))
-
     }
 
     LaunchedEffect(homeState) {
