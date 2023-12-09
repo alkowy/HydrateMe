@@ -9,35 +9,17 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetState
@@ -45,34 +27,17 @@ import androidx.compose.material3.SheetValue
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.Center
-import androidx.compose.ui.Alignment.Companion.CenterHorizontally
-import androidx.compose.ui.Alignment.Companion.TopCenter
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.azmarzly.core.R.drawable.ic_arrow_left
-import com.azmarzly.core.R.drawable.ic_arrow_right
 import core.model.CalendarDay
-import core.ui.theme.bodySmall
-import core.ui.theme.emptyProgressColor
-import core.ui.theme.shadowedTextColor
-import core.ui.theme.weekDaysColor
-import core.util.isSameDayAs
-import core.util.toCalendarHeader
-import core.util.toStringFormatted
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -103,9 +68,7 @@ fun CalendarScreenContent(
     updateSelectedDay: (LocalDate) -> Unit,
     changeMonth: (CalendarDirection) -> Unit,
 ) {
-    LaunchedEffect(key1 = state) {
-        Log.d("ANANAS", "CalendarScreenContent: calendar state $state")
-    }
+
     val screenConfiguration = LocalConfiguration.current
     val bottomSheetState = rememberStandardBottomSheetState(
         initialValue = SheetValue.PartiallyExpanded,
@@ -184,8 +147,10 @@ fun Calendar(
 
         val enterTransition = fadeIn() + slideInVertically(animationSpec = tween(400))
         val exitTransition = fadeOut() + slideOutVertically(animationSpec = tween(600))
+        val bottomSheetStateValue = remember { derivedStateOf { bottomSheetState.targetValue } }
+
         AnimatedContent(
-            targetState = bottomSheetState.targetValue, label = "",
+            targetState = bottomSheetStateValue.value, label = "",
             transitionSpec = {
                 enterTransition.togetherWith(exitTransition)
             }) { sheetState ->
@@ -213,7 +178,6 @@ fun Calendar(
 
         }
     }
-
 }
 
 @Composable

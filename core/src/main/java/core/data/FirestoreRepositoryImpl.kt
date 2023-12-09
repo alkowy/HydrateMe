@@ -59,7 +59,10 @@ class FirestoreRepositoryImpl @Inject constructor(
                 }
 
                 value?.let {
-                    trySend(Resource.Success(it.toObject(FirestoreUserDataModel::class.java)?.toUserDataModel()))
+                    val userDataModel = it.toObject(FirestoreUserDataModel::class.java)?.toUserDataModel()
+                    userDataModel?.let { userData ->
+                        trySend(Resource.Success(userData))
+                    }
                 }
             }
         awaitClose { this.cancel() }

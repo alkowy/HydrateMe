@@ -1,10 +1,12 @@
 package core.model
 
+import androidx.annotation.Keep
 import core.model.HydrationData.HydrationChunk
 import core.util.toLocalDate
 import core.util.toLocalDateTime
 
-data class FirestoreUserDataModel(
+@Keep
+data class FirestoreUserDataModel @Keep constructor(
     val uid: String = "",
     val email: String = "",
     val name: String = "",
@@ -21,6 +23,7 @@ enum class UserActivityEnum {
     VERY_LOW, LOW, AVERAGE, HIGH, EMPTY;
 }
 
+@Keep
 data class FirestoreHydrationData(
     val date: Long = -1,
     val goalMillis: Int = 2000,
@@ -39,6 +42,7 @@ data class FirestoreHydrationData(
     }
 }
 
+@Keep
 data class FirestoreHydrationChunkData(
     val dateTime: Long = -1,
     val amount: Int = 0,

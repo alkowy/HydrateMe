@@ -20,5 +20,4 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--keep public class com.google.firebase.** {*;}
--keep class com.google.android.gms.internal.** {*;}
+-keepclassmembers class core.model.FirestoreUserDataModel.kt. ** {*;}
