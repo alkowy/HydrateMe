@@ -25,9 +25,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.azmarzly.core.R
 import core.model.HydrationData
 import core.ui.theme.HydrateMeTheme
 import core.ui.theme.VeryDarkBlue
@@ -46,7 +48,7 @@ fun HomeCompactCalendar(
     val today = LocalDate.now()
     Column {
         Text(
-            text = "Tygodniowe zestawienie", // todo extract string resource
+            text = stringResource(R.string.weekly_summary),
             style = MaterialTheme.typography.h3.copy(color = VeryDarkBlue),
             modifier = Modifier.padding(bottom = 12.dp),
             color = MaterialTheme.colors.onSurface

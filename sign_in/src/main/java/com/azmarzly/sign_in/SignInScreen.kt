@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
@@ -142,7 +143,7 @@ fun SignInScreenContent(
                     .padding(horizontal = 20.dp, vertical = 64.dp)
             ) {
                 Text(
-                    text = "Zaloguj się",
+                    text = stringResource(R.string.signin),
                     style = MaterialTheme.typography.h3
                 )
 
@@ -157,7 +158,7 @@ fun SignInScreenContent(
                     label = "E-mail",
                     style = MaterialTheme.typography.caption,
                     isError = emailValidationState == ValidationState.Invalid,
-                    errorText = "Zły e-mail",
+                    errorText = stringResource(R.string.incorrect_email),
                     imeAction = ImeAction.Next,
                     keyboardType = KeyboardType.Email,
                     modifier = Modifier.fillMaxWidth()
@@ -174,7 +175,7 @@ fun SignInScreenContent(
                     label = "Password",
                     style = MaterialTheme.typography.caption.copy(),
                     isError = passwordValidationState == ValidationState.Invalid,
-                    errorText = "Złe hasło",
+                    errorText = stringResource(R.string.incorrect_password),
                     imeAction = ImeAction.Done,
                     keyboardType = KeyboardType.Password,
                     modifier = Modifier.fillMaxWidth()
@@ -186,7 +187,7 @@ fun SignInScreenContent(
                         .clickable {
                             onForgotPassword()
                         },
-                    text = "Zapomniałeś hasła?",
+                    text = stringResource(R.string.forgot_password),
                     style = buttonLabelLinkTextStyle.copy(
                         color = MaterialTheme.colors.primary,
                         textDecoration = TextDecoration.Underline
@@ -207,7 +208,7 @@ fun SignInScreenContent(
                         )
                     } else {
                         Text(
-                            text = "Zaloguj się",
+                            text = stringResource(R.string.signin),
                             style = MaterialTheme.typography.button,
                             modifier = Modifier.align(Alignment.CenterVertically),
                             color = MaterialTheme.colors.onPrimary
@@ -221,7 +222,7 @@ fun SignInScreenContent(
 
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Text(
-                        text = "Nie masz jeszcze konta?",
+                        text = stringResource(R.string.dont_have_account),
                         style = MaterialTheme.typography.caption
                     )
                     Spacer(modifier = Modifier.width(18.dp))
@@ -230,7 +231,7 @@ fun SignInScreenContent(
                             .clickable {
                                 onNavigateToRegistration()
                             },
-                        text = "Zarejestruj się",
+                        text = stringResource(R.string.sign_up),
                         style = buttonLabelLinkTextStyle.copy(
                             color = MaterialTheme.colors.primary,
                             textDecoration = TextDecoration.Underline

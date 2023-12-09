@@ -27,8 +27,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.azmarzly.core.R
 import core.model.CalendarDay
 import core.ui.theme.bodySmall
 import core.ui.theme.emptyProgressColor
@@ -130,7 +132,7 @@ private fun BottomSheetHeaderGeneralInfoRow(
                 )
             )
             Text(
-                text = "${progressInPercentage}% nawodnienia",
+                text = "${progressInPercentage}% ${stringResource(R.string.hydration)}",
                 style = MaterialTheme.typography.caption.copy(
                     color = MaterialTheme.colors.shadowedTextColor
                 )

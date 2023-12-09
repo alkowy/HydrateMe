@@ -19,6 +19,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -27,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.azmarzly.core.R
 import core.common_components.PlaneValidatedTextField
 import core.model.UserDataModel
 import core.ui.theme.Grey400
@@ -99,7 +101,7 @@ fun GoalScreenContent(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Wyliczony na podstawie uzupełnionych przez Ciebie danych",
+                text = stringResource(R.string.daily_water_intake_calculated),
                 style = MaterialTheme.typography.bodySmall,
                 color = Grey400,
                 textAlign = TextAlign.Center

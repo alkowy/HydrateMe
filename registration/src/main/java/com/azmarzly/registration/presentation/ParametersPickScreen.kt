@@ -31,12 +31,15 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.azmarzly.core.R.*
+import com.azmarzly.registration.R
 import core.common_components.PlaneValidatedTextField
 import core.common_components.RoundedButtonWithContent
 import core.input_validators.ValidationState
@@ -293,7 +296,7 @@ private fun DatePickerDialog(onDismiss: () -> Unit, onConfirm: () -> Unit, dateP
         onDismissRequest = onDismiss,
         confirmButton = {
             RoundedButtonWithContent(onClick = onConfirm) {
-                Text(text = "Potwierdź")
+                Text(text = stringResource(string.confirm))
             }
         },
         colors = DatePickerDefaults.colors(

@@ -37,6 +37,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -158,7 +159,7 @@ fun HomeHydrationProgressCard(
 ) {
     Column() {
         Text(
-            text = "Dzisiejsze nawodnienie", // todo extract string resource
+            text = stringResource(R.string.today_hydration),
             style = MaterialTheme.typography.h3.copy(color = VeryDarkBlue),
             modifier = Modifier.padding(bottom = 12.dp),
             color = MaterialTheme.colors.onSurface
@@ -173,7 +174,7 @@ fun HomeHydrationProgressCard(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Top,
                 modifier = modifier
-                    .padding(vertical = 40.dp)
+                    .padding(top = 40.dp, bottom = 20.dp)
                     .fillMaxWidth(),
             ) {
                 HydrationProgress(goalProgress = homeState.hydrationProgressPercentage)
@@ -187,7 +188,7 @@ fun HomeHydrationProgressCard(
                     withStyle(
                         style = MaterialTheme.typography.body1.toSpanStyle()
                     ) {
-                        append("Pozostało $remaining ml")
+                        append("${stringResource(R.string.water_remaining)} $remaining ml")
                     }
                     withStyle(
                         style = MaterialTheme.typography.body1.toSpanStyle().copy(
@@ -200,7 +201,7 @@ fun HomeHydrationProgressCard(
                 }
                 Text(text = remainingText,)
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
                 Button(
                     onClick = { onAddHydrationAction(250) },
@@ -219,7 +220,7 @@ fun HomeHydrationProgressCard(
                             .padding(end = 12.dp)
                     )
                     Text(
-                        text = "Dodaj szklankę",
+                        text = stringResource(R.string.add_drink),
                         style = MaterialTheme.typography.button,
                         modifier = Modifier.align(Alignment.CenterVertically)
                     )

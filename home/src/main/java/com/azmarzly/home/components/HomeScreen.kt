@@ -21,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -65,7 +66,7 @@ fun HomeScreenContent(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                text = "Witaj ${homeState.userData?.name ?: ""}!", // todo extract string resource
+                text = "${stringResource(R.string.hello_header)} ${homeState.userData?.name ?: ""}!",
                 style = MaterialTheme.typography.h2,
                 color = MaterialTheme.colors.onSurface,
             )

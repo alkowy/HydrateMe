@@ -1,5 +1,6 @@
 package com.azmarzly.home.components
 
+import android.provider.Settings.Global.getString
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,10 +26,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.azmarzly.core.R.*
+import com.azmarzly.home.R
 import core.common_components.PlaneValidatedTextField
 import core.common_components.RoundedButtonWithContent
 import core.input_validators.ValidationState
@@ -76,7 +80,7 @@ fun AddWaterDialog(
                 val textFocusRequester = remember { FocusRequester() }
                 val focusManager = LocalFocusManager.current
                 Text(
-                    text = "Dodaj napój",
+                    text = stringResource(string.add_drink),
                     style = MaterialTheme.typography.h3
                 )
 
@@ -101,7 +105,7 @@ fun AddWaterDialog(
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
-                Text(text = "lub")
+                Text(text = stringResource(string.or))
                 Spacer(modifier = Modifier.height(16.dp))
 
                 PlaneValidatedTextField(
@@ -134,7 +138,7 @@ fun AddWaterDialog(
                     enabled = hydrationAmountToAdd > 0,
                 ) {
                     Text(
-                        text = "Potwierdź",
+                        text = stringResource(string.confirm),
                         style = MaterialTheme.typography.button,
                         modifier = Modifier.align(Alignment.CenterVertically)
                     )
@@ -144,7 +148,7 @@ fun AddWaterDialog(
 
                 Text(
                     modifier = Modifier.clickable { onDismissRequest() },
-                    text = "Anuluj",
+                    text = stringResource(string.cancel),
                     style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.primary),
                 )
             }
