@@ -40,31 +40,4 @@ class HomeScreenParentViewModel @Inject constructor(
         )
     }
 
-
-    private val _state: MutableStateFlow<HomeScreenRootState> = MutableStateFlow(HomeScreenRootState.EmptyState)
-    val state: StateFlow<HomeScreenRootState> = _state.asStateFlow()
-
-
-    fun updateUserData(userDataModel: UserDataModel) {
-        viewModelScope.launch {
-            firestoreUserUseCase.invoke(userDataModel.toFirestoreUserDataModel()).collect { updateResult ->
-                when (updateResult) {
-                    Resource.EmptyState -> doNothing()
-                    is Resource.Error -> {
-                        _state.update { HomeScreenRootState.Error(updateResult.errorMessage ?: "Unexpected error") }
-                    }
-
-                    Resource.Loading -> _state.update { HomeScreenRootState.Loading }
-                    is Resource.Success -> _state.update { HomeScreenRootState.EmptyState }
-                }
-            }
-        }
-    }
-
-}
-
-sealed interface HomeScreenRootState {
-    object Loading : HomeScreenRootState
-    data class Error(val message: String) : HomeScreenRootState
-    object EmptyState : HomeScreenRootState
 }

@@ -1,16 +1,20 @@
 package com.azmarzly.home.presentation.calendar
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import core.DispatcherIO
 import core.domain.use_case.FetchHydrationDataForMonthUseCase
+import core.domain.use_case.PeriodicallyFetchUserDataModelUseCase
 import core.model.CalendarDay
 import core.model.Resource
+import core.util.doNothing
 import core.util.isSameDayAs
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
@@ -22,6 +26,7 @@ import javax.inject.Inject
 class CalendarViewModel @Inject constructor(
     private val fetchHydrationDataForMonthUseCase: FetchHydrationDataForMonthUseCase,
     @DispatcherIO private val ioDispatcher: CoroutineDispatcher,
+    private val periodicallyFetchUserDataModelUseCase: PeriodicallyFetchUserDataModelUseCase,
 ) : ViewModel() {
 
     private var _calendarState = MutableStateFlow(CalendarState(isLoading = true))
@@ -29,9 +34,36 @@ class CalendarViewModel @Inject constructor(
 
     init {
         fetchCurrentMonthData(LocalDate.now())
+        periodicallyFetchUserDataAndMapToCalendarState()
     }
 
-    fun fetchCurrentMonthData(date: LocalDate) {
+    private fun periodicallyFetchUserDataAndMapToCalendarState() {
+        viewModelScope.launch(ioDispatcher) {
+            periodicallyFetchUserDataModelUseCase.invoke()
+                .collectLatest { fetchResult ->
+                    Log.d("ANANAS", "periodicallyFetchUserDataAndMapToHomeState in CALENDAR: $fetchResult")
+                    when (fetchResult) {
+                        is Resource.Success -> {
+                            val selectedDateData = fetchResult.data?.hydrationData?.find { it.date.isSameDayAs(_calendarState.value.selectedDate) }
+                            selectedDateData?.let { selectedHydrationData ->
+                                _calendarState.update { calendarState ->
+                                    calendarState.copy(
+                                        isLoading = false,
+                                        selectedDayData = calendarState.selectedDayData?.copy(
+                                            hydrationData = selectedHydrationData
+                                        )
+                                    )
+                                }
+                            }
+                        }
+
+                        else -> doNothing()
+                    }
+                }
+        }
+    }
+
+    private fun fetchCurrentMonthData(date: LocalDate) {
         viewModelScope.launch(ioDispatcher) {
             fetchHydrationDataForMonthUseCase.invoke(date).collect { resource ->
                 when (resource) {

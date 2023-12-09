@@ -1,6 +1,5 @@
 package com.azmarzly.authentication.data
 
-import android.util.Log
 import com.azmarzly.authentication.domain.AuthenticationRepository
 import com.azmarzly.authentication.domain.UserManager
 import com.google.firebase.auth.FirebaseAuth
@@ -10,7 +9,6 @@ import core.model.UserDataModel
 import core.util.doNothing
 import core.util.toFirestoreUserDataModel
 import kotlinx.coroutines.flow.channelFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
@@ -25,13 +23,13 @@ class AuthenticationRepositoryImpl @Inject constructor(
     override fun registerWithEmailAndPassword(
         email: String,
         password: String,
-        userDataModel: UserDataModel
+        userDataModel: UserDataModel,
     ) = flow {
         emit(Resource.Loading)
         try {
             val registrationResult = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
             val userDataModelWithFirestoreId = userDataModel.copy(uid = registrationResult.user!!.uid)
-            firestore.updateUserInFirestore(userDataModelWithFirestoreId.toFirestoreUserDataModel()).collect()
+            firestore.updateUserInFirestore(userDataModelWithFirestoreId.toFirestoreUserDataModel())
             if (registrationResult.user != null) {
                 userManager.saveLoggedInUserToLocalPreferences(userDataModelWithFirestoreId)
                 userManager.saveUserId(userDataModelWithFirestoreId.uid)

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import core.DispatcherIO
 import core.domain.use_case.FetchCurrentUserUseCase
+import core.domain.use_case.PeriodicallyFetchUserDataModelUseCase
 import core.domain.use_case.UpdateFirestoreUserUseCase
 import core.input_validators.InputValidator
 import core.input_validators.ValidationState
@@ -21,6 +22,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -34,6 +36,7 @@ class HomeViewModel @Inject constructor(
     @DispatcherIO private val dispatcherIO: CoroutineDispatcher,
     private val fetchCurrentUserUseCase: FetchCurrentUserUseCase,
     private val updateFirestoreUserUseCase: UpdateFirestoreUserUseCase,
+    private val periodicallyFetchUserDataModelUseCase: PeriodicallyFetchUserDataModelUseCase,
     @Named("WholeNumberValidator") private val numberValidator: InputValidator,
 ) : ViewModel() {
 
@@ -41,39 +44,36 @@ class HomeViewModel @Inject constructor(
         const val DEFAULT_HYDRATION_GOAL = 2000
     }
 
-    private val _userDataState: MutableStateFlow<Resource<UserDataModel>> = MutableStateFlow(Resource.EmptyState)
-    val userDataState: StateFlow<Resource<UserDataModel>> = _userDataState.asStateFlow()
-
     private val _homeState: MutableStateFlow<HomeState> = MutableStateFlow(HomeState())
     val homeState: StateFlow<HomeState> = _homeState.asStateFlow()
 
     init {
-        fetchCurrentUser()
+        periodicallyFetchUserDataAndMapToHomeState()
     }
 
-    fun fetchCurrentUser() {
+    private fun periodicallyFetchUserDataAndMapToHomeState() {
         viewModelScope.launch(dispatcherIO) {
-            fetchCurrentUserUseCase().collect { fetchResult ->
-                _userDataState.update { fetchResult }
-                when (fetchResult) {
-                    is Resource.Error -> _homeState.update { _homeState.value.copy(error = (fetchResult.errorMessage ?: "Unexpected error")) }
-                    Resource.Loading -> _homeState.update { _homeState.value.copy(isLoading = true) }
-                    is Resource.Success -> _homeState.update {
-                        val hydrationData = fetchResult.data?.hydrationData?.find { it.date.isSameDayAs(LocalDate.now()) }
-                        _homeState.value.copy(
-                            userData = fetchResult.data,
-                            isLoading = false,
-                            remainingHydrationMillis = hydrationData?.calculateRemaining() ?: fetchResult.data?.hydrationGoalMillis ?: DEFAULT_HYDRATION_GOAL,
-                            hydrationProgressPercentage = hydrationData?.calculateProgress() ?: 0,
-                            todayHydrationChunks = hydrationData?.hydrationChunksList ?: emptyList(),
-                            hydrationGoal = fetchResult.data?.hydrationGoalMillis ?: DEFAULT_HYDRATION_GOAL//hydrationData?.goalMillis ?: 0
-                        )
+            periodicallyFetchUserDataModelUseCase.invoke()
+                .collectLatest { fetchResult ->
+                    Log.d("ANANAS", "periodicallyFetchUserDataAndMapToHomeState IN HOME: $fetchResult")
+                    when (fetchResult) {
+                        is Resource.Error -> _homeState.update { _homeState.value.copy(error = (fetchResult.errorMessage ?: "Unexpected error")) }
+                        Resource.Loading -> _homeState.update { _homeState.value.copy(isLoading = true) }
+                        is Resource.Success -> _homeState.update {
+                            val hydrationData = fetchResult.data?.hydrationData?.find { it.date.isSameDayAs(LocalDate.now()) }
+                            _homeState.value.copy(
+                                userData = fetchResult.data,
+                                isLoading = false,
+                                remainingHydrationMillis = hydrationData?.calculateRemaining() ?: fetchResult.data?.hydrationGoalMillis ?: DEFAULT_HYDRATION_GOAL,
+                                hydrationProgressPercentage = hydrationData?.calculateProgress() ?: 0,
+                                todayHydrationChunks = hydrationData?.hydrationChunksList ?: emptyList(),
+                                hydrationGoal = fetchResult.data?.hydrationGoalMillis ?: DEFAULT_HYDRATION_GOAL//hydrationData?.goalMillis ?: 0
+                            )
+                        }
+
+                        else -> doNothing()
                     }
-
-                    Resource.EmptyState -> doNothing()
                 }
-
-            }
         }
     }
 
@@ -165,13 +165,6 @@ class HomeViewModel @Inject constructor(
         Log.d("ANANAS", "updateFirestoreUser: $updatedUserData")
         viewModelScope.launch(dispatcherIO) {
             updateFirestoreUserUseCase(updatedUserData)
-                .collect { updateResult ->
-                    when (updateResult) {
-                        is Resource.Error -> _userDataState.update { updateResult }
-                        is Resource.Success -> _userDataState.update { updateResult }
-                        Resource.Loading, Resource.EmptyState -> doNothing()
-                    }
-                }
         }
     }
 }

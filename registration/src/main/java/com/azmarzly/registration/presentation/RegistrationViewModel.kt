@@ -7,7 +7,6 @@ import com.azmarzly.authentication.domain.AuthenticationRepository
 import core.DispatcherIO
 import core.domain.use_case.FetchCurrentUserUseCase
 import core.domain.use_case.UpdateFirestoreUserUseCase
-import core.input_validators.InputValidator
 import core.model.Resource
 import core.model.UserDataModel
 import core.util.RegistrationRoute
@@ -21,13 +20,11 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import javax.inject.Named
 
 @HiltViewModel
 class RegistrationViewModel @Inject constructor(
     @DispatcherIO private val dispatcherIO: CoroutineDispatcher,
     private val authRepository: AuthenticationRepository,
-    private val fetchCurrentUserUseCase: FetchCurrentUserUseCase,
     private val updateFirestoreUserUseCase: UpdateFirestoreUserUseCase,
 ) : ViewModel() {
 
@@ -116,36 +113,15 @@ class RegistrationViewModel @Inject constructor(
                     error = null,
                 )
             }
-            updateFirestoreUserUseCase(userModel.toFirestoreUserDataModel()).collect { updateResult ->
-                Log.d("ANANAS", "updateUserData: result $updateResult")
-                when (updateResult) {
-                    is Resource.Success -> {
-                        _registrationState.update {
-                            _registrationState.value.copy(
-                                userModel = updateResult.data,
-                                isLoading = false,
-                                error = null,
-                            )
-                        }
-                    }
+            updateFirestoreUserUseCase(userModel.toFirestoreUserDataModel())
 
-                    is Resource.Error -> _registrationState.update {
-                        _registrationState.value.copy(
-                            error = updateResult.errorMessage
-                        )
-                    }
-
-                    Resource.Loading -> _registrationState.update {
-                        _registrationState.value.copy(
-                            error = null,
-                            isLoading = true
-                        )
-                    }
-
-                    Resource.EmptyState -> doNothing()
-                }
+            _registrationState.update {
+                _registrationState.value.copy(
+                    userModel = userModel,
+                    isLoading = false,
+                    error = null,
+                )
             }
-
         }
     }
 }

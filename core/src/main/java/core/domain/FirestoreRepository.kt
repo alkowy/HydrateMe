@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface FirestoreRepository {
 
-    suspend fun updateUserInFirestore(firestoreUser: FirestoreUserDataModel): Flow<Resource<UserDataModel>>
+    suspend fun updateUserInFirestore(firestoreUser: FirestoreUserDataModel)
     fun fetchUserFromFirestore(userId: String): Flow<Resource<UserDataModel>>
+    fun periodicallyGetUserDataModel(): Flow<Resource<UserDataModel?>>
 }
