@@ -3,7 +3,6 @@ apply {
 }
 dependencies {
     implementation project(path: ':core')
-    implementation project(path: ':authentication')
 
     implementation("io.coil-kt:coil-compose:2.5.0")
 }

@@ -1,20 +1,10 @@
 package com.azmarzly.home.presentation
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.azmarzly.core.R
 import com.azmarzly.home.components.HomeScreenBottomBarItem
 import core.domain.use_case.UpdateFirestoreUserUseCase
-import core.model.Resource
-import core.model.UserDataModel
-import core.util.doNothing
-import core.util.toFirestoreUserDataModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel

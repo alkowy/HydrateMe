@@ -1,7 +1,9 @@
 package core.data
 
+import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import com.google.firebase.storage.FirebaseStorage
 import core.LocalPreferencesApi
 import core.domain.FirestoreRepository
 import core.model.FirestoreUserDataModel
@@ -26,20 +28,24 @@ class FirestoreRepositoryImpl @Inject constructor(
         private const val USERS_COLLECTION = "users"
     }
 
-    override suspend fun updateUserInFirestore(firestoreUser: FirestoreUserDataModel) {
+    override fun updateUserInFirestore(firestoreUser: FirestoreUserDataModel) {
         firestore.collection(USERS_COLLECTION)
             .document(firestoreUser.uid)
             .set(firestoreUser, SetOptions.merge())
-            .await()
+            .addOnCanceledListener {
+                Log.d("ANANAS", "updateUserInFirestore: cancaeled")
+            }
+            .addOnSuccessListener {
+                Log.d("ANANAS", "updateUserInFirestore: success")
+            }
+            .addOnFailureListener {
+                Log.d("ANANAS", "updateUserInFirestore: failure")
+            }
     }
 
     override fun fetchUserFromFirestore(userId: String) = channelFlow {
         send(Resource.Loading)
-        val user = firestore.collection(USERS_COLLECTION)
-            .document(userId)
-            .get()
-            .await()
-            .toObject(FirestoreUserDataModel::class.java)
+        val user = getFirestoreUserModel(userId)
 
         if (user == null) {
             send(Resource.Error("Error fetching the user data"))
@@ -66,5 +72,13 @@ class FirestoreRepositoryImpl @Inject constructor(
                 }
             }
         awaitClose { this.cancel() }
+    }
+
+    private suspend fun getFirestoreUserModel(userId: String = localPreferencesApi.getCurrentUserId()): FirestoreUserDataModel? {
+        return firestore.collection(USERS_COLLECTION)
+            .document(userId)
+            .get()
+            .await()
+            .toObject(FirestoreUserDataModel::class.java)
     }
 }

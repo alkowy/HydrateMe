@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
@@ -32,4 +33,7 @@ class AppModule {
 
     @Provides
     fun provideFirestore(): FirebaseFirestore = Firebase.firestore
+
+    @Provides
+    fun providerFirebaseStorage(): FirebaseStorage = FirebaseStorage.getInstance()
 }
