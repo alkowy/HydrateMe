@@ -36,4 +36,5 @@
     <string name="weekly_summary">Weekly summary</string>
     <string name="incorrect_email">Incorrect e-mail</string>
     <string name="incorrect_password">Incorrect password</string>
+    <string name="parameters_age">Age</string>
 </resources>

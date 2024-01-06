@@ -34,7 +34,6 @@ import javax.inject.Named
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     @DispatcherIO private val dispatcherIO: CoroutineDispatcher,
-    private val fetchCurrentUserUseCase: FetchCurrentUserUseCase,
     private val updateFirestoreUserUseCase: UpdateFirestoreUserUseCase,
     private val periodicallyFetchUserDataModelUseCase: PeriodicallyFetchUserDataModelUseCase,
     @Named("WholeNumberValidator") private val numberValidator: InputValidator,

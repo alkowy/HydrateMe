@@ -41,6 +41,7 @@ class CalendarViewModel @Inject constructor(
         viewModelScope.launch(ioDispatcher) {
             periodicallyFetchUserDataModelUseCase.invoke()
                 .collectLatest { fetchResult ->
+                    fetchCurrentMonthData(_calendarState.value.selectedDate)
                     Log.d("ANANAS", "periodicallyFetchUserDataAndMapToHomeState in CALENDAR: $fetchResult")
                     when (fetchResult) {
                         is Resource.Success -> {
@@ -95,7 +96,6 @@ class CalendarViewModel @Inject constructor(
 
                     else -> {}
                 }
-
             }
         }
     }
@@ -148,11 +148,9 @@ class CalendarViewModel @Inject constructor(
 
                     else -> {}
                 }
-
             }
         }
     }
-
 }
 
 enum class CalendarDirection {

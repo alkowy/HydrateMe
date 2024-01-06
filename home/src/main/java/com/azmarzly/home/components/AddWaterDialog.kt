@@ -32,7 +32,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.azmarzly.core.R.*
-import com.azmarzly.home.R
 import core.common_components.PlaneValidatedTextField
 import core.common_components.RoundedButtonWithContent
 import core.input_validators.ValidationState

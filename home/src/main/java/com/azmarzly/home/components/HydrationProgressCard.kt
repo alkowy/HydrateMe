@@ -53,7 +53,6 @@ import core.ui.theme.shadowedTextColor
 import core.util.doNothing
 import core.util.toPercentageString
 
-
 @Composable
 fun HydrationProgress(goalProgress: Int) {
     Box(

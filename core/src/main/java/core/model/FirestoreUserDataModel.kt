@@ -13,6 +13,7 @@ data class FirestoreUserDataModel @Keep constructor(
     val gender: Gender? = null,
     val height: Double? = 0.0,
     val weight: Double? = 0.0,
+    val profileImageUrl: String = "",
     val birthDate: Long? = -1, // in timestamp, epoch seconds
     val hydrationGoalMillis: Int = 0,
     val userActivity: UserActivityEnum = UserActivityEnum.EMPTY,

@@ -11,6 +11,7 @@ data class UserDataModel(
     val gender: Gender? = null,
     val height: Double? = null,
     val weight: Double? = null,
+    val profileImageUrl: String = "",
     val birthDate: LocalDate? = null,
     val hydrationGoalMillis: Int = 2000,
     val userActivity: UserActivityEnum = UserActivityEnum.EMPTY,

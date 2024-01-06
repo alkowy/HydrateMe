@@ -77,6 +77,9 @@ val Colors.shadowedTextColor: Color
 val Colors.weekDaysColor: Color
     get() = if (isLight) Grey600 else Grey400
 
+val Colors.profileEmailTextColor: Color
+    get() = if (isLight) Grey600 else Grey400
+
 //val Colors.registrationSurface: Color
 //    get() = if (isLight) VeryWhite else Grey800
 

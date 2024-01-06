@@ -30,7 +30,7 @@ fun HomeNavGraph(
         }
         composable(route = HomeRoute.PROFILE.route) {
             ProfileScreen(
-                navigateToSignIn = { navigateToSignIn() }
+                bottomBarPadding = bottomBarPadding,
             )
         }
         composable(route = HomeRoute.NEWS.route) {

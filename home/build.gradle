@@ -7,6 +7,7 @@ dependencies {
     implementation project(path: ':profile')
 
     implementation("com.exyte:animated-navigation-bar:1.0.0")
+    implementation("io.coil-kt:coil-compose:2.5.0")
 }
 
 android {
