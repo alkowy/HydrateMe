@@ -8,7 +8,7 @@ import core.DispatcherIO
 import core.domain.use_case.FetchCurrentUserUseCase
 import core.model.Resource
 import core.model.UserActivityEnum
-import core.util.round
+import core.util.roundToString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -74,7 +74,7 @@ class ProfileViewModel @Inject constructor(
                                         weight = if (data.weight == null) EMPTY_VALUE else data.weight.toString(),
                                         height = if (data.height == null) EMPTY_VALUE else data.weight.toString(),
                                         activity = data.userActivity,
-                                        dailyGoal = data.hydrationGoalMillis.div(1000).toDouble().round(decimals = 2).toString() + " L",
+                                        dailyGoal = data.hydrationGoalMillis.div(1000).toDouble().roundToString(decimals = 2) + " L",
                                     )
                                 }
                             }

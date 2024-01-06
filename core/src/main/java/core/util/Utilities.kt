@@ -13,4 +13,4 @@ fun Number.toPercentageString() = NumberFormatter.withLocale(Locale.getDefault()
     .format(this)
     .toString()
 
-fun Double.round(decimals: Int = 2): Double = "%.${decimals}f".format(this).toDouble()
+fun Double.roundToString(decimals: Int = 2): String = "%.${decimals}f".format(this)

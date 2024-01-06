@@ -63,6 +63,7 @@ fun ProfileScreen(
     ProfileScreenContent(
         state = state,
         bottomBarPadding = bottomBarPadding,
+        signOut = profileViewModel::signOut
     )
 
     LaunchedEffect(Unit) {
@@ -77,6 +78,7 @@ fun ProfileScreen(
 fun ProfileScreenContent(
     state: ProfileUiState,
     bottomBarPadding: Dp,
+    signOut: () -> Unit,
 ) {
 
     val scrollState = rememberScrollState()
@@ -89,7 +91,7 @@ fun ProfileScreenContent(
             .padding(start = 20.dp, end = 20.dp, top = 45.dp, bottom = bottomBarPadding)
     ) {
 
-        ProfileHeader()
+        ProfileHeader(signOut)
         Spacer(modifier = Modifier.height(24.dp))
         MainProfileCard(state)
         Spacer(modifier = Modifier.height(14.dp))
@@ -241,7 +243,9 @@ private fun ProfilePicture(profilePictureUrl: String) {
 
 
 @Composable
-private fun ProfileHeader() {
+private fun ProfileHeader(
+    signOut: () -> Unit,
+) {
     Box(
         modifier = Modifier.fillMaxWidth(),
     ) {
@@ -253,7 +257,7 @@ private fun ProfileHeader() {
             )
         )
         IconButton(
-            onClick = { /*TODO*/ },
+            onClick = signOut,
             modifier = Modifier.align(Alignment.CenterEnd),
         ) {
             Icon(
@@ -270,7 +274,8 @@ fun ProfileContentPreview() {
     HydrateMeTheme {
         ProfileScreenContent(
             bottomBarPadding = 20.dp,
-            state = ProfileUiState("", "OLO", "olo123123123@gmail.com", "44", "80 kg", "180 cm", UserActivityEnum.EMPTY, "2.2 L")
+            state = ProfileUiState("", "OLO", "olo123123123@gmail.com", "44", "80 kg", "180 cm", UserActivityEnum.EMPTY, "2.2 L"),
+            signOut = {}
         )
     }
 }
