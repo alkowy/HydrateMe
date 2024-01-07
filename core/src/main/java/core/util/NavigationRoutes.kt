@@ -28,8 +28,8 @@ interface Route {
 enum class RegistrationRoute : Route {
     REGISTRATION_ROOT, INITIAL, PARAMETERS, GENDER, ACTIVITY, GOAL;
 
-    fun toName() : String =
-        when(this){
+    fun toName(): String =
+        when (this) {
             REGISTRATION_ROOT -> ""
             INITIAL -> "Podstawowe dane"
             PARAMETERS -> "Twoje parametry"
@@ -45,6 +45,19 @@ enum class HomeRoute : Route {
     HOME_ROOT, HOME, CALENDAR, PROFILE, NEWS;
 
     override val route: String = this.name
+}
+
+enum class ProfileRoute : Route {
+    PROFILE, SETTINGS;
+
+    override val route: String = this.name
+}
+
+enum class SettingsRoute : Route {
+    MAIN, PERSONAL_DATA, PERSONALISATION, ACCOUNT, PRIVACY_POLICY;
+
+    override val route: String = this.name
+
 }
 
 object LandingPageRoute : Route {

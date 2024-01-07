@@ -3,7 +3,7 @@ apply {
 }
 
 dependencies {
-
+    implementation project(path: ':core')
 }
 
 android {
