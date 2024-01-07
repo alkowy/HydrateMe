@@ -10,6 +10,6 @@ data class ProfileUiState(
     val age: String,
     val weight: String,
     val height: String,
-    val activity: UserActivityEnum,
+    val activity: String,
     val dailyGoal: String,
 )

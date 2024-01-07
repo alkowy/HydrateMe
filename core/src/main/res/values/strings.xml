@@ -37,4 +37,7 @@
     <string name="incorrect_email">Incorrect e-mail</string>
     <string name="incorrect_password">Incorrect password</string>
     <string name="parameters_age">Age</string>
+    <string name="unit_kg">kg</string>
+    <string name="unit_cm">cm</string>
+    <string name="unit_liter">l</string>
 </resources>

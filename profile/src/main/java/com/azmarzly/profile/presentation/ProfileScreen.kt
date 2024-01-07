@@ -108,7 +108,7 @@ fun ProfileScreenContent(
         Spacer(modifier = Modifier.height(14.dp))
         ProfileOneParameterSectionCard(
             parameterName = stringResource(string.physical_activity),
-            parameterValue = state.activity.name
+            parameterValue = state.activity
         )
         Spacer(modifier = Modifier.height(14.dp))
         ProfileOneParameterSectionCard(
@@ -329,7 +329,7 @@ fun ProfileContentPreview() {
     HydrateMeTheme {
         ProfileScreenContent(
             bottomBarPadding = 20.dp,
-            state = ProfileUiState("", false,"OLO", "olo123123123@gmail.com", "44", "80 kg", "180 cm", UserActivityEnum.EMPTY, "2.2 L"),
+            state = ProfileUiState("", false,"OLO", "olo123123123@gmail.com", "44", "80 kg", "180 cm", "EMPTY", "2.2 L"),
             uploadProfilePicture = {},
         )
     }

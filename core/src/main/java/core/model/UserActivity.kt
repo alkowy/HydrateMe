@@ -39,3 +39,13 @@ fun UserActivity.toUserActivityEnum(): UserActivityEnum {
         is UserActivity.Empty -> UserActivityEnum.EMPTY
     }
 }
+
+fun UserActivityEnum.toUserActivity(): UserActivity {
+    return when (this) {
+        UserActivityEnum.EMPTY -> UserActivity.Empty()
+        UserActivityEnum.VERY_LOW -> UserActivity.VeryLowActivity()
+        UserActivityEnum.LOW -> UserActivity.LowActivity()
+        UserActivityEnum.AVERAGE -> UserActivity.AverageActivity()
+        UserActivityEnum.HIGH -> UserActivity.HighActivity()
+    }
+}
