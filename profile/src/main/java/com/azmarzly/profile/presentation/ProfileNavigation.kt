@@ -17,7 +17,6 @@ fun ProfileNavGraph(
     NavHost(
         navController = navController,
         startDestination = ProfileRoute.PROFILE.route,
-        route = ProfileRoute.PROFILE.route
     ) {
         composable(route = ProfileRoute.PROFILE.route) {
             ProfileScreen(

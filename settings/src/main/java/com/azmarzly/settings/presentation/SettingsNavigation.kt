@@ -12,7 +12,6 @@ fun SettingsNavGraph(navController: NavHostController = rememberNavController())
     NavHost(
         navController = navController,
         startDestination = SettingsRoute.MAIN.route,
-        route = SettingsRoute.MAIN.route,
     ) {
         composable(route = SettingsRoute.MAIN.route) {
 
