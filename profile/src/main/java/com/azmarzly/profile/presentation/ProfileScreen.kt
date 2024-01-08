@@ -24,7 +24,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
@@ -40,7 +39,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -55,7 +53,6 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.azmarzly.core.R.drawable
 import com.azmarzly.core.R.string
-import core.model.UserActivityEnum
 import core.ui.theme.HydrateMeTheme
 import core.ui.theme.backgroundContainer
 import core.ui.theme.bodySmall
@@ -66,14 +63,15 @@ import core.ui.theme.shadowedTextColor
 fun ProfileScreen(
     profileViewModel: ProfileViewModel = hiltViewModel(),
     bottomBarPadding: Dp,
+    navigateToSettings: () -> Unit,
 ) {
-
     val state by profileViewModel.profileState.collectAsStateWithLifecycle()
 
     ProfileScreenContent(
         state = state,
         bottomBarPadding = bottomBarPadding,
-        uploadProfilePicture = profileViewModel::updateProfilePicture
+        uploadProfilePicture = profileViewModel::updateProfilePicture,
+        navigateToSettings = navigateToSettings,
     )
 
     LaunchedEffect(Unit) {
@@ -89,6 +87,7 @@ fun ProfileScreenContent(
     state: ProfileUiState,
     bottomBarPadding: Dp,
     uploadProfilePicture: (Uri) -> Unit,
+    navigateToSettings: () -> Unit,
 ) {
     val scrollState = rememberScrollState()
     Column(
@@ -96,10 +95,12 @@ fun ProfileScreenContent(
             .fillMaxSize()
             .background(MaterialTheme.colors.surface)
             .verticalScroll(scrollState)
-            .padding(start = 20.dp, end = 20.dp, top = 45.dp, bottom = bottomBarPadding)
+            .padding(start = 20.dp, end = 20.dp, top = 25.dp, bottom = bottomBarPadding)
     ) {
 
-        ProfileHeader()
+        ProfileHeader(
+            navigateToSettings = navigateToSettings
+        )
         Spacer(modifier = Modifier.height(24.dp))
         MainProfileCard(
             state = state,
@@ -300,6 +301,7 @@ private fun ProfilePicture(
 
 @Composable
 private fun ProfileHeader(
+    navigateToSettings: () -> Unit,
 ) {
     Box(
         modifier = Modifier.fillMaxWidth(),
@@ -312,7 +314,7 @@ private fun ProfileHeader(
             )
         )
         IconButton(
-            onClick = {},
+            onClick = navigateToSettings,
             modifier = Modifier.align(Alignment.CenterEnd),
         ) {
             Icon(
@@ -329,8 +331,9 @@ fun ProfileContentPreview() {
     HydrateMeTheme {
         ProfileScreenContent(
             bottomBarPadding = 20.dp,
-            state = ProfileUiState("", false,"OLO", "olo123123123@gmail.com", "44", "80 kg", "180 cm", "EMPTY", "2.2 L"),
+            state = ProfileUiState("", false, "OLO", "olo123123123@gmail.com", "44", "80 kg", "180 cm", "EMPTY", "2.2 L"),
             uploadProfilePicture = {},
+            navigateToSettings = {},
         )
     }
 }

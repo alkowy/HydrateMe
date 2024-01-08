@@ -1,7 +1,11 @@
 package core.util
 
+import java.text.DecimalFormat
+
 fun Double.toStringWithUnit(unit: String): String {
-    return "$this $unit"
+    val format = DecimalFormat("0.#") // remove trailing zeroes
+    val formatted = format.format(this)
+    return "$formatted $unit"
 }
 
 fun Double.roundAndAddUnit(decimals: Int = 2, unit: String): String {

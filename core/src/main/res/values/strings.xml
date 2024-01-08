@@ -40,4 +40,12 @@
     <string name="unit_kg">kg</string>
     <string name="unit_cm">cm</string>
     <string name="unit_liter">l</string>
+    <string name="settings_header">Settings</string>
+    <string name="save">Save</string>
+    <string name="account_personalisation">Account personalisation</string>
+    <string name="general">General</string>
+    <string name="account">Account</string>
+    <string name="privacy_policy">Privacy policy</string>
+    <string name="choose">Choose</string>
+    <string name="birth_date">Birth date</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.azmarzly.home.components
 
+import android.util.Log
 import android.view.animation.OvershootInterpolator
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.LinearOutSlowInEasing
@@ -16,10 +17,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -29,18 +26,21 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.azmarzly.core.R
+import com.azmarzly.home.presentation.HomeScreenParentViewModel.Companion.homeScreens
 import com.exyte.animatednavbar.animation.balltrajectory.BallAnimation
 import com.exyte.animatednavbar.animation.balltrajectory.Teleport
 import com.exyte.animatednavbar.animation.indendshape.Height
 import com.exyte.animatednavbar.animation.indendshape.shapeCornerRadius
 import com.exyte.animatednavbar.items.dropletbutton.DropletButton
 import core.ui.theme.HydrateMeTheme
+import core.util.HomeRoute
 import core.util.doNothing
 
 data class HomeScreenBottomBarItem(
     val description: String = "description",
     val iconUnselected: Int,
     val iconSelected: Int,
+    val route: HomeRoute,
 )
 
 const val Duration = 500
@@ -58,20 +58,23 @@ fun DropletButtonNavBar(
     ),// = MaterialTheme.colors.background,
     dropletColor: Color = MaterialTheme.colors.primary,
     unselectedIconColor: Color = MaterialTheme.colors.onBackground,
-    onNavigateToHome: () -> Unit,
-    onNavigateToCalendar: () -> Unit,
-    onNavigateToProfile: () -> Unit,
-    onNavigateToNews: () -> Unit,
+    selectedScreenIndex: Int,
+    onNavigateToScreen: (HomeRoute) -> Unit,
     onFloatingActionButtonAction: () -> Unit,
 ) {
-    var selectedItem by remember { mutableIntStateOf(0) }
+//    var selectedItem by rememberSaveable { mutableIntStateOf(0) }
+
+
+    LaunchedEffect(Unit) {
+        Log.d("ANANAS", "DropletButtonNavBar: Unit")
+    }
 
     Box {
         AnimatedNavigationBar(
             modifier = Modifier
                 .padding(top = 20.dp)
                 .height(60.dp),
-            selectedIndex = selectedItem,
+            selectedIndex = selectedScreenIndex,
             ballColor = dropletColor,
             cornerRadius = shapeCornerRadius(topLeft = 25.dp, topRight = 25.dp, bottomLeft = 25.dp, bottomRight = 25.dp),
             ballAnimation = ballAnimation,
@@ -90,9 +93,9 @@ fun DropletButtonNavBar(
                 } else {
                     DropletButton(
                         modifier = Modifier.fillMaxSize(),
-                        isSelected = selectedItem == index,
-                        onClick = { selectedItem = index },
-                        icon = if (selectedItem == index) it.iconSelected else it.iconUnselected,
+                        isSelected = selectedScreenIndex == index,
+                        onClick = { onNavigateToScreen(it.route) },
+                        icon = if (selectedScreenIndex == index) it.iconSelected else it.iconUnselected,
                         iconColor = unselectedIconColor,
                         dropletColor = dropletColor,
                         animationSpec = tween(durationMillis = Duration, easing = LinearEasing)
@@ -117,18 +120,8 @@ fun DropletButtonNavBar(
             )
         }
     }
-
-
-
-    LaunchedEffect(selectedItem) {
-        when (selectedItem) {
-            0 -> onNavigateToHome()
-            1 -> onNavigateToCalendar()
-            3 -> onNavigateToProfile()
-            4 -> onNavigateToNews()
-        }
-    }
 }
+
 
 @Composable
 fun InvisButton() {
@@ -144,37 +137,10 @@ fun InvisButton() {
 fun BottomNavBarPreview() {
     HydrateMeTheme() {
         DropletButtonNavBar(
-            dropletButtons = listOf(
-                HomeScreenBottomBarItem(
-                    description = "Home",
-                    iconSelected = R.drawable.ic_home_selected,
-                    iconUnselected = R.drawable.ic_home_unselected
-                ),
-                HomeScreenBottomBarItem(
-                    description = "Calendar",
-                    iconSelected = R.drawable.ic_calendar_selected,
-                    iconUnselected = R.drawable.ic_calendar_unselected
-                ),
-                HomeScreenBottomBarItem(
-                    description = "Profile",
-                    iconSelected = R.drawable.ic_profile_selected,
-                    iconUnselected = R.drawable.ic_profile_unselected
-                ),
-                HomeScreenBottomBarItem(
-                    description = "News",
-                    iconSelected = R.drawable.ic_news_selected,
-                    iconUnselected = R.drawable.ic_news_unselected
-                ),
-                HomeScreenBottomBarItem(
-                    description = "Home",
-                    iconSelected = R.drawable.ic_home_selected,
-                    iconUnselected = R.drawable.ic_home_unselected
-                ),
-            ),
-            onNavigateToHome = { /*TODO*/ },
-            onNavigateToCalendar = { /*TODO*/ },
-            onNavigateToProfile = { /*TODO*/ },
-            onNavigateToNews = {/*TODO*/ }
-        ) {/*TODO*/ }
+            dropletButtons = homeScreens,
+            selectedScreenIndex = 0,
+            onNavigateToScreen = {},
+            onFloatingActionButtonAction = {}
+        )
     }
 }

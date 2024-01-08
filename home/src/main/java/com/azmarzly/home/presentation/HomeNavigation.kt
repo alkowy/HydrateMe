@@ -16,6 +16,7 @@ fun HomeNavGraph(
     homeViewModel: HomeViewModel,
     navigateToSignIn: () -> Unit,
     bottomBarPadding: Dp,
+    setBottomBarVisibility: (Boolean) -> Unit,
 ) {
     NavHost(
         navController = navController,
@@ -29,7 +30,10 @@ fun HomeNavGraph(
             CalendarScreen(bottomBarPadding)
         }
         composable(route = HomeRoute.PROFILE.route) {
-            ProfileNavGraph(bottomBarPadding = bottomBarPadding)
+            ProfileNavGraph(
+                bottomBarPadding = bottomBarPadding,
+                setBottomBarVisibility = setBottomBarVisibility
+            )
         }
         composable(route = HomeRoute.NEWS.route) {
             HealthNewsScreen()

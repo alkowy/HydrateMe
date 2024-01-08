@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import core.DispatcherIO
-import core.domain.use_case.FetchCurrentUserUseCase
 import core.domain.use_case.PeriodicallyFetchUserDataModelUseCase
 import core.domain.use_case.UpdateFirestoreUserUseCase
 import core.input_validators.InputValidator
@@ -46,8 +45,15 @@ class HomeViewModel @Inject constructor(
     private val _homeState: MutableStateFlow<HomeState> = MutableStateFlow(HomeState())
     val homeState: StateFlow<HomeState> = _homeState.asStateFlow()
 
+    private val _bottomBarVisibilityState: MutableStateFlow<Boolean> = MutableStateFlow(true)
+    val bottomBarVisibilityState = _bottomBarVisibilityState.asStateFlow()
+
     init {
         periodicallyFetchUserDataAndMapToHomeState()
+    }
+
+    fun setBottomBarVisibilityState(shouldBeVisible: Boolean) {
+        _bottomBarVisibilityState.update { shouldBeVisible }
     }
 
     private fun periodicallyFetchUserDataAndMapToHomeState() {

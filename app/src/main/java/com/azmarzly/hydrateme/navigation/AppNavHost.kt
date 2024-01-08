@@ -18,6 +18,7 @@ import core.util.LandingPageRoute
 import core.util.RegistrationRoute
 import core.util.Route
 import core.util.ScannerRoute
+import core.util.SettingsRoute
 import core.util.SignInRoute
 import core.util.navigateTo
 
