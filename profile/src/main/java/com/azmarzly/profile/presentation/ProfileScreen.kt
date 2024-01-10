@@ -73,13 +73,6 @@ fun ProfileScreen(
         uploadProfilePicture = profileViewModel::updateProfilePicture,
         navigateToSettings = navigateToSettings,
     )
-
-    LaunchedEffect(Unit) {
-        Log.d("ANANAS", "ProfileScreen: init")
-    }
-    LaunchedEffect(state) {
-        Log.d("ANANAS", "ProfileScreen: $state")
-    }
 }
 
 @Composable

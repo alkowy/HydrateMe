@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import core.model.DrinkType
 import core.model.HydrationData
 import core.ui.theme.shadowedTextColor
+import core.util.toHourAndMinutes
 import java.time.LocalDateTime
 
 @Composable
@@ -68,7 +69,7 @@ fun HomeHydrationChunkItem(drinkType: DrinkType, date: LocalDateTime) {
             tint = MaterialTheme.colors.primary
         )
         Text(
-            text = "${date.hour}:${date.minute}",
+            text = date.toHourAndMinutes(),
             style = MaterialTheme.typography.caption.copy(
                 color = MaterialTheme.colors.shadowedTextColor
             )

@@ -144,8 +144,6 @@ fun AnimatedGoalProgress(
                     cap = StrokeCap.Round,
                 ),
             )
-
-
         }
     }
 }
@@ -198,7 +196,7 @@ fun HomeHydrationProgressCard(
                         append(" / ${homeState.hydrationGoal} ml")
                     }
                 }
-                Text(text = remainingText,)
+                Text(text = remainingText)
 
                 Spacer(modifier = Modifier.height(16.dp))
 

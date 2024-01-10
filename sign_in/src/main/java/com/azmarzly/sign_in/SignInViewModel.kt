@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.azmarzly.authentication.domain.AuthenticationRepository
 import com.azmarzly.authentication.domain.UserManager
 import core.DispatcherIO
-import core.LocalPreferencesApi
 import core.input_validators.InputValidator
 import core.input_validators.ValidationState
 import core.model.Resource
@@ -38,10 +37,17 @@ class SignInViewModel @Inject constructor(
     private val _emailValidationState: MutableStateFlow<ValidationState> = MutableStateFlow(ValidationState.Empty)
     val emailValidationState: StateFlow<ValidationState> = _emailValidationState.asStateFlow()
 
+    private val _resetPasswordEmailValidationState: MutableStateFlow<ValidationState> = MutableStateFlow(ValidationState.Empty)
+    val resetPasswordEmailValidationState: StateFlow<ValidationState> = _resetPasswordEmailValidationState.asStateFlow()
+
     private val _passwordValidationState: MutableStateFlow<ValidationState> = MutableStateFlow(ValidationState.Empty)
     val passwordValidationState: StateFlow<ValidationState> = _passwordValidationState.asStateFlow()
 
     private var validationJob: Job? = null
+
+    fun requestPasswordReset(email: String) {
+        authRepository.sendPasswordResetToEmail(email)
+    }
 
     fun loginWithEmailAndPassword(email: String, password: String) {
         viewModelScope.launch(dispatcherIO) {
@@ -63,6 +69,14 @@ class SignInViewModel @Inject constructor(
         validationJob = viewModelScope.launch {
             delay(250.milliseconds)
             _emailValidationState.update { emailValidator.isValid(email) }
+        }
+    }
+
+    fun validateResetPasswordEmail(email: String) {
+        validationJob?.cancel()
+        validationJob = viewModelScope.launch {
+            delay(250.milliseconds)
+            _resetPasswordEmailValidationState.update { emailValidator.isValid(email) }
         }
     }
 

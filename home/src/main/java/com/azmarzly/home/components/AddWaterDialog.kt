@@ -1,6 +1,5 @@
 package com.azmarzly.home.components
 
-import android.provider.Settings.Global.getString
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -31,12 +30,11 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.azmarzly.core.R.*
+import com.azmarzly.core.R.string
 import core.common_components.PlaneValidatedTextField
 import core.common_components.RoundedButtonWithContent
 import core.input_validators.ValidationState
 import core.model.DrinkType
-
 
 @Composable
 fun AddWaterDialog(

@@ -71,6 +71,10 @@ class AuthenticationRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun sendPasswordResetToEmail(email: String) {
+        firebaseAuth.sendPasswordResetEmail(email)
+    }
+
     override fun signOut() {
         firebaseAuth.signOut()
         userManager.clearUserDataInLocalPreferences()

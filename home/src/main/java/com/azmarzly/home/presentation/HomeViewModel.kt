@@ -3,6 +3,7 @@ package com.azmarzly.home.presentation
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.azmarzly.authentication.domain.AuthenticationRepository
 import core.DispatcherIO
 import core.domain.use_case.PeriodicallyFetchUserDataModelUseCase
 import core.domain.use_case.UpdateFirestoreUserUseCase
@@ -34,6 +35,7 @@ import javax.inject.Named
 class HomeViewModel @Inject constructor(
     @DispatcherIO private val dispatcherIO: CoroutineDispatcher,
     private val updateFirestoreUserUseCase: UpdateFirestoreUserUseCase,
+    private val authRepo: AuthenticationRepository,
     private val periodicallyFetchUserDataModelUseCase: PeriodicallyFetchUserDataModelUseCase,
     @Named("WholeNumberValidator") private val numberValidator: InputValidator,
 ) : ViewModel() {
@@ -54,6 +56,11 @@ class HomeViewModel @Inject constructor(
 
     fun setBottomBarVisibilityState(shouldBeVisible: Boolean) {
         _bottomBarVisibilityState.update { shouldBeVisible }
+    }
+
+    // remove!!
+    fun signOut(){
+        authRepo.signOut()
     }
 
     private fun periodicallyFetchUserDataAndMapToHomeState() {

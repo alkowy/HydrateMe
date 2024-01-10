@@ -36,6 +36,7 @@ import core.ui.theme.bodySmall
 import core.ui.theme.emptyProgressColor
 import core.ui.theme.shadowedTextColor
 import core.ui.theme.verticalFilledProgressColor
+import core.util.toHourAndMinutes
 import core.util.toStringFormatted
 import java.time.LocalDate
 
@@ -178,7 +179,8 @@ private fun CalendarBottomSheetContent(state: CalendarState, selectedDayData: Ca
                         )
                     )
                     Spacer(modifier = Modifier.weight(1f))
-                    Text(text = "${it.dateTime.hour}:${it.dateTime.minute}")
+//                    Text(text = "${it.dateTime.hour}:${it.dateTime.minute}")
+                    Text(text = it.dateTime.toHourAndMinutes())
                 }
             }
         }

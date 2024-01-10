@@ -3,7 +3,6 @@ package core.util
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.Month
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
@@ -45,31 +44,16 @@ fun Long.toLocalDateTime(): LocalDateTime {
     return LocalDateTime.ofEpochSecond(this, 0, ZoneOffset.UTC)
 }
 
-/**
-In 'yyyy-MM-dd' format
- */
-fun String.toLocalDateTime(): LocalDateTime {
-    val formatter = DateTimeFormatter.ofPattern("yyyy-M-d")
-    return LocalDateTime.parse(this, formatter)
-}
-
 fun String.toLocalDate(): LocalDate {
     val formatter = DateTimeFormatter.ofPattern("yyyy-M-d")
     return LocalDate.parse(this, formatter)
-}
-
-fun LocalDateTime.isSameDayAs(date: LocalDateTime): Boolean {
-    return this.atZone(ZoneOffset.UTC).toLocalDate().isEqual(date.atZone(ZoneOffset.UTC).toLocalDate())
-}
-
-fun LocalDateTime.isSameDayAs(date: LocalDate): Boolean {
-    return this.atZone(ZoneOffset.UTC).toLocalDate().isEqual(date)
 }
 
 fun LocalDate.isSameDayAs(date: LocalDate): Boolean {
     return this.atStartOfDay(ZoneOffset.UTC).isEqual(date.atStartOfDay(ZoneOffset.UTC))
 }
 
-fun LocalDate.isSameMonthAs(month: Month): Boolean {
-    return this.month.compareTo(month) == 0
+fun LocalDateTime.toHourAndMinutes(): String {
+    val formatter = DateTimeFormatter.ofPattern("HH:mm", Locale.getDefault())
+    return this.format(formatter)
 }

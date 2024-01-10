@@ -1,10 +1,13 @@
 package com.azmarzly.home.components
 
-import android.util.Log
 import android.view.animation.OvershootInterpolator
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -16,7 +19,6 @@ import androidx.compose.material.FloatingActionButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -50,6 +52,7 @@ const val DoubleDuration = 1000
 @Composable
 fun DropletButtonNavBar(
     dropletButtons: List<HomeScreenBottomBarItem>,
+    shouldShowBottomBar: Boolean,
     ballAnimation: BallAnimation = Teleport(tween(Duration, easing = LinearOutSlowInEasing)),
     barColor: Brush = Brush.verticalGradient(
         colors = listOf(Color.Transparent, Color.White.copy(alpha = 0.1f)),
@@ -62,62 +65,66 @@ fun DropletButtonNavBar(
     onNavigateToScreen: (HomeRoute) -> Unit,
     onFloatingActionButtonAction: () -> Unit,
 ) {
-//    var selectedItem by rememberSaveable { mutableIntStateOf(0) }
 
-
-    LaunchedEffect(Unit) {
-        Log.d("ANANAS", "DropletButtonNavBar: Unit")
-    }
-
-    Box {
-        AnimatedNavigationBar(
-            modifier = Modifier
-                .padding(top = 20.dp)
-                .height(60.dp),
-            selectedIndex = selectedScreenIndex,
-            ballColor = dropletColor,
-            cornerRadius = shapeCornerRadius(topLeft = 25.dp, topRight = 25.dp, bottomLeft = 25.dp, bottomRight = 25.dp),
-            ballAnimation = ballAnimation,
-            indentAnimation = Height(
-                indentWidth = 56.dp,
-                indentHeight = 15.dp,
-                animationSpec = tween(
-                    DoubleDuration,
-                    easing = { OvershootInterpolator().getInterpolation(it) })
-            ),
-            barColor = barColor
-        ) {
-            dropletButtons.forEachIndexed { index, it ->
-                if (index == dropletButtons.size.div(2)) {
-                    InvisButton()
-                } else {
-                    DropletButton(
-                        modifier = Modifier.fillMaxSize(),
-                        isSelected = selectedScreenIndex == index,
-                        onClick = { onNavigateToScreen(it.route) },
-                        icon = if (selectedScreenIndex == index) it.iconSelected else it.iconUnselected,
-                        iconColor = unselectedIconColor,
-                        dropletColor = dropletColor,
-                        animationSpec = tween(durationMillis = Duration, easing = LinearEasing)
-                    )
+    AnimatedVisibility(
+        visible = shouldShowBottomBar,
+        enter = slideInVertically {
+            it.plus(100)
+        },
+        exit = slideOutVertically {
+            it.minus(100)
+        } + fadeOut(tween(250)),
+    ) {
+        Box {
+            AnimatedNavigationBar(
+                modifier = Modifier
+                    .padding(top = 20.dp)
+                    .height(60.dp),
+                selectedIndex = selectedScreenIndex,
+                ballColor = dropletColor,
+                cornerRadius = shapeCornerRadius(topLeft = 25.dp, topRight = 25.dp, bottomLeft = 25.dp, bottomRight = 25.dp),
+                ballAnimation = ballAnimation,
+                indentAnimation = Height(
+                    indentWidth = 56.dp,
+                    indentHeight = 15.dp,
+                    animationSpec = tween(
+                        DoubleDuration,
+                        easing = { OvershootInterpolator().getInterpolation(it) })
+                ),
+                barColor = barColor
+            ) {
+                dropletButtons.forEachIndexed { index, it ->
+                    if (index == dropletButtons.size.div(2)) {
+                        InvisButton()
+                    } else {
+                        DropletButton(
+                            modifier = Modifier.fillMaxSize(),
+                            isSelected = selectedScreenIndex == index,
+                            onClick = { onNavigateToScreen(it.route) },
+                            icon = if (selectedScreenIndex == index) it.iconSelected else it.iconUnselected,
+                            iconColor = unselectedIconColor,
+                            dropletColor = dropletColor,
+                            animationSpec = tween(durationMillis = Duration, easing = LinearEasing)
+                        )
+                    }
                 }
             }
-        }
 
-        FloatingActionButton(
-            onClick = { onFloatingActionButtonAction() },
-            modifier = Modifier
-                .align(Alignment.TopCenter)
-                .offset(y = (-12).dp),
-            backgroundColor = MaterialTheme.colors.primary,
-            elevation = FloatingActionButtonDefaults.elevation(0.dp)
+            FloatingActionButton(
+                onClick = { onFloatingActionButtonAction() },
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .offset(y = (-12).dp),
+                backgroundColor = MaterialTheme.colors.primary,
+                elevation = FloatingActionButtonDefaults.elevation(0.dp)
 
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_add_filled),
-                contentDescription = "fab",
-                tint = MaterialTheme.colors.onPrimary
-            )
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_add_filled),
+                    contentDescription = "fab",
+                    tint = MaterialTheme.colors.onPrimary
+                )
+            }
         }
     }
 }
@@ -140,7 +147,8 @@ fun BottomNavBarPreview() {
             dropletButtons = homeScreens,
             selectedScreenIndex = 0,
             onNavigateToScreen = {},
-            onFloatingActionButtonAction = {}
+            onFloatingActionButtonAction = {},
+            shouldShowBottomBar = true,
         )
     }
 }

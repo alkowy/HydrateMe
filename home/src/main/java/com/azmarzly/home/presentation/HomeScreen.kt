@@ -46,9 +46,9 @@ fun ParentHomeScreen(
     Scaffold(
         modifier = Modifier.background(MaterialTheme.colors.surface),
         bottomBar = {
-            if (bottomBarVisibility) {
                 DropletButtonNavBar(
                     dropletButtons = homeScreens,
+                    shouldShowBottomBar = bottomBarVisibility,
                     barColor = Brush.verticalGradient(
                         colors = listOf(MaterialTheme.colors.onBackground.copy(alpha = 0.14f), MaterialTheme.colors.background),
                         startY = 0.0f,
@@ -69,7 +69,6 @@ fun ParentHomeScreen(
                     },
                     onFloatingActionButtonAction = { showAddWaterCard = true }
                 )
-            }
         }
     ) { paddingValues ->
         HomeNavGraph(
