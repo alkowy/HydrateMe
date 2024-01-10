@@ -216,7 +216,10 @@ fun SecuredValidatedTextField(
             disabledSuffixColor = MaterialTheme.colors.textFieldLabel,
             unfocusedSuffixColor = MaterialTheme.colors.textFieldLabel,
             focusedSuffixColor = MaterialTheme.colors.textFieldLabel,
+            cursorColor = MaterialTheme.colors.primary
         ),
+
+
         textStyle = style
     )
 }
