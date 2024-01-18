@@ -12,8 +12,12 @@ fun LocalDate.toTimestamp(): Long {
     return this.atStartOfDay(ZoneOffset.UTC).toEpochSecond()
 }
 
+//fun LocalDate.toStringFormatted(): String {
+//    return "${this.dayOfMonth} ${this.month.getDisplayName(TextStyle.FULL, Locale.getDefault())} ${this.year}"
+//}
+// yyyy-M-d
 fun LocalDate.toStringFormatted(): String {
-    return "${this.dayOfMonth} ${this.month.getDisplayName(TextStyle.FULL, Locale.getDefault())} ${this.year}"
+    return "${this.year}/${this.monthValue}/${this.dayOfMonth}"
 }
 
 fun LocalDate.toCalendarHeader(): String {
@@ -44,9 +48,13 @@ fun Long.toLocalDateTime(): LocalDateTime {
     return LocalDateTime.ofEpochSecond(this, 0, ZoneOffset.UTC)
 }
 
-fun String.toLocalDate(): LocalDate {
-    val formatter = DateTimeFormatter.ofPattern("yyyy-M-d")
-    return LocalDate.parse(this, formatter)
+fun String.toLocalDate(): LocalDate? {
+    val formatter = DateTimeFormatter.ofPattern("yyyy/M/d")
+    return try {
+        LocalDate.parse(this.replace("-", "/"), formatter)
+    } catch (e: Exception) {
+        null
+    }
 }
 
 fun LocalDate.isSameDayAs(date: LocalDate): Boolean {

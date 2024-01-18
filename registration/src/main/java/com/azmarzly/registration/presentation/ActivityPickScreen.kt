@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import core.common_components.ActivityCard
 import core.model.UserActivity
 import core.model.UserDataModel
 import core.model.toUserActivityEnum
@@ -123,40 +124,6 @@ fun ActivityPickScreenContent(
 
     LaunchedEffect(activitySelected) {
         updateBottomBarState(activitySelected != null)
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ActivityCard(
-    activity: UserActivity,
-    isSelected: Boolean = false,
-    onClick: (UserActivity) -> Unit,
-) {
-
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 16.dp),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = if (isSelected) MaterialTheme.colors.primary else MaterialTheme.colors.backgroundContainer
-        ),
-        onClick = { onClick(activity) }
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(
-                text = activity.name,
-                style = MaterialTheme.typography.h4,
-                color = if (isSelected) MaterialTheme.colors.onPrimary else MaterialTheme.colors.registrationTextColor
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = activity.description,
-                style = MaterialTheme.typography.bodySmall,
-                color = Grey400
-            )
-        }
     }
 }
 

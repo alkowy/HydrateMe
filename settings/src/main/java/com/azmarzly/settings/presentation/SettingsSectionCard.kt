@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun SettingsSectionCard(
+    modifier: Modifier = Modifier,
     content: @Composable() (ColumnScope.() -> Unit),
 ) {
     Card(
@@ -29,7 +30,7 @@ fun SettingsSectionCard(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top,
-            modifier = Modifier
+            modifier = modifier
                 .padding(vertical = 20.dp, horizontal = 20.dp)
                 .fillMaxWidth(),
         ) {

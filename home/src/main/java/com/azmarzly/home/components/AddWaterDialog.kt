@@ -123,7 +123,8 @@ fun AddWaterDialog(
                     trailingIcon = {
                         Text(text = "ml", style = MaterialTheme.typography.caption)
                     },
-                    keyboardType = KeyboardType.Number
+                    keyboardType = KeyboardType.Number,
+                    maxCharacters = 4,
                 )
 
                 Spacer(modifier = Modifier.height(32.dp))

@@ -1,6 +1,7 @@
 package com.azmarzly.settings.presentation
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -18,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.azmarzly.core.R
+import com.azmarzly.settings.presentation.personal_data_settings.PersonalDataModel
 import core.util.SettingsRoute
 
 
@@ -57,16 +59,16 @@ fun SettingsScreenContent(
         )
         Spacer(modifier = Modifier.height(8.dp))
         PersonalDataCard(
-            gender = state.gender,
-            birthDate = state.birthDate,
-            weight = state.weight,
-            height = state.height,
+            personalDataModel = state.personalData,
+            navigateToScreen = { navigateToSettingsSection(SettingsRoute.PERSONAL_DATA) }
         )
         AccountPersonalisationCard(
-            activity = state.activity,
-            dailyGoal = state.hydrationGoal,
+            accountPersonalisationModel = state.accountPersonalisation,
+            navigateToScreen = { navigateToSettingsSection(SettingsRoute.ACCOUNT_PERSONALISATION) }
         )
-        AccountCard()
+        AccountCard(
+            navigateToScreen = { navigateToSettingsSection(SettingsRoute.ACCOUNT) }
+        )
         PrivacyPolicyCard()
     }
 }
@@ -79,32 +81,50 @@ fun PrivacyPolicyCard() {
 }
 
 @Composable
-fun AccountCard() {
-    SettingsSectionCard {
+fun AccountCard(
+    navigateToScreen: () -> Unit,
+) {
+    SettingsSectionCard(
+        modifier = Modifier.clickable {
+            navigateToScreen()
+        }
+    ) {
         SettingsSectionHeaderRow(title = stringResource(id = R.string.account))
     }
 }
 
 @Composable
-fun AccountPersonalisationCard(activity: String, dailyGoal: String) {
-    SettingsSectionCard {
+fun AccountPersonalisationCard(
+    accountPersonalisationModel: AccountPersonalisationModel,
+    navigateToScreen: () -> Unit,
+) {
+    SettingsSectionCard(
+        modifier = Modifier.clickable {
+            navigateToScreen()
+        }
+    ) {
         Column {
             SettingsSectionHeaderRow(title = stringResource(id = R.string.account_personalisation))
-            SettingsSectionBodyRow(type = stringResource(id = R.string.physical_activity), value = activity)
-            SettingsSectionBodyRow(type = stringResource(id = R.string.daily_water_goal), value = dailyGoal)
+            SettingsSectionBodyRow(type = stringResource(id = R.string.physical_activity), value = accountPersonalisationModel.activity)
+            SettingsSectionBodyRow(type = stringResource(id = R.string.daily_water_goal), value = accountPersonalisationModel.hydrationGoal)
         }
     }
 }
 
 @Composable
-fun PersonalDataCard(gender: String, birthDate: String, weight: String, height: String) {
-    SettingsSectionCard {
+fun PersonalDataCard(
+    personalDataModel: PersonalDataModel,
+    navigateToScreen: () -> Unit,
+) {
+    SettingsSectionCard(modifier = Modifier.clickable {
+        navigateToScreen()
+    }) {
         Column {
             SettingsSectionHeaderRow(title = stringResource(id = R.string.registration_personal_data))
-            SettingsSectionBodyRow(type = stringResource(id = R.string.gender), value = gender)
-            SettingsSectionBodyRow(type = stringResource(id = R.string.birth_date), value = birthDate)
-            SettingsSectionBodyRow(type = stringResource(id = R.string.parameters_weight), value = weight)
-            SettingsSectionBodyRow(type = stringResource(id = R.string.parameters_height), value = height)
+            SettingsSectionBodyRow(type = stringResource(id = R.string.gender), value = personalDataModel.gender)
+            SettingsSectionBodyRow(type = stringResource(id = R.string.birth_date), value = personalDataModel.birthDate)
+            SettingsSectionBodyRow(type = stringResource(id = R.string.parameters_weight), value = personalDataModel.weight)
+            SettingsSectionBodyRow(type = stringResource(id = R.string.parameters_height), value = personalDataModel.height)
         }
     }
 }

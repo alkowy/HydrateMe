@@ -116,14 +116,15 @@ fun GoalScreenContent(
                 PlaneValidatedTextField(
                     value = goal,
                     onValueChange = validateGoal,
-                    label = "Cel",
+                    label = stringResource(id = R.string.goal),
                     style = MaterialTheme.typography.caption.copy(textAlign = TextAlign.Center),
                     imeAction = ImeAction.Done,
                     keyboardType = KeyboardType.Number,
-                    modifier = Modifier.fillMaxWidth(0.3f)
+                    modifier = Modifier.fillMaxWidth(0.3f),
+                    maxCharacters = 4,
                 )
                 Text(
-                    text = "L",
+                    text = stringResource(id = R.string.unit_liter),
                     style = MaterialTheme.typography.caption
                 )
             }

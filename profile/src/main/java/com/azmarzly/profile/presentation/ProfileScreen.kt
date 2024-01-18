@@ -67,6 +67,10 @@ fun ProfileScreen(
 ) {
     val state by profileViewModel.profileState.collectAsStateWithLifecycle()
 
+    LaunchedEffect(Unit) {
+        profileViewModel.initialiseProfileState()
+    }
+
     ProfileScreenContent(
         state = state,
         bottomBarPadding = bottomBarPadding,

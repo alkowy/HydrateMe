@@ -142,7 +142,7 @@ private fun BottomSheetHeaderGeneralInfoRow(
 
         Spacer(modifier = Modifier.weight(1f))
         Text(
-            text = "$progress ml",
+            text = "$progress ${stringResource(id = R.string.unit_milliliter)}",
             style = MaterialTheme.typography.h4.copy(
                 color = MaterialTheme.colors.primary
             )
@@ -174,7 +174,7 @@ private fun CalendarBottomSheetContent(state: CalendarState, selectedDayData: Ca
                         tint = MaterialTheme.colors.primary
                     )
                     Text(
-                        text = "${it.amount} ml", style = MaterialTheme.typography.bodySmall.copy(
+                        text = "${it.amount} ${stringResource(id = R.string.unit_milliliter)}", style = MaterialTheme.typography.bodySmall.copy(
                             color = MaterialTheme.colors.onBackground
                         )
                     )

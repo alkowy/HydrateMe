@@ -1,14 +1,15 @@
 package core.util
 
-import android.icu.number.NumberFormatter
-import android.icu.number.Precision
-import android.icu.util.MeasureUnit
-import java.util.Locale
+import core.model.Gender
 
 fun doNothing() = Unit
 
-fun Number.toPercentageString() = NumberFormatter.withLocale(Locale.getDefault())
-    .unit(MeasureUnit.PERCENT)
-    .precision(Precision.maxFraction(0))
-    .format(this)
-    .toString()
+fun Number.toPercentageString() = "${this.toInt()}%"
+
+fun String.toGender(): Gender? {
+    return when (this.lowercase()) {
+        "male" -> Gender.MALE
+        "female" -> Gender.FEMALE
+        else -> null
+    }
+}

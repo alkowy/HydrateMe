@@ -14,10 +14,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerDefaults
-import androidx.compose.material3.DatePickerDialog
-import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberDatePickerState
@@ -39,9 +35,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.azmarzly.core.R.*
-import com.azmarzly.registration.R
+import core.common_components.DatePickerDialog
 import core.common_components.PlaneValidatedTextField
-import core.common_components.RoundedButtonWithContent
 import core.input_validators.ValidationState
 import core.model.UserDataModel
 import core.ui.theme.HydrateMeTheme
@@ -160,7 +155,6 @@ fun ParametersPickContent(
         }
 
         if (showDatePickerDialog) {
-            Log.d("ANANAS", "ParametersPickContent: showDatePickerDialog $showDatePickerDialog")
             DatePickerDialog(
                 onDismiss = { showDatePickerDialog = false },
                 onConfirm = {
@@ -172,7 +166,6 @@ fun ParametersPickContent(
         }
 
         LaunchedEffect(state.selectedDate) {
-            Log.d("ANANAS", "ParametersPickContent:         LaunchedEffect(state.selectedDate) {\n")
             state.selectedDate?.let {
                 day.value = it.dayOfMonth.toString()
                 month.value = it.month.value.toString()
@@ -207,9 +200,9 @@ private fun HeightRow(height: MutableState<String>, validateHeight: (String) -> 
                         color = MaterialTheme.colors.shadowedTextColor
                     )
                 )
-            }
+            },
+            maxCharacters = 5,
         )
-
     }
 }
 
@@ -222,21 +215,21 @@ private fun WeightRow(weight: MutableState<String>, validateWeight: (String) -> 
         PlaneValidatedTextField(
             value = weight,
             onValueChange = validateWeight,
-            label = "Waga",
+            label = stringResource(id = string.parameters_weight),
             style = MaterialTheme.typography.body1,
             keyboardType = KeyboardType.Decimal,
             modifier = Modifier.weight(1f),
             trailingIcon = {
                 Text(
-                    "kg",
+                    text = stringResource(id = string.unit_kg),
                     style = MaterialTheme.typography.body1.copy(
                         color = MaterialTheme.colors.shadowedTextColor
                     ),
                     modifier = Modifier.padding(start = 12.dp, end = 12.dp)
                 )
-            }
+            },
+            maxCharacters = 5,
         )
-
     }
 }
 
@@ -260,6 +253,7 @@ private fun AgeRow(
             style = MaterialTheme.typography.body1,
             keyboardType = KeyboardType.Number,
             isError = state.dateValidationState == ValidationState.Invalid,
+            maxCharacters = 5,
         )
         PlaneValidatedTextField(
             modifier = Modifier.weight(1f),
@@ -268,7 +262,8 @@ private fun AgeRow(
             label = "MM",
             style = MaterialTheme.typography.body1,
             keyboardType = KeyboardType.Number,
-            isError = state.dateValidationState == ValidationState.Invalid
+            isError = state.dateValidationState == ValidationState.Invalid,
+            maxCharacters = 5,
         )
         PlaneValidatedTextField(
             modifier = Modifier.weight(1f),
@@ -277,7 +272,8 @@ private fun AgeRow(
             label = "YYYY",
             style = MaterialTheme.typography.body1,
             keyboardType = KeyboardType.Number,
-            isError = state.dateValidationState == ValidationState.Invalid
+            isError = state.dateValidationState == ValidationState.Invalid,
+            maxCharacters = 5,
         )
         IconButton(onClick = onCalendarClick) {
             Icon(
@@ -285,44 +281,6 @@ private fun AgeRow(
                 tint = MaterialTheme.colors.primary
             )
         }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun DatePickerDialog(onDismiss: () -> Unit, onConfirm: () -> Unit, datePickerState: DatePickerState) {
-    Log.d("ANANAS", "DatePickerDialog: ")
-    DatePickerDialog(
-        onDismissRequest = onDismiss,
-        confirmButton = {
-            RoundedButtonWithContent(onClick = onConfirm) {
-                Text(text = stringResource(string.confirm))
-            }
-        },
-        colors = DatePickerDefaults.colors(
-            containerColor = MaterialTheme.colors.background,
-            subheadContentColor = MaterialTheme.colors.onBackground,
-            )
-    ) {
-        DatePicker(
-            state = datePickerState, showModeToggle = false, title = null,
-            colors = DatePickerDefaults.colors(
-                containerColor = MaterialTheme.colors.background,
-                selectedDayContainerColor = MaterialTheme.colors.primary,
-                selectedDayContentColor = MaterialTheme.colors.onPrimary,
-                todayDateBorderColor = MaterialTheme.colors.primary,
-                dayContentColor = MaterialTheme.colors.onBackground,
-                todayContentColor = MaterialTheme.colors.onBackground,
-                dayInSelectionRangeContentColor = MaterialTheme.colors.onBackground,
-                yearContentColor = MaterialTheme.colors.onBackground,
-                titleContentColor = MaterialTheme.colors.onBackground,
-                headlineContentColor = MaterialTheme.colors.onBackground,
-                currentYearContentColor = MaterialTheme.colors.onBackground,
-                selectedYearContainerColor = MaterialTheme.colors.primary,
-                selectedYearContentColor = MaterialTheme.colors.onPrimary,
-                subheadContentColor = MaterialTheme.colors.onBackground,
-                )
-        )
     }
 }
 

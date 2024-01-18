@@ -12,6 +12,7 @@
     <string name="parameters_weight">Weight</string>
     <string name="parameters_height">Height</string>
     <string name="gender">Gender</string>
+    <string name="goal">Goal</string>
     <string name="gender_female">Female</string>
     <string name="gender_male">Male</string>
     <string name="next_btn">Next</string>
@@ -40,6 +41,7 @@
     <string name="unit_kg">kg</string>
     <string name="unit_cm">cm</string>
     <string name="unit_liter">l</string>
+    <string name="unit_milliliter">ml</string>
     <string name="settings_header">Settings</string>
     <string name="save">Save</string>
     <string name="account_personalisation">Account personalisation</string>
@@ -51,4 +53,14 @@
     <string name="sign_in_error">Could not sign you in, invalid data</string>
     <string name="send">Send</string>
     <string name="reset_password_body">We will send you an email with instructions on how to reset your password.</string>
+    <string name="reset_password_body_with_placeholder">Instructions to reset your password will be send to PLACEHOLDER. Check your e-mail.</string>
+    <string name="choose_one">Choose one</string>
+    <string name="edit">Edit</string>
+    <string name="name">Name</string>
+    <string name="change_password">Change password</string>
+    <string name="reset_password">Reset password</string>
+    <string name="sign_out">Sign out</string>
+    <string name="reset_password_sent">E-mail has been sent</string>
+    <string name="reset_password_could_not_sent">Could not send the e-mail. Try again later.</string>
+
 </resources>

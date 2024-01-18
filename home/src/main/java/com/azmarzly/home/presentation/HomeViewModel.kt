@@ -1,6 +1,5 @@
 package com.azmarzly.home.presentation
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.azmarzly.authentication.domain.AuthenticationRepository
@@ -30,7 +29,6 @@ import java.time.LocalDateTime
 import javax.inject.Inject
 import javax.inject.Named
 
-
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     @DispatcherIO private val dispatcherIO: CoroutineDispatcher,
@@ -59,7 +57,7 @@ class HomeViewModel @Inject constructor(
     }
 
     // remove!!
-    fun signOut(){
+    fun signOut() {
         authRepo.signOut()
     }
 
@@ -67,7 +65,6 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch(dispatcherIO) {
             periodicallyFetchUserDataModelUseCase.invoke()
                 .collectLatest { fetchResult ->
-                    Log.d("ANANAS", "periodicallyFetchUserDataAndMapToHomeState IN HOME: $fetchResult")
                     when (fetchResult) {
                         is Resource.Error -> _homeState.update { _homeState.value.copy(error = (fetchResult.errorMessage ?: "Unexpected error")) }
                         Resource.Loading -> _homeState.update { _homeState.value.copy(isLoading = true) }
@@ -79,7 +76,7 @@ class HomeViewModel @Inject constructor(
                                 remainingHydrationMillis = hydrationData?.calculateRemaining() ?: fetchResult.data?.hydrationGoalMillis ?: DEFAULT_HYDRATION_GOAL,
                                 hydrationProgressPercentage = hydrationData?.calculateProgress() ?: 0,
                                 todayHydrationChunks = hydrationData?.hydrationChunksList ?: emptyList(),
-                                hydrationGoal = fetchResult.data?.hydrationGoalMillis ?: DEFAULT_HYDRATION_GOAL//hydrationData?.goalMillis ?: 0
+                                hydrationGoal = fetchResult.data?.hydrationGoalMillis ?: DEFAULT_HYDRATION_GOAL
                             )
                         }
 
@@ -120,8 +117,6 @@ class HomeViewModel @Inject constructor(
         val updatedHydrationData = userData.hydrationData.toMutableList()
         val existingData = updatedHydrationData.find { it.date.isSameDayAs(date) }
 
-        Log.d("ANANAS", "updateOrAddHydrationData: 111 $updatedHydrationData")
-        Log.d("ANANAS", "updateOrAddHydrationData: existingdata $existingData")
         if (existingData != null) {
             val hydrationChunksList = existingData.hydrationChunksList.toMutableList()
             hydrationChunksList.add(
@@ -133,7 +128,6 @@ class HomeViewModel @Inject constructor(
             existingData.progress += amountOfWaterAdded
             existingData.progressInPercentage = existingData.calculateProgress()
             existingData.hydrationChunksList = hydrationChunksList
-            Log.d("ANANAS", "updateOrAddHydrationData: existingdata2222 $existingData")
 
         } else {
             val newEntry = HydrationData(
@@ -151,7 +145,6 @@ class HomeViewModel @Inject constructor(
             )
             updatedHydrationData.add(newEntry)
         }
-        Log.d("ANANAS", "updateOrAddHydrationData: 222 $updatedHydrationData")
 
         return updatedHydrationData
     }
@@ -174,7 +167,6 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun updateFirestoreUser(updatedUserData: FirestoreUserDataModel) {
-        Log.d("ANANAS", "updateFirestoreUser: $updatedUserData")
         viewModelScope.launch(dispatcherIO) {
             updateFirestoreUserUseCase(updatedUserData)
         }

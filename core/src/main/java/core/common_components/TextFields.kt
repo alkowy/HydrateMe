@@ -86,14 +86,20 @@ fun PlaneValidatedTextField(
     keyboardType: KeyboardType = KeyboardType.Text,
     suffix: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
+    maxCharacters: Int? = null,
 ) {
 
     TextField(
         modifier = modifier,
         value = value.value,
         onValueChange = {
-            value.value = it
-            onValueChange(it)
+            if (maxCharacters != null) {
+                value.value = it.take(maxCharacters)
+                onValueChange(it.take(maxCharacters))
+            } else {
+                value.value = it
+                onValueChange(it)
+            }
         },
         label = {
             Text(
@@ -103,7 +109,7 @@ fun PlaneValidatedTextField(
         },
         isError = isError,
         supportingText = if (isError) {
-            { Text(text = errorText, style = style) }
+            { Text(text = errorText, style = MaterialTheme.typography.caption.copy(color = Color.Red)) }
         } else null,
         keyboardOptions = KeyboardOptions(
             keyboardType = keyboardType,

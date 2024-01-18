@@ -54,7 +54,7 @@ enum class ProfileRoute : Route {
 }
 
 enum class SettingsRoute : Route {
-    MAIN, PERSONAL_DATA, PERSONALISATION, ACCOUNT, PRIVACY_POLICY;
+    MAIN, PERSONAL_DATA, ACCOUNT_PERSONALISATION, ACCOUNT, PRIVACY_POLICY;
 
     override val route: String = this.name
 

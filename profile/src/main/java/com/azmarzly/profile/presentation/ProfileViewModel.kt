@@ -59,10 +59,6 @@ class ProfileViewModel @Inject constructor(
 
     private var updateProfileJob: Job? = null
 
-    init {
-        initialiseProfileState()
-    }
-
     @OptIn(DelicateCoroutinesApi::class)
     fun updateProfilePicture(uri: Uri) {
         updateProfileJob?.cancel()
@@ -89,7 +85,7 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    private fun initialiseProfileState() {
+    fun initialiseProfileState() {
         val today = LocalDate.now()
         viewModelScope.launch(dispatcherIO) {
             fetchCurrentUserUseCase.invoke()
@@ -107,7 +103,7 @@ class ProfileViewModel @Inject constructor(
                                         weight = if (data.weight == null) EMPTY_VALUE else data.weight!!.toStringWithUnit(unit = resourceProvider.getString(R.string.unit_kg)),
                                         height = if (data.height == null) EMPTY_VALUE else data.weight!!.toStringWithUnit(unit = resourceProvider.getString(R.string.unit_cm)),
                                         activity = data.userActivity.toUserActivity().name,
-                                        dailyGoal = data.hydrationGoalMillis.div(1000).toDouble()
+                                        dailyGoal = data.hydrationGoalMillis.toDouble().div(1000)
                                             .roundAndAddUnit(decimals = 2, unit = resourceProvider.getString(R.string.unit_liter)),
                                         useLocalImageFromUri = false,
                                     )

@@ -1,6 +1,5 @@
 package com.azmarzly.registration.presentation
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,9 +16,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
+import com.azmarzly.core.R
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import core.common_components.ValidatedTextField
@@ -91,7 +92,8 @@ fun InitialRegistrationScreenContent(
         }
     ) {
         Column(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
                 .background(MaterialTheme.colors.background),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
@@ -105,7 +107,7 @@ fun InitialRegistrationScreenContent(
                 onValueChange = {
                     doNothing()
                 },
-                label = "Imię",
+                label = stringResource(id = R.string.name),
                 style = MaterialTheme.typography.caption,
                 keyboardType = KeyboardType.Text
             )
@@ -119,7 +121,7 @@ fun InitialRegistrationScreenContent(
                 onValueChange = {
                     doNothing()
                 },
-                label = "E-mail",
+                label = stringResource(id = R.string.email_label),
                 style = MaterialTheme.typography.caption,
                 keyboardType = KeyboardType.Email
             )
@@ -133,7 +135,7 @@ fun InitialRegistrationScreenContent(
                 onValueChange = {
                     doNothing()
                 },
-                label = "Hasło",
+                label = stringResource(id = R.string.password),
                 style = MaterialTheme.typography.caption,
                 keyboardType = KeyboardType.Password
             )

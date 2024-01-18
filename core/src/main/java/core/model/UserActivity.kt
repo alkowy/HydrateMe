@@ -49,3 +49,13 @@ fun UserActivityEnum.toUserActivity(): UserActivity {
         UserActivityEnum.HIGH -> UserActivity.HighActivity()
     }
 }
+
+fun String.toUserActivityEnumFromString(): UserActivityEnum {
+    return when (this) {
+        UserActivity.VeryLowActivity().name -> UserActivity.VeryLowActivity().toUserActivityEnum()
+        UserActivity.LowActivity().name -> UserActivity.LowActivity().toUserActivityEnum()
+        UserActivity.AverageActivity().name -> UserActivity.AverageActivity().toUserActivityEnum()
+        UserActivity.HighActivity().name -> UserActivity.HighActivity().toUserActivityEnum()
+        else -> UserActivityEnum.EMPTY
+    }
+}

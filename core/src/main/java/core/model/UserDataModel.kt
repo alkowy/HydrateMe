@@ -20,8 +20,9 @@ data class UserDataModel(
     fun findHydrationDataForDate(date: LocalDate): HydrationData? {
         return hydrationData.find { it.date.isSameDayAs(date) }
     }
+
 }
 
 enum class Gender {
-    MALE, FEMALE
+    MALE, FEMALE;
 }

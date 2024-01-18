@@ -8,6 +8,10 @@ import core.model.Resource
 import core.model.UserDataModel
 import core.util.doNothing
 import core.util.toFirestoreUserDataModel
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
@@ -71,8 +75,14 @@ class AuthenticationRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun sendPasswordResetToEmail(email: String) {
+    override fun sendPasswordResetToEmail(email: String): Flow<Resource<Unit>> = callbackFlow {
         firebaseAuth.sendPasswordResetEmail(email)
+            .addOnFailureListener {
+                trySend(Resource.Error(it.localizedMessage))
+            }.addOnSuccessListener {
+                trySend(Resource.Success(Unit))
+            }
+        awaitClose { this.cancel() }
     }
 
     override fun signOut() {

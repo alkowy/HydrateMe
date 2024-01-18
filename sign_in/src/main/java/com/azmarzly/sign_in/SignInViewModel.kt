@@ -4,7 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.azmarzly.authentication.domain.AuthenticationRepository
 import com.azmarzly.authentication.domain.UserManager
+import com.azmarzly.core.R
 import core.DispatcherIO
+import core.domain.ResourceProvider
 import core.input_validators.InputValidator
 import core.input_validators.ValidationState
 import core.model.Resource
@@ -28,6 +30,7 @@ class SignInViewModel @Inject constructor(
     @DispatcherIO private val dispatcherIO: CoroutineDispatcher,
     @Named("EmailValidator") private val emailValidator: InputValidator,
     @Named("PasswordValidator") private val passwordValidator: InputValidator,
+    private val resourceProvider: ResourceProvider,
     private val userManager: UserManager,
 ) : ViewModel() {
 
@@ -43,11 +46,53 @@ class SignInViewModel @Inject constructor(
     private val _passwordValidationState: MutableStateFlow<ValidationState> = MutableStateFlow(ValidationState.Empty)
     val passwordValidationState: StateFlow<ValidationState> = _passwordValidationState.asStateFlow()
 
+    private val _forgotPasswordState: MutableStateFlow<ForgotPasswordState> = MutableStateFlow(
+        ForgotPasswordState(
+            emailSentMessage = resourceProvider.getString(R.string.reset_password_sent)
+        )
+    )
+    val forgotPasswordState = _forgotPasswordState.asStateFlow()
+
     private var validationJob: Job? = null
 
-    fun requestPasswordReset(email: String) {
-        authRepository.sendPasswordResetToEmail(email)
+    fun toggleForgotPasswordVisibility(isVisible: Boolean) {
+        _forgotPasswordState.update {
+            it.copy(
+                isVisible = isVisible
+            )
+        }
     }
+
+    fun requestPasswordReset(email: String) {
+        viewModelScope.launch(dispatcherIO) {
+            authRepository.sendPasswordResetToEmail(email).collectLatest { result ->
+                when (result) {
+                    is Resource.Success -> {
+                        _forgotPasswordState.update {
+                            it.copy(
+                                isError = false,
+                                errorMessage = "",
+                                emailSent = true
+                            )
+                        }
+                    }
+
+                    is Resource.Error -> {
+                        _forgotPasswordState.update {
+                            it.copy(
+                                isError = true,
+                                errorMessage = result.errorMessage ?: "",
+                                emailSent = false
+                            )
+                        }
+                    }
+
+                    else -> {}
+                }
+            }
+        }
+    }
+
 
     fun loginWithEmailAndPassword(email: String, password: String) {
         viewModelScope.launch(dispatcherIO) {
