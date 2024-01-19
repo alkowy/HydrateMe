@@ -70,7 +70,3 @@ object LandingPageRoute : Route {
 object SignInRoute : Route {
     override val route: String = "sign_in"
 }
-
-object ScannerRoute : Route {
-    override val route: String = "scanner"
-}

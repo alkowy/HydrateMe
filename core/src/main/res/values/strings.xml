@@ -127,5 +127,8 @@
             \n
             If you have any questions or suggestions about my Privacy Policy, do not hesitate to contact me at alek.zmarzly@gmail.com.
     </string>
+    <string name="hydration_hub_header">Hydration Hub</string>
+    <string name="expand">Expand</string>
+    <string name="collapse">Collapse</string>
 
 </resources>

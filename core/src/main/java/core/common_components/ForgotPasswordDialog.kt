@@ -38,7 +38,6 @@ import core.ui.theme.bodySmall
 fun ForgotPasswordDialog(
     isError: Boolean,
     errorMessage: String,
-    wasEmailSent: Boolean,
     isDialogVisible: Boolean,
     onDialogDismiss: () -> Unit,
     onSendResetPassword: (String) -> Unit,

@@ -107,7 +107,6 @@ fun HomeScreenContent(
 
         HomeCompactCalendar(hydrationData = homeState.userData?.hydrationData ?: emptyList())
 
-        Spacer(modifier = Modifier.height(24.dp))
     }
 }
 

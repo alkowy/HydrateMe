@@ -91,7 +91,6 @@ fun SignInScreen(navController: NavController) {
     ForgotPasswordDialog(
         isError = forgotPasswordState.isError,
         errorMessage = forgotPasswordState.errorMessage,
-        wasEmailSent = forgotPasswordState.emailSent,
         isDialogVisible = forgotPasswordState.isVisible,
         onDialogDismiss = { viewModel.toggleForgotPasswordVisibility(false) },
         onSendResetPassword = viewModel::requestPasswordReset,

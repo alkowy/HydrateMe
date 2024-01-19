@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.azmarzly.home.components.HomeScreen
 import com.azmarzly.home.presentation.calendar.CalendarScreen
+import com.azmarzly.hydration_hub.presentation.HydrationHubScreen
 import com.azmarzly.profile.presentation.ProfileNavGraph
 import core.util.HomeRoute
 
@@ -37,7 +38,7 @@ fun HomeNavGraph(
             )
         }
         composable(route = HomeRoute.NEWS.route) {
-            HealthNewsScreen()
+            HydrationHubScreen(bottomBarPadding = bottomBarPadding)
         }
     }
 }
