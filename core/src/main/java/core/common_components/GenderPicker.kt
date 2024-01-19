@@ -24,9 +24,9 @@ import java.util.Locale
 @Composable
 fun GenderPicker(
     modifier: Modifier = Modifier,
-    gender: Gender,
+    genderName: String,
     @DrawableRes imageId: Int,
-    onClick: (Gender) -> Unit,
+    onClick: () -> Unit,
     isSelected: Boolean = false,
 ) {
 
@@ -40,14 +40,14 @@ fun GenderPicker(
     ) {
         Column(
             modifier = modifier
-                .clickable { onClick(gender) }
+                .clickable { onClick() }
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
-            Image(painter = painterResource(id = imageId), contentDescription = gender.name)
+            Image(painter = painterResource(id = imageId), contentDescription = genderName)
             Text(
-                text = gender.name.lowercase().replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() },
+                text = genderName,
                 style = MaterialTheme.typography.h4,
                 color = if (isSelected) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onBackground
             )

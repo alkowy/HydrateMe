@@ -4,12 +4,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.azmarzly.settings.presentation.personal_data_settings.PersonalDataSettingsViewModel.Companion.EMPTY_VALUE
 import core.DispatcherIO
+import core.domain.ResourceProvider
 import core.domain.use_case.FetchCurrentUserUseCase
 import core.domain.use_case.UpdateFirestoreUserUseCase
 import core.input_validators.InputValidator
 import core.input_validators.ValidationState
 import core.model.Gender
+import core.model.GenderState
 import core.model.Resource
+import core.model.toDrawableIconRes
+import core.model.toNameResourceStringId
 import core.util.millisToLocalDate
 import core.util.toDoubleWithoutUnit
 import core.util.toFirestoreUserDataModel
@@ -35,6 +39,7 @@ class PersonalDataSettingsViewModel @Inject constructor(
     @DispatcherIO private val ioDispatcherIO: CoroutineDispatcher,
     @Named("DecimalValidator") private val weightValidator: InputValidator,
     @Named("HeightValidator") private val heightValidator: InputValidator,
+    private val resourceProvider: ResourceProvider,
 ) : ViewModel() {
 
     companion object {
@@ -52,7 +57,7 @@ class PersonalDataSettingsViewModel @Inject constructor(
         gender?.let { gender ->
             _state.update {
                 it.copy(
-                    gender = gender.name
+                    gender = resourceProvider.getString(gender.toNameResourceStringId())
                 )
             }
         }
@@ -124,13 +129,20 @@ class PersonalDataSettingsViewModel @Inject constructor(
                     is Resource.Success -> {
                         result.data?.let { data ->
                             _state.update {
+                                val genderName = data.gender?.toNameResourceStringId()?.let { gender -> resourceProvider.getString(gender) } ?: EMPTY_VALUE
                                 PersonalDataModel(
-                                    gender = data.gender?.name ?: EMPTY_VALUE,
+                                    gender = genderName,
                                     birthDate = data.birthDate?.toStringFormatted() ?: EMPTY_VALUE,
                                     birthDateMillis = data.birthDate?.toTimestamp() ?: 0,
                                     weight = data.weight?.toStringWithUnit(unit = null) ?: EMPTY_VALUE,
                                     height = data.height?.toStringWithUnit(unit = null) ?: EMPTY_VALUE,
-                                )
+                                    genders = Gender.entries.map {
+                                        GenderState(
+                                            name = resourceProvider.getString(it.toNameResourceStringId()),
+                                            gender = it,
+                                            genderIcon = it.toDrawableIconRes()
+                                        )
+                                    })
                             }
                         }
                     }
@@ -150,4 +162,5 @@ data class PersonalDataModel(
     val isWeightInputValid: Boolean = false,
     val height: String = EMPTY_VALUE,
     val isHeightInputValid: Boolean = false,
+    val genders: List<GenderState> = emptyList(),
 )

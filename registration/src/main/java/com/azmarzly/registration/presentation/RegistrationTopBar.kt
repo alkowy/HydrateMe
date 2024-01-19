@@ -31,7 +31,7 @@ import core.util.RegistrationRoute
 
 @Composable
 fun RegistrationTopBar(
-    currentStep: RegistrationRoute,
+    currentStep: CurrentStepState,
     showBackButton: Boolean,
     onBackButtonClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -61,7 +61,7 @@ fun RegistrationTopBar(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 RegistrationRoute.values().filter { it != RegistrationRoute.REGISTRATION_ROOT }.forEach {
-                    RegistrationStepDot(isPreviousOrCurrent = it.ordinal <= currentStep.ordinal, isCurrent = it.ordinal == currentStep.ordinal)
+                    RegistrationStepDot(isPreviousOrCurrent = it.ordinal <= currentStep.route.ordinal, isCurrent = it.ordinal == currentStep.route.ordinal)
                 }
             }
         }
@@ -70,7 +70,7 @@ fun RegistrationTopBar(
             modifier = Modifier.align(CenterHorizontally),
             style = MaterialTheme.typography.h3,
             color = colors.registrationTextColor,
-            text = currentStep.toName()
+            text = currentStep.text
         )
     }
 }
@@ -97,7 +97,7 @@ fun RegistrationStepDot(
 fun RegistrationTopBarPreview() {
     HydrateMeTheme {
         RegistrationTopBar(
-            currentStep = RegistrationRoute.GENDER,
+            currentStep = CurrentStepState(route = RegistrationRoute.GENDER, text = "Gender 123"),
             showBackButton = true,
             onBackButtonClick = {},
         )
@@ -109,7 +109,7 @@ fun RegistrationTopBarPreview() {
 fun RegistrationTopBarPreviewWithoutBackButton() {
     HydrateMeTheme {
         RegistrationTopBar(
-            currentStep = RegistrationRoute.GENDER,
+            currentStep = CurrentStepState(route = RegistrationRoute.GENDER, text = "Gender 123"),
             showBackButton = false,
             onBackButtonClick = {},
         )

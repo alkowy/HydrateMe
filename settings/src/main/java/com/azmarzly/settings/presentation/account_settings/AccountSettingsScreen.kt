@@ -1,6 +1,5 @@
 package com.azmarzly.settings.presentation.account_settings
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -41,6 +40,7 @@ import core.util.doNothing
 fun AccountSettingsScreen(
     viewModel: AccountSettingsViewModel = hiltViewModel(),
     closeScreen: () -> Unit,
+    navigateToSignIn: () -> Unit,
 ) {
 
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -55,7 +55,7 @@ fun AccountSettingsScreen(
         toggleResetPasswordDialogVisibility = viewModel::toggleResetPasswordDialogVisibility,
         onSignOut = {
             viewModel.signOut()
-            // and some navigation?
+            navigateToSignIn()
         }
     )
 }
@@ -74,7 +74,7 @@ fun AccountSettingsScreenContent(
     val scrollState = rememberScrollState()
     var showUserNamePickDialog by remember { mutableStateOf(false) }
     val context = LocalContext.current
-    
+
     LaunchedEffect(state.toastState) {
         when (state.toastState) {
             is Success -> {

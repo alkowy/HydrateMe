@@ -8,6 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import com.azmarzly.settings.presentation.account_settings.AccountSettingsScreen
 import com.azmarzly.settings.presentation.personal_data_settings.PersonalDataSettingsScreen
 import com.azmarzly.settings.presentation.personalisation_settings.AccountPersonalisationSettingsScreen
+import com.azmarzly.settings.presentation.privacy_policy_settings.PrivacyPolicyScreen
 import core.util.SettingsRoute
 import core.util.navigateTo
 
@@ -15,6 +16,7 @@ import core.util.navigateTo
 fun SettingsNavGraph(
     navController: NavHostController = rememberNavController(),
     closeSettings: () -> Unit,
+    navigateToSignIn: () -> Unit,
 ) {
     NavHost(
         navController = navController,
@@ -35,10 +37,13 @@ fun SettingsNavGraph(
             AccountPersonalisationSettingsScreen(closeScreen = { navController.popBackStack() })
         }
         composable(route = SettingsRoute.ACCOUNT.route) {
-            AccountSettingsScreen(closeScreen = { navController.popBackStack() })
+            AccountSettingsScreen(
+                closeScreen = { navController.popBackStack() },
+                navigateToSignIn = navigateToSignIn
+            )
         }
         composable(route = SettingsRoute.PRIVACY_POLICY.route) {
-//            PrivacyPolicySettingsScreen()
+            PrivacyPolicyScreen(closeScreen = { navController.popBackStack() })
         }
     }
 }

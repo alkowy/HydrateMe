@@ -2,6 +2,7 @@ package com.azmarzly.settings.presentation.account_settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.azmarzly.authentication.domain.AuthenticationRepository
 import com.azmarzly.core.R
 import com.azmarzly.settings.domain.ResetPasswordUseCase
 import core.DispatcherIO
@@ -26,6 +27,7 @@ class AccountSettingsViewModel @Inject constructor(
     @DispatcherIO private val dispatcherIO: CoroutineDispatcher,
     private val resetPasswordUseCase: ResetPasswordUseCase,
     private val resourceProvider: ResourceProvider,
+    private val authenticationRepository: AuthenticationRepository,
 ) : ViewModel() {
 
     private val _state: MutableStateFlow<AccountSettingsState> = MutableStateFlow(AccountSettingsState())
@@ -104,7 +106,7 @@ class AccountSettingsViewModel @Inject constructor(
     }
 
     fun signOut() {
-
+        authenticationRepository.signOut()
     }
 
     private fun initialiseState() {

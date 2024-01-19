@@ -69,13 +69,21 @@ fun SettingsScreenContent(
         AccountCard(
             navigateToScreen = { navigateToSettingsSection(SettingsRoute.ACCOUNT) }
         )
-        PrivacyPolicyCard()
+        PrivacyPolicyCard(
+            navigateToScreen = { navigateToSettingsSection(SettingsRoute.PRIVACY_POLICY) }
+        )
     }
 }
 
 @Composable
-fun PrivacyPolicyCard() {
-    SettingsSectionCard {
+fun PrivacyPolicyCard(
+    navigateToScreen: () -> Unit,
+) {
+    SettingsSectionCard(
+        modifier = Modifier.clickable {
+            navigateToScreen()
+        }
+    ) {
         SettingsSectionHeaderRow(title = stringResource(id = R.string.privacy_policy))
     }
 }

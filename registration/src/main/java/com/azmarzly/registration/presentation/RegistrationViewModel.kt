@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.azmarzly.authentication.domain.AuthenticationRepository
 import core.DispatcherIO
-import core.domain.use_case.FetchCurrentUserUseCase
+import core.domain.ResourceProvider
 import core.domain.use_case.UpdateFirestoreUserUseCase
 import core.model.Resource
 import core.model.UserDataModel
@@ -26,9 +26,17 @@ class RegistrationViewModel @Inject constructor(
     @DispatcherIO private val dispatcherIO: CoroutineDispatcher,
     private val authRepository: AuthenticationRepository,
     private val updateFirestoreUserUseCase: UpdateFirestoreUserUseCase,
+    private val resourceProvider: ResourceProvider,
 ) : ViewModel() {
 
-    private val _registrationState: MutableStateFlow<RegistrationState> = MutableStateFlow(RegistrationState(currentStep = RegistrationRoute.INITIAL))
+    private val _registrationState: MutableStateFlow<RegistrationState> = MutableStateFlow(
+        RegistrationState(
+            currentStep = CurrentStepState(
+                route = RegistrationRoute.INITIAL,
+                text = resourceProvider.getString(com.azmarzly.core.R.string.registration_personal_data)
+            )
+        )
+    )
     val registrationState = _registrationState.asStateFlow()
 
     private val _registrationBottomBarState: MutableStateFlow<RegistrationBottomBarState> = MutableStateFlow(RegistrationBottomBarState())
@@ -100,8 +108,12 @@ class RegistrationViewModel @Inject constructor(
         }
     }
 
+//    fun changeCurrentStep(step: RegistrationRoute) {
+//        _registrationState.update { it.copy(currentStep = step) }
+//    }
+
     fun changeCurrentStep(step: RegistrationRoute) {
-        _registrationState.update { it.copy(currentStep = step) }
+        _registrationState.update { it.copy(currentStep = CurrentStepState(route = step, text = resourceProvider.getString(step.toResourceStringId()))) }
     }
 
     fun updateUserData(userModel: UserDataModel) {
@@ -129,10 +141,15 @@ class RegistrationViewModel @Inject constructor(
 
 data class RegistrationState(
     val userModel: UserDataModel? = null,
-    val currentStep: RegistrationRoute,
+    val currentStep: CurrentStepState,
     val isLoading: Boolean = false,
     val error: String? = null,
     val isRegistrationSuccessful: Boolean = false,
+)
+
+data class CurrentStepState(
+    val route: RegistrationRoute,
+    val text: String,
 )
 
 data class RegistrationBottomBarState(

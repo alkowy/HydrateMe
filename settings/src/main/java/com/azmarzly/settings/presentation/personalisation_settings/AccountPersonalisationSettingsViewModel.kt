@@ -4,12 +4,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.azmarzly.settings.presentation.personalisation_settings.AccountPersonalisationSettingsViewModel.Companion.EMPTY_VALUE
 import core.DispatcherIO
+import core.domain.ResourceProvider
 import core.domain.use_case.FetchCurrentUserUseCase
 import core.domain.use_case.UpdateFirestoreUserUseCase
 import core.input_validators.InputValidator
 import core.input_validators.ValidationState
 import core.model.Resource
 import core.model.UserActivity
+import core.model.UserActivityEnum
+import core.model.UserActivityState
+import core.model.toDescriptionResourceStringId
+import core.model.toNameResourceStringId
 import core.model.toUserActivity
 import core.model.toUserActivityEnum
 import core.util.isSameDayAs
@@ -32,6 +37,7 @@ class AccountPersonalisationSettingsViewModel @Inject constructor(
     private val updateFirestoreUserUseCase: UpdateFirestoreUserUseCase,
     @DispatcherIO private val ioDispatcherIO: CoroutineDispatcher,
     @Named("DecimalValidator") private val decimalValidator: InputValidator,
+    private val resourceProvider: ResourceProvider,
 ) : ViewModel() {
 
     companion object {
@@ -79,7 +85,8 @@ class AccountPersonalisationSettingsViewModel @Inject constructor(
                     val originalHydrationData = userData.hydrationData.toMutableList()
                     val hydrationDataToday = originalHydrationData.find { it.date.isSameDayAs(LocalDate.now()) }
                     hydrationDataToday?.goalMillis = _state.value.hydrationGoalInMillis
-
+                    hydrationDataToday?.progressInPercentage = hydrationDataToday?.calculateProgress() ?: 0
+                    
                     val updatedUserData = userData.copy(
                         userActivity = _state.value.userActivity.toUserActivityEnum(),
                         hydrationGoalMillis = _state.value.hydrationGoalInMillis,
@@ -105,7 +112,14 @@ class AccountPersonalisationSettingsViewModel @Inject constructor(
                                     hydrationGoalInMillis = data.hydrationGoalMillis,
                                     hydrationGoalUi = fetchedHydrationGoal.toStringWithUnit(
                                         unit = null,
-                                    )
+                                    ),
+                                    userActivitiesState = (UserActivityEnum.entries.map {
+                                        UserActivityState(
+                                            userActivity = it.toUserActivity(),
+                                            name = resourceProvider.getString(it.toUserActivity().toNameResourceStringId()),
+                                            description = resourceProvider.getString(it.toUserActivity().toDescriptionResourceStringId()),
+                                        )
+                                    })
                                 )
 
                             }
@@ -124,4 +138,5 @@ data class AccountPersonalisationState(
     val hydrationGoalUi: String = EMPTY_VALUE,
     val hydrationGoalInMillis: Int = 2000,
     val isHydrationGoalInputValid: Boolean = false,
+    val userActivitiesState: List<UserActivityState> = emptyList(),
 )

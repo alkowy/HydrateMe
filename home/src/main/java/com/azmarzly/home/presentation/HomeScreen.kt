@@ -21,8 +21,7 @@ import androidx.navigation.compose.rememberNavController
 import com.azmarzly.home.components.AddWaterDialog
 import com.azmarzly.home.components.DropletButtonNavBar
 import com.azmarzly.home.domain.toBottomBarItemIndex
-import com.azmarzly.home.presentation.HomeScreenParentViewModel.Companion.homeScreens
-import core.util.HomeRoute
+import com.azmarzly.home.presentation.HomeViewModel.Companion.homeScreens
 import core.util.navigateTo
 import java.time.LocalDate
 
@@ -37,11 +36,6 @@ fun ParentHomeScreen(
     var showAddWaterCard by remember { mutableStateOf(false) }
     val bottomBarVisibility by homeViewModel.bottomBarVisibilityState.collectAsStateWithLifecycle()
     val currentRoute by navController.currentBackStackEntryAsState()
-
-    LaunchedEffect(bottomBarVisibility) {
-
-        Log.d("ANANAS", "ParentHomeScreen: bottombarvisibiltiy $bottomBarVisibility")
-    }
 
     Scaffold(
         modifier = Modifier.background(MaterialTheme.colors.surface),

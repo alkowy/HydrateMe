@@ -32,6 +32,7 @@ import com.azmarzly.settings.presentation.SettingsSubScreenHeader
 import core.common_components.ActivityCard
 import core.common_components.RoundedButtonWithContent
 import core.model.UserActivity
+import core.model.UserActivityState
 import core.ui.theme.shadowedTextColor
 
 @Composable
@@ -79,7 +80,8 @@ fun AccountPersonalisationSettingsScreenContent(
                     updateUserActivity(activity)
                     showUserActivityPicker = false
                 },
-                defaultActivity = state.userActivity
+                defaultActivity = state.userActivity,
+                userActivities = state.userActivitiesState
             )
         }
 
@@ -155,7 +157,7 @@ fun AccountPersonalisationSettingsScreenContent(
 }
 
 @Composable
-fun UserActivityPickerDialog(onDismiss: () -> Unit, onConfirm: (UserActivity) -> Unit, defaultActivity: UserActivity?) {
+fun UserActivityPickerDialog(onDismiss: () -> Unit, onConfirm: (UserActivity) -> Unit, defaultActivity: UserActivity?, userActivities: List<UserActivityState>) {
     SettingsPickerDialogWithContent(
         headerTitle = stringResource(id = R.string.physical_activity),
         headerSubTitle = stringResource(id = R.string.choose_one),
@@ -163,26 +165,14 @@ fun UserActivityPickerDialog(onDismiss: () -> Unit, onConfirm: (UserActivity) ->
         content = {
             var activitySelected: UserActivity? by remember { mutableStateOf(defaultActivity) }
 
-            ActivityCard(
-                activity = UserActivity.VeryLowActivity(),
-                onClick = { activitySelected = it },
-                isSelected = activitySelected == UserActivity.VeryLowActivity()
-            )
-            ActivityCard(
-                activity = UserActivity.LowActivity(),
-                onClick = { activitySelected = it },
-                isSelected = activitySelected == UserActivity.LowActivity()
-            )
-            ActivityCard(
-                activity = UserActivity.AverageActivity(),
-                onClick = { activitySelected = it },
-                isSelected = activitySelected == UserActivity.AverageActivity()
-            )
-            ActivityCard(
-                activity = UserActivity.HighActivity(),
-                onClick = { activitySelected = it },
-                isSelected = activitySelected == UserActivity.HighActivity()
-            )
+            userActivities.filterNot { it.userActivity is UserActivity.Empty }.forEach {
+                ActivityCard(
+                    activityName = it.name,
+                    activityDescription = it.description,
+                    onClick = { activitySelected = it.userActivity },
+                    isSelected = activitySelected == it.userActivity
+                )
+            }
 
             RoundedButtonWithContent(
                 onClick = { activitySelected?.let { onConfirm(it) } },

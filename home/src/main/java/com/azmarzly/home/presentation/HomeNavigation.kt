@@ -32,7 +32,8 @@ fun HomeNavGraph(
         composable(route = HomeRoute.PROFILE.route) {
             ProfileNavGraph(
                 bottomBarPadding = bottomBarPadding,
-                setBottomBarVisibility = setBottomBarVisibility
+                setBottomBarVisibility = setBottomBarVisibility,
+                navigateToSignIn = navigateToSignIn,
             )
         }
         composable(route = HomeRoute.NEWS.route) {

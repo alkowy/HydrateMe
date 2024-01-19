@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -20,6 +21,7 @@ import androidx.compose.ui.text.withAnnotation
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.azmarzly.core.R
 import core.common_components.RoundedButtonWithContent
 import core.ui.theme.HydrateMeTheme
 import core.util.RegistrationRoute
@@ -35,6 +37,7 @@ fun RegistrationStepBottomBar(
 ) {
 
     val primaryColor = MaterialTheme.colors.primary
+    val onBackgroundColor = MaterialTheme.colors.onBackground
 
     Column(
         modifier = modifier
@@ -47,14 +50,23 @@ fun RegistrationStepBottomBar(
                 .height(48.dp),
             enabled = state.isNextButtonEnabled,
         ) {
-            Text(if (state.currentStep == GOAL) "Stworz konto" else "Dalej")
+            Text(if (state.currentStep == GOAL) stringResource(id = R.string.create_account) else stringResource(id = R.string.next_btn))
         }
 
         Spacer(modifier = Modifier.height(32.dp))
 
+        val haveAccountText = stringResource(id = R.string.have_account)
+        val signInText = stringResource(id = R.string.signin).lowercase()
+        val fillLaterText = stringResource(id = R.string.registration_fill_later)
         val annotatedString1 = if (state.currentStep == RegistrationRoute.INITIAL) {
             buildAnnotatedString {
-                append("Mam już konto ")
+                withStyle(
+                    style = SpanStyle(
+                        color = onBackgroundColor
+                    )
+                ) {
+                    append("$haveAccountText ")
+                }
                 withAnnotation("tag", "annotation") {
                     withStyle(
                         style = SpanStyle(
@@ -62,7 +74,7 @@ fun RegistrationStepBottomBar(
                             textDecoration = TextDecoration.Underline
                         )
                     ) {
-                        append("zaloguj się")
+                        append(signInText)
                     }
                 }
             }
@@ -75,7 +87,7 @@ fun RegistrationStepBottomBar(
                             textDecoration = TextDecoration.Underline
                         )
                     ) {
-                        append("Uzupełnij później ")
+                        append(fillLaterText)
                     }
                 }
             }

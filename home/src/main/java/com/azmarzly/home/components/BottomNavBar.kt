@@ -28,7 +28,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.azmarzly.core.R
-import com.azmarzly.home.presentation.HomeScreenParentViewModel.Companion.homeScreens
+import com.azmarzly.home.presentation.HomeViewModel.Companion.homeScreens
 import com.exyte.animatednavbar.animation.balltrajectory.BallAnimation
 import com.exyte.animatednavbar.animation.balltrajectory.Teleport
 import com.exyte.animatednavbar.animation.indendshape.Height
@@ -58,7 +58,7 @@ fun DropletButtonNavBar(
         colors = listOf(Color.Transparent, Color.White.copy(alpha = 0.1f)),
         startY = 0.0f,
         endY = 400.0f
-    ),// = MaterialTheme.colors.background,
+    ),
     dropletColor: Color = MaterialTheme.colors.primary,
     unselectedIconColor: Color = MaterialTheme.colors.onBackground,
     selectedScreenIndex: Int,

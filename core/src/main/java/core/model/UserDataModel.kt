@@ -1,5 +1,6 @@
 package core.model
 
+import com.azmarzly.core.R
 import core.util.isSameDayAs
 import java.time.LocalDate
 
@@ -25,4 +26,18 @@ data class UserDataModel(
 
 enum class Gender {
     MALE, FEMALE;
+}
+
+fun Gender.toNameResourceStringId(): Int {
+    return when (this) {
+        Gender.MALE -> R.string.gender_male
+        Gender.FEMALE -> R.string.gender_female
+    }
+}
+
+fun Gender.toDrawableIconRes(): Int {
+    return when (this) {
+        Gender.MALE -> R.drawable.ic_male
+        Gender.FEMALE -> R.drawable.ic_female
+    }
 }

@@ -34,10 +34,10 @@ fun RegistrationFlow(navController: NavHostController) {
         topBar = {
             RegistrationTopBar(
                 currentStep = registrationState.currentStep,
-                showBackButton = registrationState.currentStep !in setOf(RegistrationRoute.INITIAL, RegistrationRoute.PARAMETERS),
+                showBackButton = registrationState.currentStep.route !in setOf(RegistrationRoute.INITIAL, RegistrationRoute.PARAMETERS),
                 onBackButtonClick = {
                     registrationNavController.popBackStack()
-                    registrationViewModel.changeCurrentStep(registrationState.currentStep.previousRegistrationStep())
+                    registrationViewModel.changeCurrentStep(registrationState.currentStep.route.previousRegistrationStep())
                 },
                 modifier = Modifier
                     .padding(bottom = 16.dp)

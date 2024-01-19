@@ -1,5 +1,8 @@
 package core.util
 
+import androidx.annotation.StringRes
+import com.azmarzly.core.R
+
 interface Route {
     val route: String
 
@@ -28,14 +31,14 @@ interface Route {
 enum class RegistrationRoute : Route {
     REGISTRATION_ROOT, INITIAL, PARAMETERS, GENDER, ACTIVITY, GOAL;
 
-    fun toName(): String =
+    fun toResourceStringId(): Int =
         when (this) {
-            REGISTRATION_ROOT -> ""
-            INITIAL -> "Podstawowe dane"
-            PARAMETERS -> "Twoje parametry"
-            GENDER -> "Płeć"
-            ACTIVITY -> "Aktywność"
-            GOAL -> "Dzienny cel spożycia wody"
+            REGISTRATION_ROOT -> -1
+            INITIAL -> R.string.registration_personal_data
+            PARAMETERS -> R.string.registration_parameters
+            GENDER -> R.string.gender
+            ACTIVITY -> R.string.physical_activity
+            GOAL -> R.string.daily_water_goal
         }
 
     override val route: String = this.name

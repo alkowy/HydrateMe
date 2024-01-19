@@ -16,12 +16,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.azmarzly.core.R
-import com.azmarzly.core.R.drawable.ic_female
 import com.azmarzly.core.R.drawable.ic_male
 import core.common_components.GenderPicker
 import core.model.Gender
+import core.model.GenderState
 import core.model.UserDataModel
 import core.ui.theme.HydrateMeTheme
 import core.util.RegistrationRoute
@@ -31,6 +32,7 @@ import core.util.navigateTo
 
 @Composable
 fun GenderPickScreen(
+    viewModel: GenderPickScreenViewModel = hiltViewModel(),
     navController: NavController,
     registrationState: RegistrationState,
     updateUserData: (UserDataModel) -> Unit,
@@ -40,7 +42,10 @@ fun GenderPickScreen(
     bottomBarState: RegistrationBottomBarState,
 ) {
 
+    val gendersState by viewModel.genderState.collectAsStateWithLifecycle()
+
     GenderPickScreenContent(
+        gendersStates = gendersState,
         onNavigateToHome = navigateToHome,
         setUserGender = { gender ->
             updateUserData(
@@ -64,6 +69,7 @@ fun GenderPickScreen(
 
 @Composable
 fun GenderPickScreenContent(
+    gendersStates: List<GenderState>,
     onNavigateToHome: () -> Unit,
     setUserGender: (Gender) -> Unit,
     onNavigateToNextStep: () -> Unit,
@@ -92,19 +98,14 @@ fun GenderPickScreenContent(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                GenderPicker(
-                    gender = Gender.MALE,
-                    imageId = ic_male,
-                    onClick = { genderSelected = it },
-                    isSelected = genderSelected == Gender.MALE
-
-                )
-                GenderPicker(
-                    gender = Gender.FEMALE,
-                    imageId = ic_female,
-                    onClick = { genderSelected = it },
-                    isSelected = genderSelected == Gender.FEMALE
-                )
+                gendersStates.forEach { genderState ->
+                    GenderPicker(
+                        genderName = genderState.name,
+                        imageId = genderState.genderIcon,
+                        onClick = { genderSelected = genderState.gender },
+                        isSelected = genderSelected == genderState.gender
+                    )
+                }
             }
         }
 
@@ -124,7 +125,8 @@ fun GenderPickerScreenPreview() {
             setUserGender = {},
             onNavigateToNextStep = {},
             bottomBarState = RegistrationBottomBarState(),
-            updateBottomBarState = {}
+            updateBottomBarState = {},
+            gendersStates = emptyList()
         )
     }
 }

@@ -20,9 +20,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
-import com.azmarzly.core.R
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.azmarzly.core.R
 import core.common_components.ValidatedTextField
 import core.model.UserDataModel
 import core.ui.theme.HydrateMeTheme
@@ -163,7 +163,7 @@ fun InitialRegistrationScreenContent(
 fun InitialRegistrationScreenPrev() {
     HydrateMeTheme() {
         InitialRegistrationScreenContent(
-            state = RegistrationState(currentStep = RegistrationRoute.INITIAL),
+            state = RegistrationState(currentStep = CurrentStepState(route = RegistrationRoute.INITIAL, text = "INITIAL")),
             registerWithEmailAndPassword = { _, _, _ -> Unit },
             navigateToSignIn = {},
             bottomBarState = RegistrationBottomBarState(),

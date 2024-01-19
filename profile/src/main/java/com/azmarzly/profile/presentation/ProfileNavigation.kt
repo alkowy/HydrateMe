@@ -16,6 +16,7 @@ fun ProfileNavGraph(
     navController: NavHostController = rememberNavController(),
     bottomBarPadding: Dp,
     setBottomBarVisibility: (Boolean) -> Unit,
+    navigateToSignIn: () -> Unit,
 ) {
     NavHost(
         navController = navController,
@@ -36,7 +37,8 @@ fun ProfileNavGraph(
 
         composable(route = ProfileRoute.SETTINGS.route) {
             SettingsNavGraph(
-                closeSettings = { navController.popBackStack() }
+                closeSettings = { navController.popBackStack() },
+                navigateToSignIn = navigateToSignIn
             )
         }
     }

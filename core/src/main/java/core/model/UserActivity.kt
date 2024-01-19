@@ -1,12 +1,14 @@
 package core.model
 
+import com.azmarzly.core.R
+
 sealed interface UserActivity {
     val name: String
     val description: String
 
     data class VeryLowActivity(
         override val name: String = "Very low",
-        override val description: String = "Siedząca praca, lekka prace domowe, spacer tylko do autobusu",
+        override val description: String = "Siedząca praca, lekkie prace domowe, spacer tylko do autobusu",
     ) : UserActivity
 
     data class LowActivity(
@@ -28,6 +30,26 @@ sealed interface UserActivity {
         override val name: String = "Empty",
         override val description: String = "Empty",
     ) : UserActivity
+}
+
+fun UserActivity.toNameResourceStringId(): Int{
+    return when (this) {
+        is UserActivity.VeryLowActivity -> R.string.activity_very_low_name
+        is UserActivity.LowActivity -> R.string.activity_low_name
+        is UserActivity.AverageActivity -> R.string.activity_mid_name
+        is UserActivity.HighActivity -> R.string.activity_high_name
+        is UserActivity.Empty -> R.string.activity_very_low_name
+    }
+}
+
+fun UserActivity.toDescriptionResourceStringId(): Int{
+    return when (this) {
+        is UserActivity.VeryLowActivity -> R.string.activity_very_low_description
+        is UserActivity.LowActivity -> R.string.activity_low_description
+        is UserActivity.AverageActivity -> R.string.activity_mid_description
+        is UserActivity.HighActivity -> R.string.activity_high_description
+        is UserActivity.Empty -> R.string.activity_very_low_description
+    }
 }
 
 fun UserActivity.toUserActivityEnum(): UserActivityEnum {

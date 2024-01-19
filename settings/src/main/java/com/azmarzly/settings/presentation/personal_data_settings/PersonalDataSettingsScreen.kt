@@ -37,6 +37,7 @@ import core.common_components.DatePickerDialog
 import core.common_components.GenderPicker
 import core.common_components.RoundedButtonWithContent
 import core.model.Gender
+import core.model.GenderState
 import core.ui.theme.shadowedTextColor
 import java.time.LocalDate
 
@@ -98,7 +99,8 @@ fun PersonalDataSettingsScreenContent(
                 confirm = { gender ->
                     updateGender(gender)
                     showGenderPicker = false
-                }
+                },
+                genders = state.genders,
             )
         }
         if (showDatePicker) {
@@ -225,7 +227,7 @@ fun PersonalDataSettingsScreenContent(
 }
 
 @Composable
-fun GenderPickerDialog(onDismiss: () -> Unit, confirm: (Gender?) -> Unit) {
+fun GenderPickerDialog(onDismiss: () -> Unit, confirm: (Gender?) -> Unit, genders: List<GenderState>) {
     SettingsPickerDialogWithContent(
         headerTitle = stringResource(id = R.string.gender),
         headerSubTitle = stringResource(id = R.string.choose_one),
@@ -237,19 +239,15 @@ fun GenderPickerDialog(onDismiss: () -> Unit, confirm: (Gender?) -> Unit) {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                GenderPicker(
-                    gender = Gender.MALE,
-                    imageId = R.drawable.ic_male,
-                    onClick = { genderSelected = it },
-                    isSelected = genderSelected == Gender.MALE
+                genders.forEach { genderState ->
+                    GenderPicker(
+                        genderName = genderState.name,
+                        imageId = genderState.genderIcon,
+                        onClick = { genderSelected = genderState.gender },
+                        isSelected = genderSelected == genderState.gender
 
-                )
-                GenderPicker(
-                    gender = Gender.FEMALE,
-                    imageId = R.drawable.ic_female,
-                    onClick = { genderSelected = it },
-                    isSelected = genderSelected == Gender.FEMALE
-                )
+                    )
+                }
             }
             RoundedButtonWithContent(
                 onClick = { confirm(genderSelected) },

@@ -24,9 +24,10 @@ import core.ui.theme.registrationTextColor
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ActivityCard(
-    activity: UserActivity,
+    activityName: String,
+    activityDescription: String,
     isSelected: Boolean = false,
-    onClick: (UserActivity) -> Unit,
+    onClick: () -> Unit,
 ) {
 
     Card(
@@ -37,17 +38,17 @@ fun ActivityCard(
         colors = CardDefaults.cardColors(
             containerColor = if (isSelected) MaterialTheme.colors.primary else MaterialTheme.colors.backgroundContainer
         ),
-        onClick = { onClick(activity) }
+        onClick = { onClick() }
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
-                text = activity.name,
+                text = activityName,
                 style = MaterialTheme.typography.h4,
                 color = if (isSelected) MaterialTheme.colors.onPrimary else MaterialTheme.colors.registrationTextColor
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = activity.description,
+                text = activityDescription,
                 style = MaterialTheme.typography.bodySmall,
                 color = Grey400
             )
