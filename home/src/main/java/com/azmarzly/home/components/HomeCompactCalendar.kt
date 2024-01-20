@@ -108,7 +108,7 @@ private fun RowScope.CompactCalendarDay(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = day.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault()).uppercase(),
+            text = day.dayOfWeek.getDisplayName(TextStyle.NARROW, Locale.getDefault()).uppercase(),
             style = MaterialTheme.typography.caption,
             modifier = Modifier.wrapContentWidth(unbounded = true)
         )

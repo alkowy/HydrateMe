@@ -1,7 +1,6 @@
 package com.azmarzly.home.presentation.calendar
 
 import android.content.res.Configuration
-import android.util.Log
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -138,7 +137,7 @@ fun Calendar(
                     modifier = Modifier
                         .weight(1f)
                         .aspectRatio(1f),
-                    day = it.getDisplayName(TextStyle.SHORT, Locale.getDefault()).uppercase(),
+                    day = it.getDisplayName(TextStyle.NARROW, Locale.getDefault()).uppercase(),
                 )
             }
         }

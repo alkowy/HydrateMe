@@ -128,7 +128,10 @@ fun AccountSettingsScreenContent(
 
         SettingsSubScreenHeader(
             headerText = stringResource(id = R.string.account),
-            closeScreen = closeScreen
+            isEnabled = true,
+            onCloseScreenClick = {
+                closeScreen()
+            }
         )
         Spacer(modifier = Modifier.height(8.dp))
 

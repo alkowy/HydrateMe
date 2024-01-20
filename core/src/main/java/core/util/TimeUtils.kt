@@ -1,5 +1,6 @@
 package core.util
 
+import androidx.compose.ui.text.capitalize
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -21,7 +22,7 @@ fun LocalDate.toStringFormatted(): String {
 }
 
 fun LocalDate.toCalendarHeader(): String {
-    return "${this.month.getDisplayName(TextStyle.FULL_STANDALONE, Locale.getDefault())} ${this.year}"
+    return "${this.month.getDisplayName(TextStyle.FULL_STANDALONE, Locale.getDefault()).replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }} ${this.year}"
 }
 
 fun LocalDateTime.toTimestamp(): Long {

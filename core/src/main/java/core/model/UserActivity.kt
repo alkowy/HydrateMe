@@ -32,17 +32,17 @@ sealed interface UserActivity {
     ) : UserActivity
 }
 
-fun UserActivity.toNameResourceStringId(): Int{
+fun UserActivity.toNameResourceStringId(): Int {
     return when (this) {
         is UserActivity.VeryLowActivity -> R.string.activity_very_low_name
         is UserActivity.LowActivity -> R.string.activity_low_name
         is UserActivity.AverageActivity -> R.string.activity_mid_name
         is UserActivity.HighActivity -> R.string.activity_high_name
-        is UserActivity.Empty -> R.string.activity_very_low_name
+        is UserActivity.Empty -> R.string.activity_empty
     }
 }
 
-fun UserActivity.toDescriptionResourceStringId(): Int{
+fun UserActivity.toDescriptionResourceStringId(): Int {
     return when (this) {
         is UserActivity.VeryLowActivity -> R.string.activity_very_low_description
         is UserActivity.LowActivity -> R.string.activity_low_description

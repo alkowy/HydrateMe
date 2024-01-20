@@ -98,7 +98,7 @@ class SettingsViewModel @Inject constructor(
                     height = userDataModel?.height?.toStringWithUnit(unit = resourceProvider.getString(R.string.unit_cm)) ?: EMPTY_VALUE,
                 ),
                 accountPersonalisation = AccountPersonalisationModel(
-                    activity = userDataModel?.userActivity?.toUserActivity()?.name ?: UserActivity.Empty().name,
+                    activity = resourceProvider.getString(userDataModel?.userActivity?.toUserActivity()?.toNameResourceStringId() ?: R.string.activity_empty),
                     hydrationGoal = fetchedHydrationGoal.toStringWithUnit(unit = resourceProvider.getString(R.string.unit_liter)),
                 )
             )

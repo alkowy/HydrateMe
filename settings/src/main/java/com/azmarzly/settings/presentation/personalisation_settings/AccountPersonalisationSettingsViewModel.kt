@@ -55,7 +55,10 @@ class AccountPersonalisationSettingsViewModel @Inject constructor(
         activity?.let { activity ->
             _state.update {
                 it.copy(
-                    userActivity = activity
+                    userActivityState = AccountPersonalisationActivityState(
+                        userActivity = activity,
+                        userActivityText = resourceProvider.getString(activity.toNameResourceStringId())
+                    )
                 )
             }
         }
@@ -86,9 +89,9 @@ class AccountPersonalisationSettingsViewModel @Inject constructor(
                     val hydrationDataToday = originalHydrationData.find { it.date.isSameDayAs(LocalDate.now()) }
                     hydrationDataToday?.goalMillis = _state.value.hydrationGoalInMillis
                     hydrationDataToday?.progressInPercentage = hydrationDataToday?.calculateProgress() ?: 0
-                    
+
                     val updatedUserData = userData.copy(
-                        userActivity = _state.value.userActivity.toUserActivityEnum(),
+                        userActivity = _state.value.userActivityState.userActivity.toUserActivityEnum(),
                         hydrationGoalMillis = _state.value.hydrationGoalInMillis,
                         hydrationData = originalHydrationData
                     )
@@ -108,7 +111,10 @@ class AccountPersonalisationSettingsViewModel @Inject constructor(
 
                             _state.update {
                                 AccountPersonalisationState(
-                                    userActivity = data.userActivity.toUserActivity(),
+                                    userActivityState = AccountPersonalisationActivityState(
+                                        userActivity = data.userActivity.toUserActivity(),
+                                        userActivityText = resourceProvider.getString(data.userActivity.toUserActivity().toNameResourceStringId())
+                                    ),
                                     hydrationGoalInMillis = data.hydrationGoalMillis,
                                     hydrationGoalUi = fetchedHydrationGoal.toStringWithUnit(
                                         unit = null,
@@ -134,9 +140,14 @@ class AccountPersonalisationSettingsViewModel @Inject constructor(
 }
 
 data class AccountPersonalisationState(
-    val userActivity: UserActivity = UserActivity.Empty(),
+    val userActivityState: AccountPersonalisationActivityState = AccountPersonalisationActivityState(),
     val hydrationGoalUi: String = EMPTY_VALUE,
     val hydrationGoalInMillis: Int = 2000,
     val isHydrationGoalInputValid: Boolean = false,
     val userActivitiesState: List<UserActivityState> = emptyList(),
+)
+
+data class AccountPersonalisationActivityState(
+    val userActivity: UserActivity = UserActivity.Empty(),
+    val userActivityText: String = EMPTY_VALUE,
 )

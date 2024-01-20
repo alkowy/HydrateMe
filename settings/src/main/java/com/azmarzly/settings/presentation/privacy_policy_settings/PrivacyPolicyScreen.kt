@@ -49,7 +49,8 @@ fun PrivacyPolicyScreenContent(
     ) {
         SettingsSubScreenHeader(
             headerText = stringResource(id = R.string.privacy_policy),
-            closeScreen = closeScreen
+            onCloseScreenClick = closeScreen,
+            isEnabled = true
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(

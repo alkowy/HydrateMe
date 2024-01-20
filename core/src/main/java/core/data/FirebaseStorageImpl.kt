@@ -1,7 +1,6 @@
 package core.data
 
 import android.net.Uri
-import android.util.Log
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.gson.Gson
@@ -65,9 +64,7 @@ class FirebaseStorageImpl @Inject constructor(
 
     private suspend fun removeOldProfilePicture(ref: StorageReference) {
         ref.listAll().addOnSuccessListener { result ->
-            Log.d("ANANAS", "removeOldProfilePicture: reuslt ${result.items.toString()}")
             result.items.forEach { item ->
-                Log.d("ANANAS", "removeOldProfilePicture: item! ${item.downloadUrl.toString()}")
                 item.delete()
             }
         }.await()

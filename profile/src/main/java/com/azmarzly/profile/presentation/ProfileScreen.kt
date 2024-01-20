@@ -58,6 +58,7 @@ import core.ui.theme.backgroundContainer
 import core.ui.theme.bodySmall
 import core.ui.theme.profileEmailTextColor
 import core.ui.theme.shadowedTextColor
+import core.util.clickableOnce
 
 @Composable
 fun ProfileScreen(
@@ -68,6 +69,7 @@ fun ProfileScreen(
     val state by profileViewModel.profileState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
+        Log.d("ANANAS", "ProfileScreen: LAUNCHED EFFECT UNIT")
         profileViewModel.initialiseProfileState()
     }
 
@@ -311,10 +313,15 @@ private fun ProfileHeader(
             )
         )
         IconButton(
-            onClick = navigateToSettings,
-            modifier = Modifier.align(Alignment.CenterEnd),
+            onClick = {},
+            modifier = Modifier
+                .align(Alignment.CenterEnd)
         ) {
             Icon(
+                modifier = Modifier
+                    .clickableOnce {
+                        navigateToSettings()
+                    },
                 imageVector = Icons.Outlined.Settings,
                 contentDescription = "settings"
             )

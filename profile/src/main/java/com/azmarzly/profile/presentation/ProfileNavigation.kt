@@ -10,6 +10,7 @@ import androidx.navigation.compose.rememberNavController
 import com.azmarzly.settings.presentation.SettingsNavGraph
 import core.util.ProfileRoute
 import core.util.navigateTo
+import core.util.popUpTo
 
 @Composable
 fun ProfileNavGraph(
@@ -37,7 +38,14 @@ fun ProfileNavGraph(
 
         composable(route = ProfileRoute.SETTINGS.route) {
             SettingsNavGraph(
-                closeSettings = { navController.popBackStack() },
+//                closeSettings = { navController.popBackStack() },
+                closeSettings = {
+                    navController.navigateTo(ProfileRoute.PROFILE) {
+                        popUpTo(ProfileRoute.PROFILE)
+                        launchSingleTop = true
+                    }
+                    setBottomBarVisibility(true)
+                },
                 navigateToSignIn = navigateToSignIn
             )
         }

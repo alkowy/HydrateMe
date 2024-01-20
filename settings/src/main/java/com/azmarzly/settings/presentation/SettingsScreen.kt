@@ -21,6 +21,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.azmarzly.core.R
 import com.azmarzly.settings.presentation.personal_data_settings.PersonalDataModel
 import core.util.SettingsRoute
+import core.util.clickableOnce
 
 
 @Composable
@@ -80,7 +81,7 @@ fun PrivacyPolicyCard(
     navigateToScreen: () -> Unit,
 ) {
     SettingsSectionCard(
-        modifier = Modifier.clickable {
+        modifier = Modifier.clickableOnce {
             navigateToScreen()
         }
     ) {
@@ -93,7 +94,7 @@ fun AccountCard(
     navigateToScreen: () -> Unit,
 ) {
     SettingsSectionCard(
-        modifier = Modifier.clickable {
+        modifier = Modifier.clickableOnce {
             navigateToScreen()
         }
     ) {
@@ -107,7 +108,7 @@ fun AccountPersonalisationCard(
     navigateToScreen: () -> Unit,
 ) {
     SettingsSectionCard(
-        modifier = Modifier.clickable {
+        modifier = Modifier.clickableOnce {
             navigateToScreen()
         }
     ) {
@@ -124,7 +125,7 @@ fun PersonalDataCard(
     personalDataModel: PersonalDataModel,
     navigateToScreen: () -> Unit,
 ) {
-    SettingsSectionCard(modifier = Modifier.clickable {
+    SettingsSectionCard(modifier = Modifier.clickableOnce {
         navigateToScreen()
     }) {
         Column {

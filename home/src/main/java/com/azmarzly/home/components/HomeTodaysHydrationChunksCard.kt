@@ -65,7 +65,7 @@ fun HomeHydrationChunkItem(drinkType: DrinkType, date: LocalDateTime) {
     ) {
         Icon(
             modifier = Modifier.size(24.dp),
-            painter = painterResource(id = drinkType.resIdUnselected), contentDescription = "",
+            painter = painterResource(id = drinkType.resIdSelected), contentDescription = "",
             tint = MaterialTheme.colors.primary
         )
         Text(

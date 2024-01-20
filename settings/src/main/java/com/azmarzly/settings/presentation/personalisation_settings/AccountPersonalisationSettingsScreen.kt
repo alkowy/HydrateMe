@@ -63,6 +63,7 @@ fun AccountPersonalisationSettingsScreenContent(
     val scrollState = rememberScrollState()
     var showUserActivityPicker by remember { mutableStateOf(false) }
     var showHydrationGoalPicker by remember { mutableStateOf(false) }
+    var isCloseButtonEnabled by remember { mutableStateOf(true) }
 
     Column(
         modifier = Modifier
@@ -80,7 +81,7 @@ fun AccountPersonalisationSettingsScreenContent(
                     updateUserActivity(activity)
                     showUserActivityPicker = false
                 },
-                defaultActivity = state.userActivity,
+                defaultActivity = state.userActivityState.userActivity,
                 userActivities = state.userActivitiesState
             )
         }
@@ -106,13 +107,17 @@ fun AccountPersonalisationSettingsScreenContent(
 
         SettingsSubScreenHeader(
             headerText = stringResource(id = R.string.account_personalisation),
-            closeScreen = closeScreen
+            onCloseScreenClick = {
+                isCloseButtonEnabled = false
+                closeScreen()
+            },
+            isEnabled = isCloseButtonEnabled,
         )
         Spacer(modifier = Modifier.height(8.dp))
 
         SettingsSubScreenCard(
             label = stringResource(id = R.string.physical_activity),
-            value = state.userActivity.name,
+            value = state.userActivityState.userActivityText,
             onClickAction = { showUserActivityPicker = true },
             trailingItem = {
                 ClickableText(
@@ -142,6 +147,7 @@ fun AccountPersonalisationSettingsScreenContent(
             modifier = Modifier.fillMaxWidth(),
             onClick = {
                 saveChanges()
+                isCloseButtonEnabled = false
                 closeScreen()
             },
         ) {

@@ -10,6 +10,7 @@ import com.azmarzly.home.presentation.calendar.CalendarScreen
 import com.azmarzly.hydration_hub.presentation.HydrationHubScreen
 import com.azmarzly.profile.presentation.ProfileNavGraph
 import core.util.HomeRoute
+import core.util.navigateTo
 
 @Composable
 fun HomeNavGraph(
@@ -25,7 +26,9 @@ fun HomeNavGraph(
         route = HomeRoute.HOME_ROOT.route,
     ) {
         composable(route = HomeRoute.HOME.route) {
-            HomeScreen(homeViewModel, bottomBarPadding)
+            HomeScreen(homeViewModel, bottomBarPadding, navigateToProfile = {
+                navController.navigateTo(HomeRoute.PROFILE) {}
+            })
         }
         composable(route = HomeRoute.CALENDAR.route) {
             CalendarScreen(bottomBarPadding)

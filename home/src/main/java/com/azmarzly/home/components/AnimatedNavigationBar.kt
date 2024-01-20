@@ -2,9 +2,11 @@ package com.azmarzly.home.components
 
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -79,7 +81,16 @@ fun AnimatedNavigationBar(
                     shape = indentShape.value
                 }
                 .background(barColor)
-            ,
+                .border(
+                    width = Dp.Hairline,
+                    brush = Brush.verticalGradient(
+                        colors = listOf(
+                            Color.White.copy(alpha = .8f),
+                            Color.White.copy(alpha = .2f),
+                        ),
+                    ),
+                    shape = indentShape.value
+                ),
             content = content,
             measurePolicy = measurePolicy
         )

@@ -82,7 +82,7 @@ fun DropletButtonNavBar(
                     .height(60.dp),
                 selectedIndex = selectedScreenIndex,
                 ballColor = dropletColor,
-                cornerRadius = shapeCornerRadius(topLeft = 25.dp, topRight = 25.dp, bottomLeft = 25.dp, bottomRight = 25.dp),
+                cornerRadius = shapeCornerRadius(topLeft = 25.dp, topRight = 25.dp, bottomLeft = 0.dp, bottomRight = 0.dp),
                 ballAnimation = ballAnimation,
                 indentAnimation = Height(
                     indentWidth = 56.dp,

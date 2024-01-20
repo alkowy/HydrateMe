@@ -53,6 +53,7 @@ import core.ui.theme.HydrateMeTheme
 import core.ui.theme.buttonLabelLinkTextStyle
 import core.util.HomeRoute
 import core.util.RegistrationRoute
+import core.util.clickableOnce
 import core.util.navigateTo
 
 @Composable
@@ -183,7 +184,7 @@ fun SignInScreenContent(
                     onValueChange = {
                         validateEmail(it)
                     },
-                    label = "E-mail",
+                    label = stringResource(id = R.string.email_label),
                     style = MaterialTheme.typography.caption,
                     isError = emailValidationState == ValidationState.Invalid,
                     errorText = stringResource(R.string.incorrect_email),
@@ -200,7 +201,7 @@ fun SignInScreenContent(
                     onValueChange = {
                         validatePassword(it)
                     },
-                    label = "Password",
+                    label = stringResource(id = R.string.password),
                     style = MaterialTheme.typography.caption.copy(),
                     isError = passwordValidationState == ValidationState.Invalid,
                     errorText = stringResource(R.string.incorrect_password),
@@ -212,7 +213,7 @@ fun SignInScreenContent(
                 Text(
                     modifier = Modifier
                         .align(Alignment.End)
-                        .clickable {
+                        .clickableOnce {
                             onForgotPassword()
                         },
                     text = stringResource(R.string.forgot_password),
@@ -260,7 +261,7 @@ fun SignInScreenContent(
                     Spacer(modifier = Modifier.width(18.dp))
                     Text(
                         modifier = Modifier
-                            .clickable {
+                            .clickableOnce {
                                 onNavigateToRegistration()
                             },
                         text = stringResource(R.string.sign_up),

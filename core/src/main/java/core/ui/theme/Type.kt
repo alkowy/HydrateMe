@@ -65,6 +65,14 @@ val Typography = Typography(
         lineHeight = 22.sp,
         platformStyle = PlatformTextStyle(includeFontPadding = false)
     ),
+    h5 = TextStyle(
+        fontFamily = Poppins,
+        fontWeight = FontWeight.Medium,
+        fontSize = 18.sp,
+        letterSpacing = (-0.03).sp,
+        lineHeight = 22.sp,
+        platformStyle = PlatformTextStyle(includeFontPadding = false)
+    ),
     body1 = TextStyle(
         fontFamily = Poppins,
         fontWeight = FontWeight.Medium,

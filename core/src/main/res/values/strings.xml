@@ -22,6 +22,7 @@
     <string name="activity_low_name">Low</string>
     <string name="activity_mid_name">Average</string>
     <string name="activity_high_name">High</string>
+    <string name="activity_empty">Empty</string>
     <string name="daily_water_goal">Daily water intake goal</string>
     <string name="daily_water_intake_calculated">Calculated based on the data you\'ve provided</string>
     <string name="create_account">Create account</string>
@@ -130,5 +131,6 @@
     <string name="hydration_hub_header">Hydration Hub</string>
     <string name="expand">Expand</string>
     <string name="collapse">Collapse</string>
+    <string name="hydration_hub_error">Could not load content for the Hydration Hub. Try again later.</string>
 
 </resources>

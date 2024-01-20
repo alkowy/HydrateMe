@@ -1,7 +1,6 @@
 package com.azmarzly.home.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -34,12 +33,14 @@ import com.azmarzly.core.R
 import com.azmarzly.home.presentation.HomeState
 import com.azmarzly.home.presentation.HomeViewModel
 import core.ui.theme.HydrateMeTheme
+import core.util.clickableOnce
 import core.util.doNothing
 
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel,
     bottomBarPadding: Dp,
+    navigateToProfile: () -> Unit
 ) {
     val homeScreenState by viewModel.homeState.collectAsStateWithLifecycle()
 
@@ -47,7 +48,7 @@ fun HomeScreen(
         homeState = homeScreenState,
         addWater = { water -> viewModel.addHydration(amountOfWaterAdded = water) },
         bottomBarPadding = bottomBarPadding,
-        signOut = viewModel::signOut,
+        navigateToProfile = navigateToProfile,
     )
 }
 
@@ -56,7 +57,7 @@ fun HomeScreenContent(
     homeState: HomeState,
     addWater: (Int) -> Unit,
     bottomBarPadding: Dp,
-    signOut: () -> Unit,
+    navigateToProfile: () -> Unit,
 ) {
     val scrollState = rememberScrollState()
 
@@ -90,7 +91,7 @@ fun HomeScreenContent(
                 modifier = Modifier
                     .clip(CircleShape)
                     .size(40.dp)
-                    .clickable { signOut() }
+                    .clickableOnce { navigateToProfile() }
             )
 
         }

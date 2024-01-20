@@ -35,6 +35,7 @@ import core.common_components.PlaneValidatedTextField
 import core.common_components.RoundedButtonWithContent
 import core.input_validators.ValidationState
 import core.model.DrinkType
+import core.util.clickableOnce
 
 @Composable
 fun AddWaterDialog(
@@ -145,7 +146,7 @@ fun AddWaterDialog(
                 Spacer(modifier = Modifier.height(32.dp))
 
                 Text(
-                    modifier = Modifier.clickable { onDismissRequest() },
+                    modifier = Modifier.clickableOnce { onDismissRequest() },
                     text = stringResource(string.cancel),
                     style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.primary),
                 )

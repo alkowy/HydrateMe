@@ -57,7 +57,7 @@ class HydrationHubViewModel @Inject constructor(
 }
 
 data class HydrationHubState(
-    val content: HydrationHubContentModel? = HydrationHubContentModel(emptyList(), emptyList()),
+    val content: HydrationHubContentModel? = null,
     val isLoading: Boolean = true,
     val isError: Boolean = false,
 )

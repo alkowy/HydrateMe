@@ -1,6 +1,5 @@
 package com.azmarzly.settings.presentation
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.IconButton
@@ -12,11 +11,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import com.azmarzly.core.R.drawable
+import core.util.clickableOnce
 
 @Composable
 fun ClickableText(modifier: Modifier = Modifier, text: String, onClick: () -> Unit) {
     Text(
-        modifier = modifier.clickable { onClick() },
+        modifier = modifier.clickableOnce { onClick() },
         text = text,
         style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.primary),
     )
@@ -26,13 +26,15 @@ fun ClickableText(modifier: Modifier = Modifier, text: String, onClick: () -> Un
 @Composable
 fun SettingsSubScreenHeader(
     headerText: String,
-    closeScreen: () -> Unit,
+    onCloseScreenClick: () -> Unit,
+    isEnabled: Boolean,
 ) {
     Box(
         modifier = Modifier.fillMaxWidth(),
     ) {
         IconButton(
-            onClick = closeScreen,
+            onClick = onCloseScreenClick,
+            enabled = isEnabled,
             modifier = Modifier.align(Alignment.CenterStart),
         ) {
             Icon(

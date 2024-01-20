@@ -13,6 +13,7 @@ import core.domain.use_case.UpdateProfilePictureUseCase
 import core.model.Resource
 import core.model.UserActivity
 import core.model.UserDataModel
+import core.model.toNameResourceStringId
 import core.model.toUserActivity
 import core.util.roundAndAddUnit
 import core.util.toStringWithUnit
@@ -101,8 +102,8 @@ class ProfileViewModel @Inject constructor(
                                         email = data.email,
                                         age = if (data.birthDate == null) EMPTY_VALUE else today.year.minus(data.birthDate!!.year).toString(),
                                         weight = if (data.weight == null) EMPTY_VALUE else data.weight!!.toStringWithUnit(unit = resourceProvider.getString(R.string.unit_kg)),
-                                        height = if (data.height == null) EMPTY_VALUE else data.weight!!.toStringWithUnit(unit = resourceProvider.getString(R.string.unit_cm)),
-                                        activity = data.userActivity.toUserActivity().name,
+                                        height = if (data.height == null) EMPTY_VALUE else data.height!!.toStringWithUnit(unit = resourceProvider.getString(R.string.unit_cm)),
+                                        activity = resourceProvider.getString(data.userActivity.toUserActivity().toNameResourceStringId()),
                                         dailyGoal = data.hydrationGoalMillis.toDouble().div(1000)
                                             .roundAndAddUnit(decimals = 2, unit = resourceProvider.getString(R.string.unit_liter)),
                                         useLocalImageFromUri = false,

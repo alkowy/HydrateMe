@@ -1,12 +1,10 @@
 package com.azmarzly.home.presentation
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,29 +38,25 @@ fun ParentHomeScreen(
     Scaffold(
         modifier = Modifier.background(MaterialTheme.colors.surface),
         bottomBar = {
-                DropletButtonNavBar(
-                    dropletButtons = homeScreens,
-                    shouldShowBottomBar = bottomBarVisibility,
-                    barColor = Brush.verticalGradient(
-                        colors = listOf(MaterialTheme.colors.onBackground.copy(alpha = 0.14f), MaterialTheme.colors.background),
-                        startY = 0.0f,
-                        endY = 100.0f,
-                    ),
-                    selectedScreenIndex = currentRoute?.destination?.route.toBottomBarItemIndex(),
-                    onNavigateToScreen = { route ->
-                        navController.popBackStack()
-                        navController.navigateTo(route) {
-                            navController.graph.startDestinationRoute?.let { screen_route ->
-                                popUpTo(screen_route) {
-                                    saveState = true
-                                }
+            DropletButtonNavBar(
+                dropletButtons = homeScreens,
+                shouldShowBottomBar = bottomBarVisibility,
+                barColor = Brush.verticalGradient(listOf(MaterialTheme.colors.background,MaterialTheme.colors.background)),
+                selectedScreenIndex = currentRoute?.destination?.route.toBottomBarItemIndex(),
+                onNavigateToScreen = { route ->
+                    navController.popBackStack()
+                    navController.navigateTo(route) {
+                        navController.graph.startDestinationRoute?.let { screen_route ->
+                            popUpTo(screen_route) {
+                                saveState = true
                             }
-                            launchSingleTop = true
-                            restoreState = true
                         }
-                    },
-                    onFloatingActionButtonAction = { showAddWaterCard = true }
-                )
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
+                onFloatingActionButtonAction = { showAddWaterCard = true }
+            )
         }
     ) { paddingValues ->
         HomeNavGraph(

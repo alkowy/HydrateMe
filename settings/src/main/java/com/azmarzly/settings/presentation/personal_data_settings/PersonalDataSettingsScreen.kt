@@ -153,7 +153,8 @@ fun PersonalDataSettingsScreenContent(
 
         SettingsSubScreenHeader(
             headerText = stringResource(id = R.string.registration_personal_data),
-            closeScreen = closeScreen
+            onCloseScreenClick = closeScreen,
+            isEnabled = true
         )
         Spacer(modifier = Modifier.height(8.dp))
 

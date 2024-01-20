@@ -19,6 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import core.model.Gender
 import core.ui.theme.backgroundContainer
+import core.util.clickableOnce
 import java.util.Locale
 
 @Composable
@@ -40,7 +41,7 @@ fun GenderPicker(
     ) {
         Column(
             modifier = modifier
-                .clickable { onClick() }
+                .clickableOnce { onClick() }
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
