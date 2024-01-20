@@ -24,6 +24,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -130,6 +131,7 @@ fun PersonalDataSettingsScreenContent(
                     showWeightPicker = false
                 },
                 maxCharacters = 5,
+                keyboardType = KeyboardType.Decimal,
             )
         }
         if (showHeightPicker) {
@@ -148,7 +150,8 @@ fun PersonalDataSettingsScreenContent(
                     showHeightPicker = false
                 },
                 maxCharacters = 5,
-            )
+                keyboardType = KeyboardType.Decimal,
+                )
         }
 
         SettingsSubScreenHeader(
@@ -160,7 +163,7 @@ fun PersonalDataSettingsScreenContent(
 
         SettingsSubScreenCard(
             label = stringResource(id = R.string.gender),
-            value = state.gender,
+            value = state.gender.genderText,
             onClickAction = { showGenderPicker = true },
             trailingItem = {
                 ClickableText(

@@ -2,6 +2,7 @@ package com.azmarzly.settings.presentation
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -23,6 +24,8 @@ fun SettingsSectionBodyRow(type: String, value: String) {
                 color = MaterialTheme.colors.shadowedTextColor
             )
         )
+
+        Spacer(modifier = Modifier.weight(1f))
 
         Text(
             text = value,

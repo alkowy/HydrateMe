@@ -1,5 +1,6 @@
 package com.azmarzly.settings.presentation.personal_data_settings
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.azmarzly.settings.presentation.personal_data_settings.PersonalDataSettingsViewModel.Companion.EMPTY_VALUE
@@ -17,7 +18,6 @@ import core.model.toNameResourceStringId
 import core.util.millisToLocalDate
 import core.util.toDoubleWithoutUnit
 import core.util.toFirestoreUserDataModel
-import core.util.toGender
 import core.util.toLocalDate
 import core.util.toStringFormatted
 import core.util.toStringWithUnit
@@ -57,7 +57,10 @@ class PersonalDataSettingsViewModel @Inject constructor(
         gender?.let { gender ->
             _state.update {
                 it.copy(
-                    gender = resourceProvider.getString(gender.toNameResourceStringId())
+                    gender = GenderDisplayState(
+                        gender = gender,
+                        genderText = resourceProvider.getString(gender.toNameResourceStringId())
+                    )
                 )
             }
         }
@@ -109,9 +112,10 @@ class PersonalDataSettingsViewModel @Inject constructor(
     fun saveChanges() {
         viewModelScope.launch(ioDispatcherIO) {
             fetchCurrentUserUseCase.invoke().collectLatest { result ->
+                Log.d("ANANAS", "saveChanges: personaldatasettingsviewmodel reuslt $result")
                 (result as? Resource.Success)?.data?.let { userData ->
                     val updatedUserData = userData.copy(
-                        gender = _state.value.gender.toGender(),
+                        gender = _state.value.gender.gender,
                         birthDate = _state.value.birthDate.toLocalDate(),
                         weight = _state.value.weight.toDoubleWithoutUnit(),
                         height = _state.value.height.toDoubleWithoutUnit()
@@ -128,10 +132,14 @@ class PersonalDataSettingsViewModel @Inject constructor(
                 when (result) {
                     is Resource.Success -> {
                         result.data?.let { data ->
+                            Log.d("ANANAS", " personaldatasettingsivewmodel initialiseState: data ${data.toString()}")
                             _state.update {
                                 val genderName = data.gender?.toNameResourceStringId()?.let { gender -> resourceProvider.getString(gender) } ?: EMPTY_VALUE
                                 PersonalDataModel(
-                                    gender = genderName,
+                                    gender = GenderDisplayState(
+                                        gender = data.gender,
+                                        genderText = genderName
+                                    ),
                                     birthDate = data.birthDate?.toStringFormatted() ?: EMPTY_VALUE,
                                     birthDateMillis = data.birthDate?.toTimestamp() ?: 0,
                                     weight = data.weight?.toStringWithUnit(unit = null) ?: EMPTY_VALUE,
@@ -155,7 +163,7 @@ class PersonalDataSettingsViewModel @Inject constructor(
 }
 
 data class PersonalDataModel(
-    val gender: String = EMPTY_VALUE,
+    val gender: GenderDisplayState = GenderDisplayState(),
     val birthDate: String = EMPTY_VALUE,
     val birthDateMillis: Long = 0,
     val weight: String = EMPTY_VALUE,
@@ -163,4 +171,9 @@ data class PersonalDataModel(
     val height: String = EMPTY_VALUE,
     val isHeightInputValid: Boolean = false,
     val genders: List<GenderState> = emptyList(),
+)
+
+data class GenderDisplayState(
+    val gender: Gender? = null,
+    val genderText: String = EMPTY_VALUE,
 )

@@ -83,7 +83,8 @@ fun CalendarScreenContent(
                 color = MaterialTheme.colors.surface
             ),
         scaffoldState = scaffoldState,
-        sheetPeekHeight = screenConfiguration.screenHeightDp.div(2).dp,
+//        sheetPeekHeight = screenConfiguration.screenHeightDp.div(2).dp,
+        sheetPeekHeight = screenConfiguration.screenHeightDp.times(0.45).dp,
         sheetSwipeEnabled = true,
         sheetDragHandle = null,
         sheetContent = {
@@ -199,7 +200,7 @@ private fun CalendarFlowRow(
                     .heightIn(
                         max = (screenConfiguration.screenHeightDp
                             .div(2)
-                            .div(7)).dp
+                            .div(8)).dp
                     )
                     .weight(1f)
                     .aspectRatio(1f),

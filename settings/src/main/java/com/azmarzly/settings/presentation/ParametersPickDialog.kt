@@ -29,6 +29,7 @@ fun ParametersPickDialog(
     isInputValid: Boolean = false,
     validateInput: (String) -> Unit,
     maxCharacters: Int? = null,
+    keyboardType: KeyboardType,
 ) {
     SettingsPickerDialogWithContent(
         headerTitle = parameterTitle,
@@ -45,7 +46,7 @@ fun ParametersPickDialog(
                     onValueChange = validateInput,
                     label = label,
                     style = MaterialTheme.typography.body1,
-                    keyboardType = KeyboardType.Decimal,
+                    keyboardType = keyboardType,
                     modifier = Modifier.weight(1f),
                     trailingIcon = {
                         unit?.let {

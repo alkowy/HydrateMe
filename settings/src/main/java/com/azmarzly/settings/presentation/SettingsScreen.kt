@@ -130,7 +130,7 @@ fun PersonalDataCard(
     }) {
         Column {
             SettingsSectionHeaderRow(title = stringResource(id = R.string.registration_personal_data))
-            SettingsSectionBodyRow(type = stringResource(id = R.string.gender), value = personalDataModel.gender)
+            SettingsSectionBodyRow(type = stringResource(id = R.string.gender), value = personalDataModel.gender.genderText)
             SettingsSectionBodyRow(type = stringResource(id = R.string.birth_date), value = personalDataModel.birthDate)
             SettingsSectionBodyRow(type = stringResource(id = R.string.parameters_weight), value = personalDataModel.weight)
             SettingsSectionBodyRow(type = stringResource(id = R.string.parameters_height), value = personalDataModel.height)

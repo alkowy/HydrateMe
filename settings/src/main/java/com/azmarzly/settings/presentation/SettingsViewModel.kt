@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.azmarzly.core.R
 import com.azmarzly.settings.presentation.SettingsViewModel.Companion.EMPTY_VALUE
+import com.azmarzly.settings.presentation.personal_data_settings.GenderDisplayState
 import com.azmarzly.settings.presentation.personal_data_settings.PersonalDataModel
 import com.azmarzly.settings.presentation.personal_data_settings.PersonalDataSettingsViewModel
 import core.DispatcherIO
@@ -12,7 +13,6 @@ import core.domain.ResourceProvider
 import core.domain.use_case.FetchCurrentUserUseCase
 import core.domain.use_case.PeriodicallyFetchUserDataModelUseCase
 import core.model.Resource
-import core.model.UserActivity
 import core.model.UserDataModel
 import core.model.toNameResourceStringId
 import core.model.toUserActivity
@@ -92,7 +92,10 @@ class SettingsViewModel @Inject constructor(
         _settingsState.update {
             SettingsUiState(
                 PersonalDataModel(
-                    gender = genderName,
+                    gender = GenderDisplayState(
+                        gender = userDataModel?.gender,
+                        genderText = genderName,
+                    ),
                     birthDate = userDataModel?.birthDate?.toStringFormatted() ?: EMPTY_VALUE,
                     weight = userDataModel?.weight?.toStringWithUnit(unit = resourceProvider.getString(R.string.unit_kg)) ?: EMPTY_VALUE,
                     height = userDataModel?.height?.toStringWithUnit(unit = resourceProvider.getString(R.string.unit_cm)) ?: EMPTY_VALUE,
