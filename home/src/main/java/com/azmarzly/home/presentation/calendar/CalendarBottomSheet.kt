@@ -16,11 +16,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Button
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -99,10 +100,11 @@ private fun BottomSheetHeaderGeneralInfoRow(
                 .size(36.dp)
                 .clip(RoundedCornerShape(25))
                 .background(MaterialTheme.colors.emptyProgressColor),
-            contentAlignment = Alignment.BottomCenter
+            contentAlignment = Alignment.Center
         ) {
             Box(
                 modifier = Modifier
+                    .align(Alignment.BottomCenter)
                     .fillMaxHeight(
                         progressInPercentage
                             .toFloat()
@@ -115,8 +117,7 @@ private fun BottomSheetHeaderGeneralInfoRow(
                 if (isGoalMet) {
                     Icon(
                         modifier = Modifier
-                            .align(Alignment.BottomCenter)
-                            .padding(bottom = 10.dp),
+                            .align(Alignment.Center),
                         imageVector = Icons.Default.Check,
                         contentDescription = "Goal met check",
                         tint = MaterialTheme.colors.onPrimary
@@ -179,7 +180,6 @@ private fun CalendarBottomSheetContent(state: CalendarState, selectedDayData: Ca
                         )
                     )
                     Spacer(modifier = Modifier.weight(1f))
-//                    Text(text = "${it.dateTime.hour}:${it.dateTime.minute}")
                     Text(text = it.dateTime.toHourAndMinutes())
                 }
             }

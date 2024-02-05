@@ -83,7 +83,6 @@ fun CalendarScreenContent(
                 color = MaterialTheme.colors.surface
             ),
         scaffoldState = scaffoldState,
-//        sheetPeekHeight = screenConfiguration.screenHeightDp.div(2).dp,
         sheetPeekHeight = screenConfiguration.screenHeightDp.times(0.45).dp,
         sheetSwipeEnabled = true,
         sheetDragHandle = null,
@@ -147,7 +146,7 @@ fun Calendar(
 
         val enterTransition = fadeIn() + slideInVertically(animationSpec = tween(400))
         val exitTransition = fadeOut() + slideOutVertically(animationSpec = tween(600))
-        val bottomSheetStateValue = remember { derivedStateOf { bottomSheetState.targetValue } }
+        val bottomSheetStateValue = remember(bottomSheetState.targetValue) { derivedStateOf { bottomSheetState.targetValue } }
 
         AnimatedContent(
             targetState = bottomSheetStateValue.value, label = "",

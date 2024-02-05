@@ -119,10 +119,10 @@ fun AddWaterDialog(
                             0
                         }
                     },
-                    label = "Wpisz pojemność",
+                    label = stringResource(id = string.enter_capacity),
                     style = MaterialTheme.typography.body1,
                     trailingIcon = {
-                        Text(text = "ml", style = MaterialTheme.typography.caption)
+                        Text(text = stringResource(id = string.unit_milliliter), style = MaterialTheme.typography.caption)
                     },
                     keyboardType = KeyboardType.Number,
                     maxCharacters = 4,

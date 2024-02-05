@@ -46,7 +46,6 @@ class FirestoreRepositoryImpl @Inject constructor(
     override fun fetchUserFromFirestore(userId: String) = channelFlow {
         send(Resource.Loading)
         val user = getFirestoreUserModel(userId)
-
         if (user == null) {
             send(Resource.Error("Error fetching the user data"))
         } else {
