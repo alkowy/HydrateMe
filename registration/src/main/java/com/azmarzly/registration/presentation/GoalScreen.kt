@@ -100,14 +100,14 @@ fun GoalScreenContent(
                 .padding(horizontal = 20.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = stringResource(R.string.daily_water_intake_calculated),
-                style = MaterialTheme.typography.bodySmall,
-                color = Grey400,
-                textAlign = TextAlign.Center
-            )
+//            Text(
+//                text = stringResource(R.string.daily_water_intake_calculated),
+//                style = MaterialTheme.typography.bodySmall,
+//                color = Grey400,
+//                textAlign = TextAlign.Center
+//            )
 
-            Spacer(modifier = Modifier.height(28.dp))
+            Spacer(modifier = Modifier.height(1.dp))
 
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),

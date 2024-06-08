@@ -1,6 +1,5 @@
 package com.azmarzly.home.components
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -113,16 +112,20 @@ fun AddWaterDialog(
                     value = customAmountState,
                     onValueChange = {
                         drinkTypeSelected = null
-                        hydrationAmountToAdd = if (validateCustomAmount(it) == ValidationState.Valid) {
-                            customAmountState.value.toInt()
-                        } else {
-                            0
-                        }
+                        hydrationAmountToAdd =
+                            if (validateCustomAmount(it) == ValidationState.Valid) {
+                                customAmountState.value.toInt()
+                            } else {
+                                0
+                            }
                     },
                     label = stringResource(id = string.enter_capacity),
                     style = MaterialTheme.typography.body1,
                     trailingIcon = {
-                        Text(text = stringResource(id = string.unit_milliliter), style = MaterialTheme.typography.caption)
+                        Text(
+                            text = stringResource(id = string.unit_milliliter),
+                            style = MaterialTheme.typography.caption
+                        )
                     },
                     keyboardType = KeyboardType.Number,
                     maxCharacters = 4,

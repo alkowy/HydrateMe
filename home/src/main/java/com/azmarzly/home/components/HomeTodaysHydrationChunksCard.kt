@@ -30,7 +30,7 @@ import java.time.LocalDateTime
 @Composable
 fun HomeTodaysHydrationChunks(todayHydrationChunks: List<HydrationData.HydrationChunk>) {
     val scrollState = rememberScrollState()
-    AnimatedVisibility(visible = todayHydrationChunks.isNullOrEmpty().not()) {
+    AnimatedVisibility(visible = todayHydrationChunks.isEmpty().not()) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()

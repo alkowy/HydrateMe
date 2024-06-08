@@ -189,13 +189,13 @@ private fun HeightRow(height: MutableState<String>, validateHeight: (String) -> 
         PlaneValidatedTextField(
             value = height,
             onValueChange = validateHeight,
-            label = "Wzrost",
+            label = stringResource(id = string.parameters_height),
             style = MaterialTheme.typography.body1,
             keyboardType = KeyboardType.Number,
             modifier = Modifier.weight(1f),
             trailingIcon = {
                 Text(
-                    "cm",
+                    stringResource(id = string.unit_cm),
                     style = MaterialTheme.typography.body1.copy(
                         color = MaterialTheme.colors.shadowedTextColor
                     )

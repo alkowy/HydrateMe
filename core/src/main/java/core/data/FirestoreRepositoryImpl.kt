@@ -29,6 +29,7 @@ class FirestoreRepositoryImpl @Inject constructor(
     }
 
     override fun updateUserInFirestore(firestoreUser: FirestoreUserDataModel) {
+        Log.d("ANANAS", "updateUserInFirestore: firestoreuser $firestoreUser")
         firestore.collection(USERS_COLLECTION)
             .document(firestoreUser.uid)
             .set(firestoreUser, SetOptions.merge())

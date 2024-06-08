@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        compose_ui_version = '1.5.4'
+        compose_ui_version = '1.6.0'
     }
 
     dependencies {
