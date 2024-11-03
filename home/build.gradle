@@ -11,6 +11,7 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.5.0")
 
     implementation project(path: ':authentication')
+    implementation project(path: ':notifications')
 
 }
 

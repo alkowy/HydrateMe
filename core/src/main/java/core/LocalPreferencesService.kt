@@ -1,7 +1,6 @@
 package core
 
 import android.content.SharedPreferences
-import android.util.Log
 import com.google.gson.Gson
 import core.model.UserDataModel
 import javax.inject.Inject
@@ -15,6 +14,7 @@ class LocalPreferencesService @Inject constructor(
         const val CURRENT_USER_KEY = "current_user"
         const val CURRENT_USER_ID_KEY = "current_user_id"
         const val DEFAULT_VALUE = ""
+        const val LAST_LOG_TIMESTAMP = "last_log_timestamp"
     }
 
     override fun setCurrentUser(userData: UserDataModel?) {
@@ -22,7 +22,6 @@ class LocalPreferencesService @Inject constructor(
             .putString(CURRENT_USER_KEY, gson.toJson(userData))
             .apply()
     }
-
 
     override fun getCurrentUser(): UserDataModel {
         val json = sharedPreferences.getString(CURRENT_USER_KEY, DEFAULT_VALUE)
@@ -41,5 +40,19 @@ class LocalPreferencesService @Inject constructor(
 
     override fun getCurrentUserId(): String {
         return sharedPreferences.getString(CURRENT_USER_ID_KEY, DEFAULT_VALUE) ?: ""
+    }
+
+    override fun setLastLogTimestamp(timestamp: Long) {
+        sharedPreferences.edit()
+            .putLong(LAST_LOG_TIMESTAMP, timestamp)
+            .apply()
+    }
+
+    override fun getLastLogTimestamp(): Long {
+        return try {
+            sharedPreferences.getLong(LAST_LOG_TIMESTAMP, -1)
+        } catch (e: Exception) {
+            -1
+        }
     }
 }

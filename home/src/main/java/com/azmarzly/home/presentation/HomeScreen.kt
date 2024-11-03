@@ -21,7 +21,6 @@ import com.azmarzly.home.components.DropletButtonNavBar
 import com.azmarzly.home.domain.toBottomBarItemIndex
 import com.azmarzly.home.presentation.HomeViewModel.Companion.homeScreens
 import core.util.navigateTo
-import java.time.LocalDate
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -41,7 +40,7 @@ fun ParentHomeScreen(
             DropletButtonNavBar(
                 dropletButtons = homeScreens,
                 shouldShowBottomBar = bottomBarVisibility,
-                barColor = Brush.verticalGradient(listOf(MaterialTheme.colors.background,MaterialTheme.colors.background)),
+                barColor = Brush.verticalGradient(listOf(MaterialTheme.colors.background, MaterialTheme.colors.background)),
                 selectedScreenIndex = currentRoute?.destination?.route.toBottomBarItemIndex(),
                 onNavigateToScreen = { route ->
                     navController.popBackStack()
@@ -71,7 +70,7 @@ fun ParentHomeScreen(
             AddWaterDialog(
                 onDismissRequest = { showAddWaterCard = false },
                 addHydrationAction = { amount ->
-                    homeViewModel.addHydration(LocalDate.now(), amount)
+                    homeViewModel.addHydration(amountOfWaterAdded = amount)
                     showAddWaterCard = false
                 },
                 validateCustomAmount = homeViewModel::validateNumber,

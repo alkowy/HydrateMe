@@ -2,10 +2,10 @@ package com.azmarzly.home.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.azmarzly.authentication.domain.AuthenticationRepository
 import com.azmarzly.core.R
 import com.azmarzly.home.components.HomeScreenBottomBarItem
 import core.DispatcherIO
+import core.LocalPreferencesApi
 import core.domain.use_case.PeriodicallyFetchUserDataModelUseCase
 import core.domain.use_case.UpdateFirestoreUserUseCase
 import core.input_validators.InputValidator
@@ -19,6 +19,7 @@ import core.util.HomeRoute
 import core.util.doNothing
 import core.util.isSameDayAs
 import core.util.toFirestoreUserDataModel
+import core.util.toTimestamp
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -38,6 +39,7 @@ class HomeViewModel @Inject constructor(
     private val updateFirestoreUserUseCase: UpdateFirestoreUserUseCase,
     private val periodicallyFetchUserDataModelUseCase: PeriodicallyFetchUserDataModelUseCase,
     @Named("WholeNumberValidator") private val numberValidator: InputValidator,
+    private val localPreferencesApi: LocalPreferencesApi,
 ) : ViewModel() {
 
     companion object {
@@ -131,6 +133,7 @@ class HomeViewModel @Inject constructor(
         }
 
         _homeState.value.userData?.toFirestoreUserDataModel()?.let { updateFirestoreUser(it) }
+        localPreferencesApi.setLastLogTimestamp(LocalDateTime.now().toTimestamp())
     }
 
     private fun updateOrAddHydrationData(

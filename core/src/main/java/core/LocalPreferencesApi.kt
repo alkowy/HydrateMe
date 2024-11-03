@@ -9,4 +9,6 @@ interface LocalPreferencesApi {
     fun clearUserData()
     fun getCurrentUserId(): String
     fun setCurrentUserId(id: String)
+    fun setLastLogTimestamp(timestamp: Long)
+    fun getLastLogTimestamp(): Long
 }
