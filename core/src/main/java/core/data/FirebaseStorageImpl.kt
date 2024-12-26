@@ -47,15 +47,11 @@ class FirebaseStorageImpl @Inject constructor(
         return try {
             val language = if (locale == PL_LOCALE) PL_LOCALE else EN_LOCALE
             val contentReference = firebaseStorage.reference.child("${HYDRATION_HUB_CONTENT}/$language/$HYDRATION_HUB_CONTENT_FILE_JSON")
-            val tempFile = withContext(Dispatchers.IO) {
-                File.createTempFile("file", "json")
-            }
-            contentReference.getFile(tempFile).await()
-            val reader = withContext(Dispatchers.IO) {
-                FileReader(tempFile)
-            }
+            val fileBytes = contentReference.getBytes(Long.MAX_VALUE).await()
 
-            gson.fromJson(reader, HydrationHubContentModel::class.java)
+            val contentString = fileBytes.decodeToString()
+
+            gson.fromJson(contentString, HydrationHubContentModel::class.java)
         } catch (e: Exception) {
             null
         }
