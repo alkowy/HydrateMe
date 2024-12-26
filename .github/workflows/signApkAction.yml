@@ -1,10 +1,10 @@
-name: Sign APK
+name: Build and Sign APKs & AAB
 
 on:
   push:
-    branches: [ "develop" ]
+    branches: ["develop"]
   pull_request:
-    branches: [ "develop" ]
+    branches: ["develop"]
 
 jobs:
   build:
@@ -13,7 +13,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
-    - name: set up JDK 17
+    - name: Set up JDK 17
       uses: actions/setup-java@v4
       with:
         java-version: '17'
@@ -28,12 +28,18 @@ jobs:
         GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
       run: echo $GOOGLE_SERVICES_JSON | base64 -di > ./app/google-services.json
       
-    - name: Build with Gradle
-      run: ./gradlew app:build
+    - name: Build Debug APK
+      run: ./gradlew app:assembleDebug
+    
+    - name: Build Release APK
+      run: ./gradlew app:assembleRelease
       
-    - uses: r0adkll/sign-android-release@v1
-      name: Sign app APK
-      id: sign_app
+    - name: Build Release AAB
+      run: ./gradlew app:bundleRelease
+
+    - name: Sign Release APK
+      uses: r0adkll/sign-android-release@v1
+      id: sign_release_apk
       with:
         releaseDirectory: app/build/outputs/apk/release
         signingKeyBase64: ${{ secrets.SIGNING_KEY }}
@@ -41,11 +47,46 @@ jobs:
         keyStorePassword: ${{ secrets.SIGNING_KEY_STORE_PASSWORD }}
         keyPassword: ${{ secrets.SIGNING_KEY_PASSWORD }}
       env:
-      # override default build-tools version (33.0.0) -- optional
+        BUILD_TOOLS_VERSION: "34.0.0"
+        
+    - name: Sign Debug APK
+      uses: r0adkll/sign-android-release@v1
+      id: sign_debug_apk
+      with:
+        releaseDirectory: app/build/outputs/apk/debug
+        signingKeyBase64: ${{ secrets.SIGNING_KEY }}
+        alias: ${{ secrets.SIGNING_ALIAS }}
+        keyStorePassword: ${{ secrets.SIGNING_KEY_STORE_PASSWORD }}
+        keyPassword: ${{ secrets.SIGNING_KEY_PASSWORD }}
+      env:
+        BUILD_TOOLS_VERSION: "34.0.0"
+    
+    - name: Sign Release AAB
+      uses: r0adkll/sign-android-release@v1
+      id: sign_release_aab
+      with:
+        releaseDirectory: app/build/outputs/bundle/release
+        signingKeyBase64: ${{ secrets.SIGNING_KEY }}
+        alias: ${{ secrets.SIGNING_ALIAS }}
+        keyStorePassword: ${{ secrets.SIGNING_KEY_STORE_PASSWORD }}
+        keyPassword: ${{ secrets.SIGNING_KEY_PASSWORD }}
+      env:
         BUILD_TOOLS_VERSION: "34.0.0"
 
-  # Example use of `signedReleaseFile` output -- not needed
-    - uses: actions/upload-artifact@v4
+    - name: Upload Signed Release APK
+      uses: actions/upload-artifact@v4
       with:
-        name: Signed app bundle
-        path: ${{steps.sign_app.outputs.signedReleaseFile}}
+        name: Signed Release APK
+        path: app/build/outputs/apk/release/app-release.apk
+
+    - name: Upload Signed Debug APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: Signed Debug APK
+        path: app/build/outputs/apk/debug/app-debug.apk
+
+    - name: Upload Signed Release AAB
+      uses: actions/upload-artifact@v4
+      with:
+        name: Signed Release AAB
+        path: app/build/outputs/bundle/release/app-release.aab
