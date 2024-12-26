@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -60,7 +62,6 @@ fun InitialRegistrationScreen(
     }
 }
 
-
 @Composable
 fun InitialRegistrationScreenContent(
     state: RegistrationState,
@@ -76,6 +77,7 @@ fun InitialRegistrationScreenContent(
     val buttonEnabled = remember {
         derivedStateOf { name.value.isNotEmpty() && email.value.isNotEmpty() && password.value.isNotEmpty() }
     }
+    val scrollState = rememberScrollState()
 
     RegistrationStepWithBottomBar(
         bottomBarState = bottomBarState,
@@ -94,6 +96,8 @@ fun InitialRegistrationScreenContent(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(it)
+                .verticalScroll(scrollState)
                 .background(MaterialTheme.colors.background),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
