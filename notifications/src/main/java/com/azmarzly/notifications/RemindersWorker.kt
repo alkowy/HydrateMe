@@ -1,6 +1,7 @@
 package com.azmarzly.notifications
 
 import android.content.Context
+import android.util.Log
 import androidx.hilt.work.HiltWorker
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequest
@@ -39,7 +40,6 @@ class RemindersWorker @AssistedInject constructor(
 
     override fun doWork(): Result {
         if (isWithinDayHours().not()) return Result.success()
-
         when (userInactivityCheckerApi.checkUserInactivity()) {
             InactivityType.NONE -> doNothing()
 

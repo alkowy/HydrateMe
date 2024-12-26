@@ -1,11 +1,16 @@
 package com.azmarzly.profile.presentation
 
+import android.app.NotificationManager
+import android.content.Context
+import android.content.Intent
 import android.net.Uri
+import android.provider.Settings
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,20 +26,19 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Class
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.NotificationsActive
+import androidx.compose.material.icons.filled.NotificationsOff
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -43,24 +47,25 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewFontScale
-import androidx.compose.ui.tooling.preview.PreviewLightDark
-import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.core.app.NotificationManagerCompat
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.azmarzly.core.R.drawable
 import com.azmarzly.core.R.string
+import com.azmarzly.profile.R
 import core.ui.theme.HydrateMeTheme
 import core.ui.theme.backgroundContainer
 import core.ui.theme.bodySmall
@@ -123,7 +128,63 @@ fun ProfileScreenContent(
             parameterName = stringResource(string.daily_water_goal),
             parameterValue = state.dailyGoal
         )
+        Spacer(modifier = Modifier.height(14.dp))
+        HydrationRemindersRow(modifier = Modifier.fillMaxWidth())
     }
+}
+
+@Composable
+fun HydrationRemindersRow(modifier: Modifier = Modifier) {
+    val context = LocalContext.current
+    val channelId = "reminders_channel"
+    val lifecycle = LocalLifecycleOwner.current.lifecycle
+
+    var isChannelEnabled by remember { mutableStateOf(isNotificationChannelEnabled(context, channelId)) }
+
+    DisposableEffect(lifecycle) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                isChannelEnabled = isNotificationChannelEnabled(context, channelId)
+            }
+        }
+        lifecycle.addObserver(observer)
+        onDispose { lifecycle.removeObserver(observer) }
+    }
+
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(text = stringResource(string.hydration_reminders))
+        Icon(
+            modifier = Modifier
+                .clickable { openAppSettings(context = context) }
+                .size(36.dp),
+            imageVector = (if (isChannelEnabled) Icons.Filled.NotificationsActive else Icons.Filled.NotificationsOff),
+            contentDescription = null,
+        )
+    }
+}
+
+private fun openAppSettings(context: Context) {
+    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+        data = Uri.fromParts("package", context.packageName, null)
+    }
+    context.startActivity(intent)
+}
+
+private fun isNotificationChannelEnabled(context: Context, channelId: String): Boolean {
+    val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    if (notificationManager.areNotificationsEnabled().not()) {
+        return false
+    }
+    val channel = notificationManager.getNotificationChannel(channelId)
+    if (channel != null) {
+        return channel.importance != NotificationManager.IMPORTANCE_NONE &&
+                NotificationManagerCompat.from(context).areNotificationsEnabled()
+    }
+    return false
 }
 
 @Composable
@@ -304,7 +365,6 @@ private fun ProfilePicture(
         }
     }
 }
-
 
 @Composable
 private fun ProfileHeader(
