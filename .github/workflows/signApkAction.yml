@@ -73,20 +73,16 @@ jobs:
       env:
         BUILD_TOOLS_VERSION: "34.0.0"
 
-    - name: Upload Signed Release APK
+    - name: Create ZIP Archive of Signed Files
+      run: |
+        mkdir -p signed_files
+        cp app/build/outputs/apk/release/*.apk signed_files/
+        cp app/build/outputs/apk/debug/*.apk signed_files/
+        cp app/build/outputs/bundle/release/*.aab signed_files/
+        zip -r signed_artifacts.zip signed_files/
+      
+    - name: Upload Signed Artifacts ZIP
       uses: actions/upload-artifact@v4
       with:
-        name: Signed Release APK
-        path: app/build/outputs/apk/release/app-release.apk
-
-    - name: Upload Signed Debug APK
-      uses: actions/upload-artifact@v4
-      with:
-        name: Signed Debug APK
-        path: app/build/outputs/apk/debug/app-debug.apk
-
-    - name: Upload Signed Release AAB
-      uses: actions/upload-artifact@v4
-      with:
-        name: Signed Release AAB
-        path: app/build/outputs/bundle/release/app-release.aab
+        name: Signed Artifacts
+        path: signed_artifacts.zip
