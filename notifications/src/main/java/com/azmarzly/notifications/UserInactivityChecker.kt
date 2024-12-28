@@ -16,8 +16,8 @@ class UserInactivityChecker @Inject constructor(
         val difference = currentTime.minus(lastLogTime)
         return when {
             lastLogTime == -1L -> InactivityType.NONE
-            difference in 4.hours.inWholeMilliseconds..8.hours.inWholeMilliseconds -> InactivityType.REGULAR
-            difference >= 8.hours.inWholeMilliseconds -> InactivityType.LONG
+            difference in 4.hours.inWholeSeconds..8.hours.inWholeSeconds -> InactivityType.REGULAR
+            difference >= 8.hours.inWholeSeconds -> InactivityType.LONG
             else -> InactivityType.NONE
         }
     }
