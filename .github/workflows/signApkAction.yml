@@ -70,11 +70,10 @@ jobs:
 
     - name: Create ZIP Archive of Signed Files
       run: |
-        mkdir -p signed_files
-        cp app/build/outputs/apk/release/*.apk signed_files/
-        cp app/build/outputs/apk/debug/*.apk signed_files/
-        cp app/build/outputs/bundle/release/*.aab signed_files/
-        zip -r signed_artifacts.zip signed_files/
+        zip -j signed_artifacts.zip \
+          app/build/outputs/apk/release/*.apk \
+          app/build/outputs/apk/debug/*.apk \
+          app/build/outputs/bundle/release/*.aab
       
     - name: Upload Signed Artifacts ZIP
       uses: actions/upload-artifact@v4
