@@ -92,14 +92,20 @@ class HomeViewModel @Inject constructor(
             periodicallyFetchUserDataModelUseCase.invoke()
                 .collectLatest { fetchResult ->
                     when (fetchResult) {
-                        is Resource.Error -> _homeState.update { _homeState.value.copy(error = (fetchResult.errorMessage ?: "Unexpected error")) }
+                        is Resource.Error -> _homeState.update {
+                            _homeState.value.copy(
+                                error = (fetchResult.errorMessage ?: "Unexpected error")
+                            )
+                        }
+
                         Resource.Loading -> _homeState.update { _homeState.value.copy(isLoading = true) }
                         is Resource.Success -> _homeState.update {
                             val hydrationData = fetchResult.data?.hydrationData?.find { it.date.isSameDayAs(LocalDate.now()) }
                             _homeState.value.copy(
                                 userData = fetchResult.data,
                                 isLoading = false,
-                                remainingHydrationMillis = hydrationData?.calculateRemaining() ?: fetchResult.data?.hydrationGoalMillis ?: DEFAULT_HYDRATION_GOAL,
+                                remainingHydrationMillis = hydrationData?.calculateRemaining()
+                                    ?: fetchResult.data?.hydrationGoalMillis ?: DEFAULT_HYDRATION_GOAL,
                                 hydrationProgressPercentage = hydrationData?.calculateProgress() ?: 0,
                                 todayHydrationChunks = hydrationData?.hydrationChunksList ?: emptyList(),
                                 hydrationGoal = fetchResult.data?.hydrationGoalMillis ?: DEFAULT_HYDRATION_GOAL
@@ -205,7 +211,8 @@ data class HomeState(
     val hydrationProgressPercentage: Int = 0,
     var remainingHydrationMillis: Int = userData?.hydrationGoalMillis ?: 0,
     val todayHydrationChunks: List<HydrationChunk> = emptyList(),
-    var hydrationGoal: Int = userData?.hydrationGoalMillis ?: 2000, //userData?.hydrationData?.find { it.date.isSameDayAs(LocalDate.now()) }?.goalMillis ?: 0,
+    var hydrationGoal: Int = userData?.hydrationGoalMillis
+        ?: 2000, //userData?.hydrationData?.find { it.date.isSameDayAs(LocalDate.now()) }?.goalMillis ?: 0,
     val isLoading: Boolean = false,
     val error: String = "",
 ) {

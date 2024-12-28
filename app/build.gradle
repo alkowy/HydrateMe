@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
     id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
 }
 
 android {
@@ -14,7 +15,7 @@ android {
         applicationId "com.azmarzly.hydrateme"
         minSdk 26
         targetSdk 34
-        versionCode 5
+        versionCode 6
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -92,6 +93,11 @@ dependencies {
 
 // WorkManager
     implementation "androidx.work:work-runtime-ktx:2.8.1"
+
+    //firebase analytics
+    implementation platform('com.google.firebase:firebase-bom:31.2.3')
+    implementation("com.google.firebase:firebase-crashlytics")
+    implementation("com.google.firebase:firebase-analytics")
 
     implementation project(path: ':core')
     implementation project(path: ':authentication')
