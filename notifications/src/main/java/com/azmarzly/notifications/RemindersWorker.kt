@@ -8,10 +8,13 @@ import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import core.LocalPreferencesApi
 import core.domain.ResourceProvider
 import core.util.doNothing
+import core.util.toTimestamp
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import java.time.LocalDateTime
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
@@ -22,12 +25,14 @@ class RemindersWorker @AssistedInject constructor(
     private val reminderNotificationApi: ReminderNotificationApi,
     private val userInactivityCheckerApi: UserInactivityCheckerApi,
     private val resourceProvider: ResourceProvider,
+    private val localPreferencesApi: LocalPreferencesApi,
 ) : Worker(context, workerParams) {
 
     companion object {
         fun startRemindersWork(context: Context) {
-            val periodicWorkRequest: PeriodicWorkRequest = PeriodicWorkRequest.Builder(RemindersWorker::class.java, 15, TimeUnit.MINUTES)
-                .build()
+            val periodicWorkRequest: PeriodicWorkRequest =
+                PeriodicWorkRequest.Builder(RemindersWorker::class.java, 30, TimeUnit.MINUTES)
+                    .build()
 
             WorkManager.getInstance(context).enqueueUniquePeriodicWork(
                 "RemindersWork",
@@ -39,7 +44,7 @@ class RemindersWorker @AssistedInject constructor(
     }
 
     override fun doWork(): Result {
-        if (isWithinDayHours().not()) return Result.success()
+        if (isWithinDayHours().not() || wasNotificationShownRecently()) return Result.success()
         when (userInactivityCheckerApi.checkUserInactivity()) {
             InactivityType.NONE -> doNothing()
 
@@ -53,6 +58,19 @@ class RemindersWorker @AssistedInject constructor(
         }
 
         return Result.success()
+    }
+
+    private fun wasNotificationShownRecently(): Boolean {
+        val lastNotificationTimestamp = localPreferencesApi.getLastNotificationTimestamp()
+        if (lastNotificationTimestamp < 0) {
+            return false
+        }
+
+        val currentTime = LocalDateTime.now().toTimestamp()
+        val difference = currentTime.minus(lastNotificationTimestamp)
+        val notificationInterval = TimeUnit.HOURS.toSeconds(3)
+
+        return difference < notificationInterval
     }
 
     private fun isWithinDayHours(): Boolean {

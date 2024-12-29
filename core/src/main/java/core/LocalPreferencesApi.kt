@@ -11,4 +11,6 @@ interface LocalPreferencesApi {
     fun setCurrentUserId(id: String)
     fun setLastLogTimestamp(timestamp: Long)
     fun getLastLogTimestamp(): Long
+    fun setLastNotificationTimestamp(timestamp: Long)
+    fun getLastNotificationTimestamp(): Long
 }

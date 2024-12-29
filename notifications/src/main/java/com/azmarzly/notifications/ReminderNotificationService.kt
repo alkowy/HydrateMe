@@ -7,15 +7,18 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.util.Log
 import androidx.core.app.NotificationCompat
+import core.LocalPreferencesApi
 import core.domain.ResourceProvider
+import core.util.toTimestamp
 import dagger.hilt.android.qualifiers.ApplicationContext
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 class ReminderNotificationService @Inject constructor(
     @ApplicationContext private val context: Context,
     private val resourceProvider: ResourceProvider,
+    private val localPreferencesApi: LocalPreferencesApi,
 ) : ReminderNotificationApi {
 
     private val channelId = "reminders_channel"
@@ -62,5 +65,6 @@ class ReminderNotificationService @Inject constructor(
             .build()
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.notify(1, notification)
+        localPreferencesApi.setLastNotificationTimestamp(LocalDateTime.now().toTimestamp())
     }
 }
