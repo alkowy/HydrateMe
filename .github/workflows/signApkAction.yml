@@ -75,8 +75,12 @@ jobs:
           app/build/outputs/apk/debug/*.apk \
           app/build/outputs/bundle/release/*.aab
       
-    - name: Upload Signed Artifacts ZIP
+    - name: Upload Signed Artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: Signed Artifacts
-        path: signed_artifacts.zip
+        name: HydrateMe Signed Artifacts
+        path: |
+          app/build/outputs/apk/release/
+          app/build/outputs/apk/debug/
+          app/build/outputs/bundle/release/
+
