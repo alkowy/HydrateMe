@@ -136,7 +136,7 @@ fun ParametersPickContent(
                 .fillMaxSize()
                 .padding(it)
                 .verticalScroll(scrollState)
-                .background(MaterialTheme.colors.background)
+                .background(MaterialTheme.colors.surface)
                 .padding(horizontal = 20.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {

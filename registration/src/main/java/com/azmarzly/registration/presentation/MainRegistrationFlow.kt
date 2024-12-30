@@ -41,10 +41,10 @@ fun RegistrationFlow(navController: NavHostController) {
                 },
                 modifier = Modifier
                     .padding(bottom = 16.dp)
-                    .background(MaterialTheme.colors.background)
+                    .background(MaterialTheme.colors.surface)
             )
         },
-        containerColor = MaterialTheme.colors.background
+        containerColor = MaterialTheme.colors.surface
     ) { padding ->
         Box(modifier = Modifier.padding(padding)) {
             RegistrationNavHost(

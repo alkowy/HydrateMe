@@ -21,14 +21,14 @@ fun RegistrationStepWithBottomBar(
 ) {
     Scaffold(
         modifier = Modifier
-            .background(MaterialTheme.colors.background),
+            .background(MaterialTheme.colors.surface),
         bottomBar = {
             RegistrationStepBottomBar(
                 state = bottomBarState,
                 onSkip = onSkip,
                 onNext = onNext,
                 modifier = Modifier
-                    .background(MaterialTheme.colors.background)
+                    .background(MaterialTheme.colors.surface)
                     .fillMaxWidth()
                     .padding(start = 20.dp, end = 20.dp, top = 12.dp)
             )

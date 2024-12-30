@@ -29,6 +29,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import core.ui.theme.backgroundContainer
+import core.ui.theme.textFieldFocusedTextColor
 import core.ui.theme.textFieldLabel
 
 @Composable
@@ -118,6 +119,9 @@ fun PlaneValidatedTextField(
         maxLines = 1,
         shape = RoundedCornerShape(12.dp),
         colors = TextFieldDefaults.colors(
+            focusedTextColor = MaterialTheme.colors.textFieldFocusedTextColor,
+            errorTextColor = MaterialTheme.colors.textFieldFocusedTextColor,
+            unfocusedTextColor = MaterialTheme.colors.textFieldFocusedTextColor,
             unfocusedContainerColor = MaterialTheme.colors.backgroundContainer,
             focusedContainerColor = MaterialTheme.colors.backgroundContainer,
             errorContainerColor = MaterialTheme.colors.backgroundContainer,
@@ -213,6 +217,9 @@ fun SecuredValidatedTextField(
         }),
 
         colors = TextFieldDefaults.colors(
+            focusedTextColor = MaterialTheme.colors.textFieldFocusedTextColor,
+            errorTextColor = MaterialTheme.colors.textFieldFocusedTextColor,
+            unfocusedTextColor = MaterialTheme.colors.textFieldFocusedTextColor,
             unfocusedContainerColor = MaterialTheme.colors.backgroundContainer,
             focusedContainerColor = MaterialTheme.colors.backgroundContainer,
             errorContainerColor = MaterialTheme.colors.backgroundContainer,

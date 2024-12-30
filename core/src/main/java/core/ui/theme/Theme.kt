@@ -48,10 +48,10 @@ val Colors.blue200: Color
     get() = if (isLight) Color.Blue else Color.Red
 
 val Colors.emptyProgressColor: Color
-    get() = if (isLight) Grey200 else Grey600
+    get() = if (isLight) Grey300 else Grey600
 
 val Colors.verticalFilledProgressColor: Color
-    get() = if (isLight) Grey300 else Grey500
+    get() = if (isLight) Grey400 else Grey500
 
 val Colors.compactCalendarProgressText: Color
     get() = if (isLight) Grey400 else Grey400
@@ -62,17 +62,20 @@ val Colors.caption: Color
 val Colors.textFieldLabel: Color
     get() = if (isLight) Grey500 else Grey200
 
+val Colors.textFieldFocusedTextColor: Color
+    get() = if (isLight) VeryDarkBlue else Grey200
+
 val Colors.backgroundContainer: Color
     get() = if (isLight) Grey200 else Grey600
 
 val Colors.registrationStepDot: Color
-    get() = if (isLight) Grey300 else Grey600
+    get() = if (isLight) Grey400 else Grey600
 
 val Colors.registrationTextColor: Color
     get() = if (isLight) Grey900 else Grey100
 
 val Colors.shadowedTextColor: Color
-    get() = if (isLight) Grey400 else Grey600
+    get() = if (isLight) Grey500 else Grey400
 
 val Colors.weekDaysColor: Color
     get() = if (isLight) Grey600 else Grey400

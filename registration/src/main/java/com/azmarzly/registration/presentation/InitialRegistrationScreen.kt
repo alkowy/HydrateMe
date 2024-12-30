@@ -98,7 +98,7 @@ fun InitialRegistrationScreenContent(
                 .fillMaxSize()
                 .padding(it)
                 .verticalScroll(scrollState)
-                .background(MaterialTheme.colors.background),
+                .background(MaterialTheme.colors.surface),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             ValidatedTextField(

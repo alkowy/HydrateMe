@@ -92,7 +92,7 @@ fun GenderPickScreenContent(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colors.background)
+                .background(MaterialTheme.colors.surface)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),

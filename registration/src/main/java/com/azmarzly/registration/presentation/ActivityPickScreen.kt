@@ -91,7 +91,7 @@ fun ActivityPickScreenContent(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colors.background)
+                .background(MaterialTheme.colors.surface)
                 .padding(start = 20.dp, end = 20.dp, bottom = paddingValues.calculateBottomPadding())
                 .verticalScroll(rememberScrollState())
         ) {
