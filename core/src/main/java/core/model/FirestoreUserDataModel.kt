@@ -18,6 +18,7 @@ data class FirestoreUserDataModel @Keep constructor(
     val hydrationGoalMillis: Int = 0,
     val userActivity: UserActivityEnum = UserActivityEnum.EMPTY,
     val hydrationData: List<FirestoreHydrationData> = emptyList(),
+    val quickAddWaterValue: Int = 250,
 )
 
 enum class UserActivityEnum {

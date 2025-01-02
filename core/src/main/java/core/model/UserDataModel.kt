@@ -17,6 +17,7 @@ data class UserDataModel(
     val hydrationGoalMillis: Int = 2000,
     val userActivity: UserActivityEnum = UserActivityEnum.EMPTY,
     val hydrationData: List<HydrationData> = emptyList(),
+    val quickAddWaterValue: Int = 250,
 ) {
     fun findHydrationDataForDate(date: LocalDate): HydrationData? {
         return hydrationData.find { it.date.isSameDayAs(date) }

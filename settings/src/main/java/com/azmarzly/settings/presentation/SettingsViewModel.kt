@@ -39,6 +39,7 @@ class SettingsViewModel @Inject constructor(
     companion object {
         const val EMPTY_VALUE = "-"
         const val DEFAULT_HYDRATION_GOAL = 2000.0
+        const val DEFAULT_QUICK_ADD_WATER_VALUE = 250.0
     }
 
     private val _settingsState = MutableStateFlow(SettingsUiState())
@@ -87,7 +88,9 @@ class SettingsViewModel @Inject constructor(
 
     private fun updateUiState(userDataModel: UserDataModel?) {
         val fetchedHydrationGoal = userDataModel?.hydrationGoalMillis?.toDouble()?.div(1000) ?: DEFAULT_HYDRATION_GOAL
-        val genderName = userDataModel?.gender?.toNameResourceStringId()?.let { gender -> resourceProvider.getString(gender) } ?: PersonalDataSettingsViewModel.EMPTY_VALUE
+        val fetchedQuickAddWaterValue = userDataModel?.quickAddWaterValue?.toDouble() ?: DEFAULT_QUICK_ADD_WATER_VALUE
+        val genderName = userDataModel?.gender?.toNameResourceStringId()?.let { gender -> resourceProvider.getString(gender) }
+            ?: PersonalDataSettingsViewModel.EMPTY_VALUE
 
         _settingsState.update {
             SettingsUiState(
@@ -97,12 +100,19 @@ class SettingsViewModel @Inject constructor(
                         genderText = genderName,
                     ),
                     birthDate = userDataModel?.birthDate?.toStringFormatted() ?: EMPTY_VALUE,
-                    weight = userDataModel?.weight?.toStringWithUnit(unit = resourceProvider.getString(R.string.unit_kg)) ?: EMPTY_VALUE,
-                    height = userDataModel?.height?.toStringWithUnit(unit = resourceProvider.getString(R.string.unit_cm)) ?: EMPTY_VALUE,
+                    weight = userDataModel?.weight?.toStringWithUnit(unit = resourceProvider.getString(R.string.unit_kg))
+                        ?: EMPTY_VALUE,
+                    height = userDataModel?.height?.toStringWithUnit(unit = resourceProvider.getString(R.string.unit_cm))
+                        ?: EMPTY_VALUE,
                 ),
                 accountPersonalisation = AccountPersonalisationModel(
-                    activity = resourceProvider.getString(userDataModel?.userActivity?.toUserActivity()?.toNameResourceStringId() ?: R.string.activity_empty),
+                    activity = resourceProvider.getString(
+                        userDataModel?.userActivity?.toUserActivity()?.toNameResourceStringId() ?: R.string.activity_empty
+                    ),
                     hydrationGoal = fetchedHydrationGoal.toStringWithUnit(unit = resourceProvider.getString(R.string.unit_liter)),
+                    quickAddWaterValue = fetchedQuickAddWaterValue.toStringWithUnit(
+                        unit = resourceProvider.getString(R.string.unit_milliliter),
+                    )
                 )
             )
         }
@@ -117,4 +127,5 @@ data class SettingsUiState(
 data class AccountPersonalisationModel(
     val activity: String = EMPTY_VALUE,
     val hydrationGoal: String = EMPTY_VALUE,
+    val quickAddWaterValue: String = EMPTY_VALUE,
 )

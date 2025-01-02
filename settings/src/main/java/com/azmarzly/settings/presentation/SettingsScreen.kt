@@ -126,6 +126,10 @@ fun AccountPersonalisationCard(
                 type = stringResource(id = R.string.daily_water_goal),
                 value = accountPersonalisationModel.hydrationGoal
             )
+            SettingsSectionBodyRow(
+                type = stringResource(id = R.string.quick_add_water_amount),
+                value = accountPersonalisationModel.quickAddWaterValue
+            )
         }
     }
 }

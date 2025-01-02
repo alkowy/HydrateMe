@@ -200,8 +200,9 @@ fun HomeHydrationProgressCard(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
+                val quickAddWaterValue = homeState.userData?.quickAddWaterValue ?: 250
                 Button(
-                    onClick = { onAddHydrationAction(250) },
+                    onClick = { onAddHydrationAction(quickAddWaterValue) },
                     modifier = Modifier
                         .padding(horizontal = 24.dp),
                     shape = RoundedCornerShape(25.dp),
@@ -217,7 +218,7 @@ fun HomeHydrationProgressCard(
                             .padding(end = 12.dp)
                     )
                     Text(
-                        text = stringResource(R.string.add_drink),
+                        text = stringResource(R.string.add_drink, quickAddWaterValue),
                         style = MaterialTheme.typography.button,
                         modifier = Modifier.align(Alignment.CenterVertically)
                     )

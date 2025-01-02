@@ -37,6 +37,7 @@ class AccountPersonalisationSettingsViewModel @Inject constructor(
     private val updateFirestoreUserUseCase: UpdateFirestoreUserUseCase,
     @DispatcherIO private val ioDispatcherIO: CoroutineDispatcher,
     @Named("DecimalValidator") private val decimalValidator: InputValidator,
+    @Named("WholeNumberValidator") private val wholeNumberValidator: InputValidator,
     private val resourceProvider: ResourceProvider,
 ) : ViewModel() {
 
@@ -72,11 +73,27 @@ class AccountPersonalisationSettingsViewModel @Inject constructor(
         }
     }
 
+    fun onQuickWaterInputChanged(input: String){
+        _state.update {
+            it.copy(
+                isQuickAddWaterInputValid = wholeNumberValidator.isValid(input) == ValidationState.Valid && input.toInt() > 0
+            )
+        }
+    }
+
     fun updateHydrationGoal(goal: String) {
         _state.update {
             it.copy(
                 hydrationGoalUi = goal,
                 hydrationGoalInMillis = goal.toDouble().times(1000).toInt(),
+            )
+        }
+    }
+
+    fun updateQuickAddWaterValue(value: String) {
+        _state.update {
+            it.copy(
+                quickAddWaterValue = value.toInt(),
             )
         }
     }
@@ -93,7 +110,8 @@ class AccountPersonalisationSettingsViewModel @Inject constructor(
                     val updatedUserData = userData.copy(
                         userActivity = _state.value.userActivityState.userActivity.toUserActivityEnum(),
                         hydrationGoalMillis = _state.value.hydrationGoalInMillis,
-                        hydrationData = originalHydrationData
+                        hydrationData = originalHydrationData,
+                        quickAddWaterValue = _state.value.quickAddWaterValue,
                     )
                     updateFirestoreUserUseCase.invoke(user = updatedUserData.toFirestoreUserDataModel())
                 }
@@ -113,7 +131,9 @@ class AccountPersonalisationSettingsViewModel @Inject constructor(
                                 AccountPersonalisationState(
                                     userActivityState = AccountPersonalisationActivityState(
                                         userActivity = data.userActivity.toUserActivity(),
-                                        userActivityText = resourceProvider.getString(data.userActivity.toUserActivity().toNameResourceStringId())
+                                        userActivityText = resourceProvider.getString(
+                                            data.userActivity.toUserActivity().toNameResourceStringId()
+                                        )
                                     ),
                                     hydrationGoalInMillis = data.hydrationGoalMillis,
                                     hydrationGoalUi = fetchedHydrationGoal.toStringWithUnit(
@@ -123,9 +143,12 @@ class AccountPersonalisationSettingsViewModel @Inject constructor(
                                         UserActivityState(
                                             userActivity = it.toUserActivity(),
                                             name = resourceProvider.getString(it.toUserActivity().toNameResourceStringId()),
-                                            description = resourceProvider.getString(it.toUserActivity().toDescriptionResourceStringId()),
+                                            description = resourceProvider.getString(
+                                                it.toUserActivity().toDescriptionResourceStringId()
+                                            ),
                                         )
-                                    })
+                                    }),
+                                    quickAddWaterValue = data.quickAddWaterValue,
                                 )
 
                             }
@@ -145,6 +168,8 @@ data class AccountPersonalisationState(
     val hydrationGoalInMillis: Int = 2000,
     val isHydrationGoalInputValid: Boolean = false,
     val userActivitiesState: List<UserActivityState> = emptyList(),
+    val quickAddWaterValue: Int = 250,
+    val isQuickAddWaterInputValid: Boolean = false,
 )
 
 data class AccountPersonalisationActivityState(

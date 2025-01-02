@@ -16,6 +16,7 @@ fun UserDataModel.toFirestoreUserDataModel(): FirestoreUserDataModel {
         hydrationGoalMillis = this.hydrationGoalMillis,
         userActivity = this.userActivity,
         hydrationData = this.hydrationData.map { it.toFirestoreHydrationData() },
+        quickAddWaterValue = this.quickAddWaterValue,
     )
 }
 
@@ -32,5 +33,6 @@ fun FirestoreUserDataModel.toUserDataModel(): UserDataModel {
         hydrationGoalMillis = this.hydrationGoalMillis,
         userActivity = this.userActivity,
         hydrationData = this.hydrationData.map { it.toHydrationData() },
+        quickAddWaterValue = this.quickAddWaterValue,
     )
 }

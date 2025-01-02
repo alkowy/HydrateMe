@@ -48,7 +48,9 @@ fun AccountPersonalisationSettingsScreen(
         saveChanges = viewModel::saveChanges,
         updateUserActivity = viewModel::updateUserActivity,
         updateHydrationGoal = viewModel::updateHydrationGoal,
+        updateQuickAddWaterValue = viewModel::updateQuickAddWaterValue,
         validateGoalInput = viewModel::onHydrationGoalChanged,
+        validateQuickWaterAddInput = viewModel::onQuickWaterInputChanged,
     )
 }
 
@@ -59,11 +61,14 @@ fun AccountPersonalisationSettingsScreenContent(
     saveChanges: () -> Unit,
     updateUserActivity: (UserActivity) -> Unit,
     updateHydrationGoal: (String) -> Unit,
+    updateQuickAddWaterValue: (String) -> Unit,
     validateGoalInput: (String) -> Unit,
+    validateQuickWaterAddInput: (String) -> Unit,
 ) {
     val scrollState = rememberScrollState()
     var showUserActivityPicker by remember { mutableStateOf(false) }
     var showHydrationGoalPicker by remember { mutableStateOf(false) }
+    var showQuickAddWaterValuePicker by remember { mutableStateOf(false) }
     var isCloseButtonEnabled by remember { mutableStateOf(true) }
 
     Column(
@@ -107,6 +112,26 @@ fun AccountPersonalisationSettingsScreenContent(
             )
         }
 
+        if (showQuickAddWaterValuePicker) {
+            ParametersPickDialog(
+                parameterTitle = stringResource(id = R.string.quick_add_water_amount),
+                parameterSubtitle = null,
+                label = stringResource(id = R.string.quick_add_water_amount),
+                unit = stringResource(id = R.string.unit_milliliter),
+                onDismiss = {
+                    showQuickAddWaterValuePicker = false
+                },
+                validateInput = validateQuickWaterAddInput,
+                isInputValid = state.isQuickAddWaterInputValid,
+                confirm = { value ->
+                    updateQuickAddWaterValue(value)
+                    showQuickAddWaterValuePicker = false
+                },
+                maxCharacters = 3,
+                keyboardType = KeyboardType.Decimal,
+            )
+        }
+
         SettingsSubScreenHeader(
             headerText = stringResource(id = R.string.account_personalisation),
             onCloseScreenClick = {
@@ -136,6 +161,20 @@ fun AccountPersonalisationSettingsScreenContent(
             trailingItem = {
                 Text(
                     text = stringResource(id = R.string.unit_liter),
+                    style = MaterialTheme.typography.caption.copy(
+                        color = MaterialTheme.colors.shadowedTextColor
+                    )
+                )
+            }
+        )
+
+        SettingsSubScreenCard(
+            label = "Quick add water value",
+            value = state.quickAddWaterValue.toString(),
+            onClickAction = { showQuickAddWaterValuePicker = true },
+            trailingItem = {
+                Text(
+                    text = stringResource(id = R.string.unit_milliliter),
                     style = MaterialTheme.typography.caption.copy(
                         color = MaterialTheme.colors.shadowedTextColor
                     )

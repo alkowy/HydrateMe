@@ -30,7 +30,7 @@
     <string name="hello_header">Cześć</string>
     <string name="today_hydration">Dzisiejsze nawodnienie</string>
     <string name="water_remaining">Pozostało</string>
-    <string name="add_drink">Dodaj napój</string>
+    <string name="add_drink">Dodaj %d ml</string>
     <string name="enter_capacity">Wprowadź ilość</string>
     <string name="confirm">Potwierdź</string>
     <string name="cancel">Anuluj</string>
@@ -77,4 +77,6 @@
     <string name="notification_message_regular">Minęło trochę czasu! Pamiętaj, żeby wziąć łyk i się nawadniać.</string>
     <string name="notification_message_long">Minęło sporo czasu od twojego ostatniego napoju! Weź trochę wody i utrzymuj nawodnienie.</string>
     <string name="hydration_reminders">Przypomnienia</string>
+    <string name="quick_add_water_amount">Wartość szybkiego dodawania wody</string>"
+
 </resources>
