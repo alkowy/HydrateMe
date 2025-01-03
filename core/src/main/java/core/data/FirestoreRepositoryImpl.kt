@@ -57,21 +57,25 @@ class FirestoreRepositoryImpl @Inject constructor(
     }
 
     override fun periodicallyGetUserDataModel(): Flow<Resource<UserDataModel?>> = callbackFlow {
-        firestore.collection(USERS_COLLECTION)
-            .document(localPreferencesApi.getCurrentUserId())
-            .addSnapshotListener { value, error ->
-                error?.let {
-                    trySend(Resource.Error(it.localizedMessage))
-                }
-
-                value?.let {
-                    val userDataModel = it.toObject(FirestoreUserDataModel::class.java)?.toUserDataModel()
-                    userDataModel?.let { userData ->
-                        trySend(Resource.Success(userData))
+        val currentUser = localPreferencesApi.getCurrentUserId()
+        if (currentUser.isNotEmpty()) {
+            firestore.collection(USERS_COLLECTION)
+                .document(currentUser)
+                .addSnapshotListener { snapshot, error ->
+                    error?.let {
+                        trySend(Resource.Error(it.localizedMessage))
                     }
+
+                    snapshot?.toObject(FirestoreUserDataModel::class.java)
+                        ?.toUserDataModel()
+                        ?.let { userDataModel ->
+                            trySend(Resource.Success(userDataModel))
+                        }
                 }
-            }
-        awaitClose { this.cancel() }
+            awaitClose { this.cancel() }
+        } else {
+            close()
+        }
     }
 
     private suspend fun getFirestoreUserModel(userId: String = localPreferencesApi.getCurrentUserId()): FirestoreUserDataModel? {

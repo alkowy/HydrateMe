@@ -136,6 +136,6 @@
     <string name="notification_message_regular">It\'s been a little while! Remember to take a sip and stay hydrated.</string>
     <string name="notification_message_long">It\'s been quite some time since your last drink! Grab some water and keep up the hydration.</string>
     <string name="hydration_reminders">Hydration reminders</string>
-    <string name="quick_add_water_amount">Quick add water amount</string>"
+    <string name="quick_add_water_amount">Quick add water amount</string>
 
 </resources>
