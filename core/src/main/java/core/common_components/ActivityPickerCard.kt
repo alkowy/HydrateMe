@@ -14,6 +14,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.google.android.material.color.utilities.MaterialDynamicColors.onBackground
 import core.model.UserActivity
 import core.ui.theme.Grey400
 import core.ui.theme.backgroundContainer
@@ -50,7 +51,7 @@ fun ActivityCard(
             Text(
                 text = activityDescription,
                 style = MaterialTheme.typography.bodySmall,
-                color = Grey400
+                color = MaterialTheme.colors.onBackground
             )
         }
     }
