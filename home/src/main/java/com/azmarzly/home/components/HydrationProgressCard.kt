@@ -218,7 +218,7 @@ fun HomeHydrationProgressCard(
                             .padding(end = 12.dp)
                     )
                     Text(
-                        text = stringResource(R.string.add_drink, quickAddWaterValue),
+                        text = stringResource(R.string.add_drink_with_placeholder, quickAddWaterValue),
                         style = MaterialTheme.typography.button,
                         modifier = Modifier.align(Alignment.CenterVertically)
                     )

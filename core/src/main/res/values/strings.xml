@@ -29,7 +29,8 @@
     <string name="hello_header">Hello</string>
     <string name="today_hydration">Today\'s hydration</string>
     <string name="water_remaining">Remaining</string>
-    <string name="add_drink">Add %d ml</string>
+    <string name="add_drink_with_placeholder">Add %d ml</string>
+    <string name="add_drink">Add a drink</string>
     <string name="enter_capacity">Enter capacity</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>

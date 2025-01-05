@@ -30,7 +30,8 @@
     <string name="hello_header">Cześć</string>
     <string name="today_hydration">Dzisiejsze nawodnienie</string>
     <string name="water_remaining">Pozostało</string>
-    <string name="add_drink">Dodaj %d ml</string>
+    <string name="add_drink_with_placeholder">Dodaj %d ml</string>
+    <string name="add_drink">Dodaj napój</string>
     <string name="enter_capacity">Wprowadź ilość</string>
     <string name="confirm">Potwierdź</string>
     <string name="cancel">Anuluj</string>
