@@ -36,7 +36,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import core.input_validators.ValidationState
 import core.model.CalendarDay
+import core.model.HydrationData.HydrationChunk
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -56,6 +58,9 @@ fun CalendarScreen(
         state = state,
         updateSelectedDay = calendarViewModel::updateDaySelected,
         changeMonth = calendarViewModel::changeMonth,
+        onDeleteHydrationChunk = calendarViewModel::deleteHydrationChunk,
+        validateCustomAmount = calendarViewModel::validateNumber,
+        updateHydrationChunk = calendarViewModel::onConfirmEditHydrationChunk,
     )
 }
 
@@ -66,6 +71,9 @@ fun CalendarScreenContent(
     state: CalendarState,
     updateSelectedDay: (LocalDate) -> Unit,
     changeMonth: (CalendarDirection) -> Unit,
+    onDeleteHydrationChunk: (HydrationChunk) -> Unit,
+    validateCustomAmount: (String) -> ValidationState,
+    updateHydrationChunk: (HydrationChunk) -> Unit,
 ) {
 
     val screenConfiguration = LocalConfiguration.current
@@ -87,7 +95,14 @@ fun CalendarScreenContent(
         sheetSwipeEnabled = true,
         sheetDragHandle = null,
         sheetContent = {
-            CalendarBottomSheet(bottomBarPadding, state, state.selectedDayData)
+            CalendarBottomSheet(
+                bottomBarPadding = bottomBarPadding,
+                state = state,
+                selectedDayData = state.selectedDayData,
+                onDeleteHydrationChunk = onDeleteHydrationChunk,
+                validateCustomAmount = validateCustomAmount,
+                updateHydrationChunk = updateHydrationChunk,
+            )
         },
         content = { paddingValues ->
             Calendar(
@@ -207,7 +222,7 @@ private fun CalendarFlowRow(
                 date = calendarDayData.date,
                 isSelected = calendarState.selectedDate == calendarDayData.date,
                 isFromDifferentMonth = calendarDayData.isInDifferentMonth,
-                isGoalMet = calendarDayData.hydrationData.progressInPercentage >= 100,
+                isGoalMet = calendarDayData.hydrationData.calculateProgressInPercents() >= 100,
             )
         }
     }

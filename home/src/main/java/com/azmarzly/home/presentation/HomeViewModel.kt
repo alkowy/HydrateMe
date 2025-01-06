@@ -106,7 +106,7 @@ class HomeViewModel @Inject constructor(
                                 isLoading = false,
                                 remainingHydrationMillis = hydrationData?.calculateRemaining()
                                     ?: fetchResult.data?.hydrationGoalMillis ?: DEFAULT_HYDRATION_GOAL,
-                                hydrationProgressPercentage = hydrationData?.calculateProgress() ?: 0,
+                                hydrationProgressPercentage = hydrationData?.calculateProgressInPercents() ?: 0,
                                 todayHydrationChunks = hydrationData?.hydrationChunksList ?: emptyList(),
                                 hydrationGoal = fetchResult.data?.hydrationGoalMillis ?: DEFAULT_HYDRATION_GOAL
                             )
@@ -158,16 +158,12 @@ class HomeViewModel @Inject constructor(
                     amount = amountOfWaterAdded
                 )
             )
-            existingData.progress += amountOfWaterAdded
-            existingData.progressInPercentage = existingData.calculateProgress()
-            existingData.hydrationChunksList = hydrationChunksList
+            existingData.hydrationChunksList = hydrationChunksList.sortedBy { it.dateTime }
 
         } else {
             val newEntry = HydrationData(
                 date = date,
                 goalMillis = userData.hydrationGoalMillis,
-                progress = amountOfWaterAdded,
-                progressInPercentage = (amountOfWaterAdded * 100) / userData.hydrationGoalMillis,
                 hydrationChunksList = listOf(
                     HydrationChunk(
                         dateTime = LocalDateTime.now(),
@@ -188,7 +184,7 @@ class HomeViewModel @Inject constructor(
         date: LocalDate,
     ): HomeState {
         val hydrationData = updatedUserData.hydrationData.find { it.date.isSameDayAs(date) }
-        val hydrationProgressPercentage = hydrationData?.calculateProgress() ?: 0
+        val hydrationProgressPercentage = hydrationData?.calculateProgressInPercents() ?: 0
         val remainingHydrationMillis = hydrationData?.calculateRemaining() ?: 0
 
         return currentState.copy(

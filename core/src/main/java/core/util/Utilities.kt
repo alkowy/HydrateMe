@@ -3,6 +3,7 @@ package core.util
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
@@ -10,7 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
-import core.model.Gender
+import androidx.compose.ui.platform.LocalDensity
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.transform
@@ -56,3 +57,6 @@ fun Modifier.clickableOnce(
         interactionSource = remember { MutableInteractionSource() }
     )
 }
+
+@Composable
+fun pixelsToDp(pixels: Int) = with(LocalDensity.current) { pixels.toDp() }

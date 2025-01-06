@@ -60,7 +60,7 @@ val Colors.caption: Color
     get() = if (isLight) Blue900 else Blue100
 
 val Colors.textFieldLabel: Color
-    get() = if (isLight) Grey500 else Grey200
+    get() = if (isLight) Grey500 else Grey400
 
 val Colors.textFieldFocusedTextColor: Color
     get() = if (isLight) VeryDarkBlue else Grey200
@@ -76,6 +76,9 @@ val Colors.registrationTextColor: Color
 
 val Colors.shadowedTextColor: Color
     get() = if (isLight) Grey500 else Grey400
+
+val Colors.shadowedCalendarTextColor: Color
+    get() = if (isLight) Grey400 else Grey600
 
 val Colors.weekDaysColor: Color
     get() = if (isLight) Grey600 else Grey400

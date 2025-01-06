@@ -22,7 +22,10 @@ fun LocalDate.toStringFormatted(): String {
 }
 
 fun LocalDate.toCalendarHeader(): String {
-    return "${this.month.getDisplayName(TextStyle.FULL_STANDALONE, Locale.getDefault()).replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }} ${this.year}"
+    return "${
+        this.month.getDisplayName(TextStyle.FULL_STANDALONE, Locale.getDefault())
+            .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
+    } ${this.year}"
 }
 
 fun LocalDateTime.toTimestamp(): Long {
@@ -61,6 +64,8 @@ fun String.toLocalDate(): LocalDate? {
 fun LocalDate.isSameDayAs(date: LocalDate): Boolean {
     return this.atStartOfDay(ZoneOffset.UTC).isEqual(date.atStartOfDay(ZoneOffset.UTC))
 }
+
+fun LocalDate.isInFuture(): Boolean = this.isAfter(LocalDate.now())
 
 fun LocalDateTime.toHourAndMinutes(): String {
     val formatter = DateTimeFormatter.ofPattern("HH:mm", Locale.getDefault())

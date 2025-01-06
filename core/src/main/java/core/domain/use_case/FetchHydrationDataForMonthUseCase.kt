@@ -56,8 +56,6 @@ class FetchHydrationDataForMonthUseCase @Inject constructor(
                                         hydrationData = HydrationData(
                                             date = currentDate,
                                             goalMillis = 2000,
-                                            progress = 0,
-                                            progressInPercentage = 0,
                                             hydrationChunksList = emptyList()
                                         ),
                                         isInDifferentMonth = true
@@ -87,8 +85,6 @@ class FetchHydrationDataForMonthUseCase @Inject constructor(
                                         hydrationData = HydrationData(
                                             date = currentDate,
                                             goalMillis = 2000,
-                                            progress = 0,
-                                            progressInPercentage = 0,
                                             hydrationChunksList = emptyList()
                                         ),
                                         isInDifferentMonth = false
@@ -119,8 +115,6 @@ class FetchHydrationDataForMonthUseCase @Inject constructor(
                                         hydrationData = HydrationData(
                                             date = currentDate,
                                             goalMillis = 2000,
-                                            progress = 0,
-                                            progressInPercentage = 0,
                                             hydrationChunksList = emptyList()
                                         ),
                                         isInDifferentMonth = true

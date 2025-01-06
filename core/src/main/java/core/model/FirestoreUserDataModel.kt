@@ -29,16 +29,12 @@ enum class UserActivityEnum {
 data class FirestoreHydrationData(
     val date: Long = -1,
     val goalMillis: Int = 2000,
-    val progress: Int = 0,
-    val progressInPercentage: Int = 0,
     val hydrationChunksList: List<FirestoreHydrationChunkData> = emptyList(),
 ) {
     fun toHydrationData(): HydrationData {
         return HydrationData(
             date = this.date.toLocalDate(),
             goalMillis = this.goalMillis,
-            progress = this.progress,
-            progressInPercentage = this.progressInPercentage,
             hydrationChunksList = this.hydrationChunksList.map { it.toHydrationChunk() },
         )
     }
@@ -46,11 +42,13 @@ data class FirestoreHydrationData(
 
 @Keep
 data class FirestoreHydrationChunkData(
+    val uuid: String = "",
     val dateTime: Long = -1,
     val amount: Int = 0,
 ) {
     fun toHydrationChunk(): HydrationChunk {
         return HydrationChunk(
+            uuid = this.uuid,
             dateTime = this.dateTime.toLocalDateTime(),
             amount = this.amount,
         )

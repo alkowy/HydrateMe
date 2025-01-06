@@ -73,7 +73,7 @@ class AccountPersonalisationSettingsViewModel @Inject constructor(
         }
     }
 
-    fun onQuickWaterInputChanged(input: String){
+    fun onQuickWaterInputChanged(input: String) {
         _state.update {
             it.copy(
                 isQuickAddWaterInputValid = wholeNumberValidator.isValid(input) == ValidationState.Valid && input.toInt() > 0
@@ -105,7 +105,6 @@ class AccountPersonalisationSettingsViewModel @Inject constructor(
                     val originalHydrationData = userData.hydrationData.toMutableList()
                     val hydrationDataToday = originalHydrationData.find { it.date.isSameDayAs(LocalDate.now()) }
                     hydrationDataToday?.goalMillis = _state.value.hydrationGoalInMillis
-                    hydrationDataToday?.progressInPercentage = hydrationDataToday?.calculateProgress() ?: 0
 
                     val updatedUserData = userData.copy(
                         userActivity = _state.value.userActivityState.userActivity.toUserActivityEnum(),

@@ -79,5 +79,8 @@
     <string name="notification_message_long">Minęło sporo czasu od twojego ostatniego napoju! Weź trochę wody i utrzymuj nawodnienie.</string>
     <string name="hydration_reminders">Przypomnienia</string>
     <string name="quick_add_water_amount">Wartość szybkiego dodawania wody</string>
+    <string name="incorrect_amount">Niepoprawna ilość</string>
+    <string name="edit_hydration_chunk">Edytuj dane nawodnienia</string>
+    <string name="delete">Usuń</string>
 
 </resources>

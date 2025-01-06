@@ -84,8 +84,8 @@ fun HomeCompactCalendar(
                         } else {
                             CompactCalendarDay(
                                 day = today.minusDays(daysBack),
-                                hydrationProgressInPercentage = hydrationDataForSingleDay.progressInPercentage,
-                                hydrationAmount = hydrationDataForSingleDay.progress,
+                                hydrationProgressInPercentage = hydrationDataForSingleDay.calculateProgressInPercents(),
+                                hydrationAmount = hydrationDataForSingleDay.getProgressMillis(),
                             )
                         }
                     }

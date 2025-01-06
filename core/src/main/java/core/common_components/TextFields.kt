@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight.Companion.ExtraLight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -105,13 +106,18 @@ fun PlaneValidatedTextField(
         label = {
             Text(
                 text = label,
-                style = style.copy(color = MaterialTheme.colors.textFieldLabel)
+                style = style.copy(
+                    color = MaterialTheme.colors.textFieldLabel,
+                    fontWeight = ExtraLight
+                )
             )
         },
         isError = isError,
-        supportingText = if (isError) {
-            { Text(text = errorText, style = MaterialTheme.typography.caption.copy(color = Color.Red)) }
-        } else null,
+        supportingText = {
+            if (isError) {
+                Text(text = errorText, style = MaterialTheme.typography.caption.copy(color = Color.Red))
+            }
+        },
         keyboardOptions = KeyboardOptions(
             keyboardType = keyboardType,
             imeAction = imeAction

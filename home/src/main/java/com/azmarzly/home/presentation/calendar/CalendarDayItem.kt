@@ -22,6 +22,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import core.ui.theme.shadowedCalendarTextColor
 import core.ui.theme.shadowedTextColor
 import core.util.isSameDayAs
 import java.time.LocalDate
@@ -56,7 +57,7 @@ fun CalendarDayItem(
                     .padding(vertical = 8.dp, horizontal = 8.dp),
                 text = date.dayOfMonth.toString(),
                 style = MaterialTheme.typography.body1.copy(
-                    color = if (isFromDifferentMonth) MaterialTheme.colors.shadowedTextColor else if (isSelected) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onBackground
+                    color = if (isFromDifferentMonth) MaterialTheme.colors.shadowedCalendarTextColor else if (isSelected) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onBackground
                 )
             )
             Spacer(modifier = Modifier.height(2.dp))

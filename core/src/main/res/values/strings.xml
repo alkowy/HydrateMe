@@ -138,5 +138,8 @@
     <string name="notification_message_long">It\'s been quite some time since your last drink! Grab some water and keep up the hydration.</string>
     <string name="hydration_reminders">Hydration reminders</string>
     <string name="quick_add_water_amount">Quick add water amount</string>
+    <string name="incorrect_amount">Incorrect amount</string>
+    <string name="edit_hydration_chunk">Edit hydration chunk</string>
+    <string name="delete">Delete</string>
 
 </resources>
